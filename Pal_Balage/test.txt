@@ -1,4 +1,0 @@
-This is a test for push, commit, etc.
-
-
-This is another line in the test txt.
