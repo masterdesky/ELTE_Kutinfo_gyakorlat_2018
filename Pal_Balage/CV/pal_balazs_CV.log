@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6600 64-bit) (preloaded format=xelatex 2018.2.28)  28 FEB 2018 23:29
+This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6600 64-bit) (preloaded format=xelatex 2018.3.1)  1 MAR 2018 08:27
 entering extended mode
 **./pal_balazs_CV.tex
 (pal_balazs_CV.tex
@@ -8,9 +8,9 @@ Babel <3.17> and hyphenation patterns for 75 language(s) loaded.
 Document Class: simpleresumecv 2016/12/20 Simple Resume CV https://github.com/z
 achscrivena/simple-resume-cv
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-("E:\Program Files\MiKTeX 2.9\tex\latex\base\size10.clo"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\size10.clo"
 File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -25,21 +25,21 @@ File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("E:\Program Files\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
 Package: geometry 2010/09/12 v5.6 Page Geometry
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-("E:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
 Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
 )
-("E:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifvtex.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifvtex.sty"
 Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
 Package ifvtex Info: VTeX not detected.
 )
-("E:\Program Files\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 \Gm@cnth=\count87
@@ -55,15 +55,15 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@layoutvoffset=\dimen110
 \Gm@dimlist=\toks15
 
-("E:\Program Files\MiKTeX 2.9\tex\xelatex\xetexconfig\geometry.cfg"))
-("E:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hyperref.sty"
+("C:\Program Files\MiKTeX 2.9\tex\xelatex\xetexconfig\geometry.cfg"))
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hyperref.sty"
 Package: hyperref 2018/02/06 v6.86b Hypertext links for LaTeX
 
-("E:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\hobsub-hyperref.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\hobsub-hyperref.sty"
 Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
 
 
-("E:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\hobsub-generic.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\hobsub-generic.sty"
 Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
@@ -103,22 +103,22 @@ Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
 Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
 Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
 )
-("E:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\auxhook.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\auxhook.sty"
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 )
-("E:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
 \@linkdim=\dimen111
 \Hy@linkcounter=\count90
 \Hy@pagecounter=\count91
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\hyperref\pd1enc.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\pd1enc.def"
 File: pd1enc.def 2018/02/06 v6.86b Hyperref: PDFDocEncoding definition (HO)
 )
 \Hy@SavedSpaceFactor=\count92
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\00miktex\hyperref.cfg"
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\hyperref.cfg"
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
 Package hyperref Info: Hyper figures OFF on input line 4509.
@@ -154,13 +154,13 @@ LaTeX Info: Redefining \pageref on input line 6443.
 )
 Package hyperref Info: Driver (autodetected): hxetex.
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hxetex.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hxetex.def"
 File: hxetex.def 2018/02/06 v6.86b Hyperref driver for XeTeX
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\hyperref\puenc.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\puenc.def"
 File: puenc.def 2018/02/06 v6.86b Hyperref: PDF Unicode definition (HO)
 )
-("E:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\stringenc.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\stringenc.sty"
 Package: stringenc 2016/05/16 v1.11 Convert strings between diff. encodings (HO
 )
 )
@@ -170,7 +170,7 @@ Package: stringenc 2016/05/16 v1.11 Convert strings between diff. encodings (HO
 \Fld@listcount=\count100
 \c@bookmark@seq@number=\count101
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\rerunfilecheck.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\rerunfilecheck.sty"
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package rerunfilecheck Info: Feature \pdfmdfivesum is not available
 (rerunfilecheck)             (e.g. pdfTeX or LuaTeX with package `pdftexcmds').
@@ -186,15 +186,15 @@ Package: hyphenat 2009/09/02 v2.3c hyphenation utilities
 \langwohyphens=\language76
 LaTeX Info: Redefining \_ on input line 43.
 )
-("E:\Program Files\MiKTeX 2.9\tex\latex\graphics\color.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\color.sty"
 Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\color.cfg"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\color.cfg"
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: xetex.def on input line 147.
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\graphics-def\xetex.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-def\xetex.def"
 File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
 ))
 (C:\Users\Lordpb\AppData\Roaming\MiKTeX\2.9\tex\latex\datetime2\datetime2.sty
@@ -207,18 +207,18 @@ Package: tracklang 2018/02/21 v1.3.5 (NLCT) Track Languages
 )) (C:\Users\Lordpb\AppData\Roaming\MiKTeX\2.9\tex\latex\etoolbox\etoolbox.sty
 Package: etoolbox 2018/02/11 v2.5e e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count102
-) ("E:\Program Files\MiKTeX 2.9\tex\latex\xkeyval\xkeyval.sty"
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\xkeyval\xkeyval.sty"
 Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
 
-("E:\Program Files\MiKTeX 2.9\tex\generic\xkeyval\xkeyval.tex"
-("E:\Program Files\MiKTeX 2.9\tex\generic\xkeyval\xkvutils.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\xkeyval\xkeyval.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\xkeyval\xkvutils.tex"
 \XKV@toks=\toks16
 \XKV@tempa@toks=\toks17
 )
 \XKV@depth=\count103
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 )))
-("E:\Program Files\MiKTeX 2.9\tex\latex\fontspec\fontspec.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\fontspec\fontspec.sty"
 (C:\Users\Lordpb\AppData\Roaming\MiKTeX\2.9\tex\latex\l3packages\xparse\xparse.
 sty (C:\Users\Lordpb\AppData\Roaming\MiKTeX\2.9\tex\latex\l3kernel\expl3.sty
 Package: expl3 2018/02/21 L3 programming layer (loader) 
@@ -375,7 +375,7 @@ Package: xparse 2018/02/21 L3 Experimental document command parser
 \l__xparse_v_nesting_int=\count187
 )
 Package: fontspec 2017/11/09 v2.6g Font selection for XeLaTeX and LuaLaTeX
- ("E:\Program Files\MiKTeX 2.9\tex\latex\fontspec\fontspec-xetex.sty"
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\fontspec\fontspec-xetex.sty"
 Package: fontspec-xetex 2017/11/09 v2.6g Font selection for XeLaTeX and LuaLaTe
 X
 \l__fontspec_script_int=\count188
@@ -391,10 +391,10 @@ X
 \l__fontspec_tmpc_dim=\dimen148
 \g__file_internal_ior=\read1
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\base\fontenc.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\fontenc.sty"
 Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\base\tuenc.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\tuenc.def"
 File: tuenc.def 2017/04/05 v2.0i Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding TU on input line 82.
 ))
@@ -569,7 +569,7 @@ LaTeX Font Info:    Redeclaring font encoding TU on input line 82.
 . Defining command \UndeclareComposite with sig. 'mm' on line 3706.
 .................................................
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\fontspec\fontspec.cfg")
+("C:\Program Files\MiKTeX 2.9\tex\latex\fontspec\fontspec.cfg")
 LaTeX Info: Redefining \itshape on input line 3891.
 LaTeX Info: Redefining \slshape on input line 3896.
 LaTeX Info: Redefining \scshape on input line 3901.
@@ -588,7 +588,7 @@ LaTeX Info: Redefining \- on input line 4015.
 . Defining command \liningnums with sig. 'm' on line 4114.
 .................................................
 ))
-("E:\Program Files\MiKTeX 2.9\tex\xelatex\xunicode\xunicode.sty"
+("C:\Program Files\MiKTeX 2.9\tex\xelatex\xunicode\xunicode.sty"
 File: xunicode.sty 2011/09/09 v0.981 provides access to latin accents and many 
 other characters in Unicode lower plane
 
@@ -599,16 +599,16 @@ File: t3enc.def 2001/12/31 T3 encoding
 \tipasavetokens=\toks18
 \tipachecktokens=\toks19
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
 Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
 
-("E:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
-("E:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\graphics.cfg"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\graphics.cfg"
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: xetex.def on input line 99.
@@ -616,7 +616,7 @@ Package graphics Info: Driver file: xetex.def on input line 99.
 \Gin@req@height=\dimen149
 \Gin@req@width=\dimen150
 ))
-("E:\Program Files\MiKTeX 2.9\tex\latex\xltxtra\xltxtra.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\xltxtra\xltxtra.sty"
 Package: xltxtra 2016/01/21 v0.6 Improvements for the "XeLaTeX" format
 
 (C:\Users\Lordpb\AppData\Roaming\MiKTeX\2.9\tex\latex\realscripts\realscripts.s
@@ -714,7 +714,7 @@ LaTeX Info: Redefining \rmfamily on input line 146.
 \MaxNumberedItemIndentWidth=\skip52
 \NumberedItemIndentBox=\box50
 \NumberedItemIndentWidth=\skip53
-) ("E:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\se-ascii-print.def"
+) ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\se-ascii-print.def"
 File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
 
 )
@@ -797,10 +797,10 @@ LaTeX Font Info:    ... okay on input line 55.
 
 \AtBeginShipoutBox=\box51
 Package hyperref Info: Link coloring OFF on input line 55.
-("E:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
-("E:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count198
@@ -920,8 +920,8 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 451.
  ) 
 Here is how much of TeX's memory you used:
  24427 strings out of 427834
- 463119 string characters out of 3152461
- 544351 words of memory out of 3000000
+ 463119 string characters out of 3152462
+ 544349 words of memory out of 3000000
  28269 multiletter control sequences out of 15000+200000
  532671 words of font info for 56 fonts, out of 3000000 for 9000
  1328 hyphenation exceptions out of 8191
