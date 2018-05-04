@@ -81,6 +81,12 @@ R = 6378e03
 # We Simply Label It as dS
 dS = 1.002737909350795
 
+# Months' length int days, without leap day
+MonthLengthList = [31,28,31,30,31,30,31,31,30,31,30,31]
+
+# Months' length int days, with leap day
+MonthLengthListLeapYear = [31,29,31,30,31,30,31,31,30,31,30,31]
+
 # Predefined Coordinates of Some Notable Cities
 # Format:
 # "LocationName": [N Latitude (φ), E Longitude(λ)]
@@ -153,12 +159,6 @@ StellarDict = {
     "Vega": [18.61565, 38.78369],
     "VYCanisMajoris": [7.38287, -25.767565]
 }
-
-# Months' length int days, without leap day
-MonthLengthList = [31,28,31,30,31,30,31,31,30,31,30,31]
-
-# Months' length int days, with leap day
-MonthLengthListLeapYear = [31,29,31,30,31,30,31,31,30,31,30,31]
 
 # Dictionary for Planets in 
 PlanetDict = {

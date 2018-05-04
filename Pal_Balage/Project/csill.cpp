@@ -61,11 +61,22 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <cmath>
 #include <map>
 #include <vector>
 
 // Current Version of the Csillész II Problem Solver
 std::string ActualVersion = "v1.32";
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////                                                ////////////////
+//////////////////       CONSTANTS FOR CALCULATIONS HEADER        ////////////////
+//////////////////                                                ////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+// Pi
+double Pi = 3.14159265358979323846264338327950288419716939937510L;
 
 // Earth's Radius
 double R = 6378e03;
@@ -448,6 +459,7 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
                 {
                     CountingIndex = CountingIndex - MonthLengthListLeapYear[Month - 1];
                 }
+
                 else
                 {
                     CountingIndex = 0;
@@ -464,11 +476,14 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
         if(Year%4 != 0)
         {
             if(Day > MonthLengthList[Month - 1])
+            {
                 Day = Day - MonthLengthList[Month - 1];
                 Month = Month + 1;
                 if(Month == 13)
+                {
                     Month = 1;
                     Year = Year + 1;
+                }
 
                 if(Day > MonthLengthList[Month - 1])
                 {
@@ -480,6 +495,7 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
                     CountingIndex = 0;
                     break;
                 }
+            }
 
             else
             {
@@ -498,88 +514,93 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
 std::vector <double> LTtoUT(LocalHours, LocalMinutes, LocalSeconds, DateYear, DateMonth, DateDay)
 {
     // Calculate United Time
-    LocalTime = LocalHours + LocalMinutes/60 + LocalSeconds/3600
+    LocalTime = LocalHours + LocalMinutes/60 + LocalSeconds/3600;
     // Normalize LT
-    LocalTime = NormalizeZeroBounded(LocalTime, 24)
+    LocalTime = NormalizeZeroBounded(LocalTime, 24);
 
     // Summer/Winter Saving time
     // Summer: March 26/31 - October 8/14 LT+1
     // Winter: October 8/14 - March 26/31 LT+0
     // ISN'T NEEDED
-    if((DateMonth > 3 and DateMonth < 10) or ((DateMonth == 3 and DateDay >=25) or (DateMonth == 10 && (DateDay >= 8 and DateDay <=14)))):
-        UnitedTime = LocalTime - (round(Longitude/15, 0) + 1)
+    if((DateMonth > 3 and DateMonth < 10) || ((DateMonth == 3 and DateDay >=25) || (DateMonth == 10 && (DateDay >= 8 && DateDay <=14))))
+    {
+        UnitedTime = LocalTime - (round(Longitude/15, 0) + 1);
+    }
 
-    else:
-        UnitedTime = LocalTime - round(Longitude/15, 0)
+    else
+    {
+        UnitedTime = LocalTime - round(Longitude/15, 0);
+    }
 
     //UnitedTime = LocalTime - round(Longitude/15, 0)
 
     // Apply corrections if United Time is not in the correct format
     // returns: UnitedTime, UnitedHours, UnitedMinutes, UnitedSeconds, UnitedDateYear, UnitedDateMonth, UnitedDateDay
-    std::vector<double> LTtoUTvec = NormalizeTimeParameters(UnitedTime, DateYear, DateMonth, DateDay)
+    std::vector<double> LTtoUTvec = NormalizeTimeParameters(UnitedTime, DateYear, DateMonth, DateDay);
 
-    return(LTtoUTvec)
+    return(LTtoUTvec);
 
 }
 
 std::vector<double> UTtoLT(Latitude, UnitedHours, UnitedMinutes, UnitedSeconds, UnitedDateYear, UnitedDateMonth, UnitedDateDay)
 {
     // Calculate United Time
-    UnitedTime = UnitedHours + UnitedMinutes/60 + UnitedSeconds/3600
+    UnitedTime = UnitedHours + UnitedMinutes/60 + UnitedSeconds/3600;
     // Normalize LT
-    UnitedTime = NormalizeZeroBounded(UnitedTime, 24)
+    UnitedTime = NormalizeZeroBounded(UnitedTime, 24);
 
     // Summer/Winter Saving time
     // Summer: March 26/31 - October 8/14 LT+1
     // Winter: October 8/14 - March 26/31 LT+0
     // ISN'T NEEDED
-    if((UnitedDateMonth > 3 and UnitedDateMonth < 10) or ((UnitedDateMonth == 3 and UnitedDateDay >=25) or (UnitedDateMonth == 10 and (UnitedDateDay >= 8 and UnitedDateDay <=14)))):
-        LocalTime = UnitedTime + (round(Longitude/15, 0) + 1)
+    if((UnitedDateMonth > 3 && UnitedDateMonth < 10) || ((UnitedDateMonth == 3 && UnitedDateDay >=25) || (UnitedDateMonth == 10 && (UnitedDateDay >= 8 && UnitedDateDay <=14)))):
+        LocalTime = UnitedTime + (round(Longitude/15, 0) + 1);
 
     else:
-        LocalTime = UnitedTime + round(Longitude/15, 0)
+        LocalTime = UnitedTime + round(Longitude/15, 0);
 
     //LocalTime = UnitedTime + round(Longitude/15, 0)
 
     // Apply corrections if Local Time is not in the correct format
-    LocalTime, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay = NormalizeTimeParameters(LocalTime, UnitedDateYear, UnitedDateMonth, UnitedDateDay)
+    // returns: LocalTime, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay
+    std::vector<double> UTtoLTvec = NormalizeTimeParameters(LocalTime, UnitedDateYear, UnitedDateMonth, UnitedDateDay);
 
     // Correction for Julian Date
     //LocalHours += 12
     //LocalHours = NormalizeZeroBounded(LocalHours, 24)
 
     // Apply Correction for Local Time
-    LocalTime = LocalHours + LocalMinutes/60 + LocalSeconds/3600
+    //LocalTime = LocalHours + LocalMinutes/60 + LocalSeconds/3600
 
-    return(LocalTime, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay)
+    return(UTtoLTvec);
 }
 
 // Calculate Greenwich Mean Sidereal Time (GMST = S_0) at UT 00:00 on Given Date
-def CalculateGMST(Longitude, UnitedHoursForGMST, UnitedMinutesForGMST, UnitedSecondsForGMST, UnitedDateYear, UnitedDateMonth, UnitedDateDay):
+double CalculateGMST(float Longitude, double UnitedHoursForGMST, double UnitedMinutesForGMST, double UnitedSecondsForGMST, int UnitedDateYear, int UnitedDateMonth, int UnitedDateDay)
 
     // JulianDays = UT days since J2000.0, including parts of a day
     // Could be + or - or 0
     //Dwhole = int(int(1461 * int(UnitedDateYear + 4800 + (UnitedDateMonth - 14) / 12)) / 4) + int((367 * (UnitedDateMonth - 2 - 12 * int((UnitedDateMonth - 14) / 12))) / 12) - int((3 * int((UnitedDateYear + 4900 + (UnitedDateMonth - 14)/12) / 100)) / 4) + UnitedDateDay - 32075
     //Dwhole = 367 * UnitedDateYear - int(int(7 * (UnitedDateYear + 5001 + (UnitedDateMonth - 9) / 7)) / 4) + int((275 * UnitedDateMonth) / 9) + UnitedDateDay + 1729777
-    Dwhole = 367 * UnitedDateYear - int(7 * (UnitedDateYear + int((UnitedDateMonth + 9) / 12)) / 4) + int(275 * UnitedDateMonth / 9) + UnitedDateDay - 730531.5
+    double Dwhole = 367 * UnitedDateYear - int(7 * (UnitedDateYear + int((UnitedDateMonth + 9) / 12)) / 4) + int(275 * UnitedDateMonth / 9) + UnitedDateDay - 730531.5;
     // Dfrac: Fraction of the day
     // If UT = 00:00:00, then Dfrac = 0
-    Dfrac = (UnitedHoursForGMST + UnitedMinutesForGMST/60 + UnitedSecondsForGMST/3600)/24
-    JulianDays = Dwhole + Dfrac
+    double Dfrac = (UnitedHoursForGMST + UnitedMinutesForGMST/60 + UnitedSecondsForGMST/3600)/24;
+    double JulianDays = Dwhole + Dfrac;
 
     // Number of Julian centuries since J2000.0
-    JulianCenturies = JulianDays / 36525
+    double JulianCenturies = JulianDays / 36525;
 
     // Calculate GMST in Degrees
-    GMSTDegrees = 280.46061837 + 360.98564736629 * JulianDays + 0.000388 * JulianCenturies**2
+    double GMSTDegrees = 280.46061837 + 360.98564736629 * JulianDays + 0.000388 * JulianCenturies**2;
 
     // Normalize between to [0,+2π[
-    GMSTDegrees = NormalizeZeroBounded(GMSTDegrees, 360)
+    GMSTDegrees = NormalizeZeroBounded(GMSTDegrees, 360);
 
     // Convert GMST to Hours
-    GMST = GMSTDegrees / 15
+    double GMST = GMSTDegrees / 15;
 
-    return(GMST)
+    return(GMST);
 
 
 
@@ -590,251 +611,364 @@ def CalculateGMST(Longitude, UnitedHoursForGMST, UnitedMinutesForGMST, UnitedSec
 ////////////////////////////////////////////////////////////////////////////////
 
 // 1. Horizontal to Equatorial I
-def HorToEquI(Latitude, Altitude, Azimuth, LocalSiderealTime=None):
+std::vector<double> HorToEquI(float Latitude, double Altitude, double Azimuth, double LocalSiderealTime)
+{
+
+    double RightAscension;
+    double Declination;
+    double LocalHourAngleDegrees;
+    double LocalHourAngleDegrees1_1;
+    double LocalHourAngleDegrees1_2;
+    double LHAcos2_1;
+    double LocalHourAngleDegrees2_1;
+    double LocalHourAngleDegrees2_2;
 
     // Initial Data Normalization
     // Latitude: [-π,+π]
     // Altitude: [-π/2,+π/2]
     // Azimuth: [0,+2π[
     // Local Mean Sidereal Time: [0,24h[
-    Latitude = NormalizeSymmetricallyBoundedPI(Latitude)
-    Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude)
-    Azimuth = NormalizeZeroBounded(Azimuth, 360)
-    if (LocalSiderealTime != None):
-        LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24)
+    Latitude = NormalizeSymmetricallyBoundedPI(Latitude);
+    Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude);
+    Azimuth = NormalizeZeroBounded(Azimuth, 360);
+
+    if (LocalSiderealTime != NULL)
+    {
+        LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
+    }
 
     // Calculate Declination (δ)
     // sin(δ) = sin(m) * sin(φ) + cos(m) * cos(φ) * cos(A)
-    Declination =  math.degrees(math.asin(
-                   math.sin(math.radians(Altitude)) * math.sin(math.radians(Latitude)) +
-                   math.cos(math.radians(Altitude)) * math.cos(math.radians(Latitude)) * math.cos(math.radians(Azimuth))
-                   ))
+    Declination =  (180 / Pi) * (asin(
+                   sin((Pi / 180) * (Altitude)) * sin((Pi / 180) * (Latitude)) +
+                   cos((Pi / 180) * (Altitude)) * cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (Azimuth))
+                   ));
     // Normalize result for Declination [-π/2,+π/2]
-    Declination = NormalizeSymmetricallyBoundedPI_2(Declination)
+    Declination = NormalizeSymmetricallyBoundedPI_2(Declination);
 
     // Calculate Local Hour Angle in Degrees (H)
     // sin(H) = - sin(A) * cos(m) / cos(δ)
-    LocalHourAngleDegrees1_1 = math.degrees(math.asin(
-                            - math.sin(math.radians(Azimuth)) * math.cos(math.radians(Altitude)) / math.cos(math.radians(Declination))
-                            ))
+    LocalHourAngleDegrees1_1 = (180 / Pi) * (asin(
+                            - sin((Pi / 180) * (Azimuth)) * cos((Pi / 180) * (Altitude)) / cos((Pi / 180) * (Declination))
+                            ));
 
-    if(LocalHourAngleDegrees1_1 <= 180):
-        LocalHourAngleDegrees1_2 = 180 - LocalHourAngleDegrees1_1
+    if(LocalHourAngleDegrees1_1 <= 180)
+    {
+        LocalHourAngleDegrees1_2 = 180 - LocalHourAngleDegrees1_1;
+    }
 
-    elif(LocalHourAngleDegrees1_1 > 180):
-        LocalHourAngleDegrees1_2 = 540 - LocalHourAngleDegrees1_1
+    else if(LocalHourAngleDegrees1_1 > 180)
+    {
+        LocalHourAngleDegrees1_2 = 540 - LocalHourAngleDegrees1_1;
+    }
 
     // Check correct value
     // cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)
-    LHAcos2_1 = (math.sin(math.radians(Altitude)) - math.sin(math.radians(Declination)) * math.sin(math.radians(Latitude))) / (math.cos(math.radians(Declination)) * math.cos(math.radians(Latitude)))
+    LHAcos2_1 = (sin((Pi / 180) * (Altitude)) - sin((Pi / 180) * (Declination)) * sin((Pi / 180) * (Latitude))) / (cos((Pi / 180) * (Declination)) * cos((Pi / 180) * (Latitude)));
 
-    if(LHAcos2_1 <= 1 and LHAcos2_1 >= -1):
-        LocalHourAngleDegrees2_1 = math.degrees(math.acos(LHAcos2_1))
-    elif(LHAcos2_1 > 1):
-        LocalHourAngleDegrees2_1 = math.degrees(math.acos(1))
-    elif(LHAcos2_1 < -1):
-        LocalHourAngleDegrees2_1 = math.degrees(math.acos(-1))
+    if(LHAcos2_1 <= 1 and LHAcos2_1 >= -1)
+    {
+        LocalHourAngleDegrees2_1 = (180 / Pi) * (acos(LHAcos2_1));
+    }
 
-    LocalHourAngleDegrees2_2 = - LocalHourAngleDegrees2_1
+    else if(LHAcos2_1 > 1)
+    {
+        LocalHourAngleDegrees2_1 = (180 / Pi) * (acos(1));
+    }
+
+    else if(LHAcos2_1 < -1)
+    {
+        LocalHourAngleDegrees2_1 = (180 / Pi) * (acos(-1));
+    }
+
+    LocalHourAngleDegrees2_2 = - LocalHourAngleDegrees2_1;
 
     // Compare Azimuth values
-    if(int(LocalHourAngleDegrees1_1) == int(LocalHourAngleDegrees2_1)):
-        LocalHourAngleDegrees = LocalHourAngleDegrees1_1
+    if(int(LocalHourAngleDegrees1_1) == int(LocalHourAngleDegrees2_1))
+    {
+        LocalHourAngleDegrees = LocalHourAngleDegrees1_1;
+    }
 
-    elif(int(LocalHourAngleDegrees1_1) == int(LocalHourAngleDegrees2_2)):
-        LocalHourAngleDegrees = LocalHourAngleDegrees1_1
+    else if(int(LocalHourAngleDegrees1_1) == int(LocalHourAngleDegrees2_2))
+    {
+        LocalHourAngleDegrees = LocalHourAngleDegrees1_1;
+    }
 
-    else:
-        LocalHourAngleDegrees = LocalHourAngleDegrees1_2
+    else
+    {
+        LocalHourAngleDegrees = LocalHourAngleDegrees1_2;
+    }
 
     // Normalize result [0,+2π[
     LocalHourAngleDegrees = NormalizeZeroBounded(LocalHourAngleDegrees, 360)
     // Convert to hours from angles (H -> t)
-    LocalHourAngle = LocalHourAngleDegrees / 15
+    LocalHourAngle = LocalHourAngleDegrees / 15;
 
-    if(LocalSiderealTime != None):
+    if(LocalSiderealTime != NULL)
+    {
         // Calculate Right Ascension (α)
         // α = S – t
-        RightAscension = LocalSiderealTime - LocalHourAngle
-    else:
-        RightAscension = None
+        RightAscension = LocalSiderealTime - LocalHourAngle;
+    }
 
+    else
+    {
+        RightAscension = NULL;
+    }
 
-    return(Declination, LocalHourAngle, RightAscension)
+    std::vector<double> HorToEquIvec = {Declination, LocalHourAngle, RightAscension};
+
+    return(HorToEquIvec);
+
+}
 
 // 2. Horizontal to Equatorial II
-def HorToEquII(Latitude, Altitude, Azimuth, LocalSiderealTime):
+std::vector<double> HorToEquII(float Latitude, double Altitude, double Azimuth, double LocalSiderealTime)
 
     // First Convert Horizontal to Equatorial I Coordinates
-    Declination, LocalHourAngle, RightAscension = HorToEquI(Latitude, Altitude, Azimuth, LocalSiderealTime)
+    // returns: Declination, LocalHourAngle, RightAscension
+    std::vector<double> DecLHARAHorToEquII = HorToEquI(Latitude, Altitude, Azimuth, LocalSiderealTime);
 
     // Convert Equatorial I to Equatorial II
-    LocalSiderealTime = LocalHourAngle + RightAscension
+    LocalSiderealTime = DecLHARAHorToEquII[1] + DecLHARAHorToEquII[2];
     // Normalize LMST
     // LMST: [0,24h[
-    LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24)
+    LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
 
-    return(Declination, RightAscension, LocalSiderealTime)
+    std::vector<double> HorToEquIIvec = {Declination, RightAscension, LocalSiderealTime};
+
+    return(HorToEquIIvec);
 
 
 // 3. Equatorial I to Horizontal
-def EquIToHor(Latitude, RightAscension, Declination, Altitude=None, LocalSiderealTime=None, LocalHourAngle=None):
-
+std::vector<double> EquIToHor(float Latitude, double RightAscension, double Declination, double Altitude, double LocalSiderealTime, double LocalHourAngle)
+{
     // Initial Data Normalization
     // Latitude: [-π,+π]
     // Right Ascension: [0h,24h[
     // Declination: [-π/2,+π/2]
-    Latitude = NormalizeSymmetricallyBoundedPI(Latitude)
-    if(RightAscension != None):
-        RightAscension = NormalizeZeroBounded(RightAscension, 24)
-    if(Declination != None):
-        Declination = NormalizeSymmetricallyBoundedPI_2(Declination)
+    Latitude = NormalizeSymmetricallyBoundedPI(Latitude);
+
+    if(RightAscension != NULL)
+    {
+        RightAscension = NormalizeZeroBounded(RightAscension, 24);
+    }
+
+    if(Declination != NULL)
+    {
+        Declination = NormalizeSymmetricallyBoundedPI_2(Declination);
+    }
 
 
-    if(LocalSiderealTime != None):
+    if(LocalSiderealTime != NULL)
+    {
         // Calculate Local Hour Angle in Hours (t)
         // t = S - α
-        LocalHourAngle = LocalSiderealTime - RightAscension
+        LocalHourAngle = LocalSiderealTime - RightAscension;
         // Normalize LHA
         // LHA: [0h,24h[
-        LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24)
+        LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
+    }
 
-    if(LocalHourAngle != None):
+    if(LocalHourAngle != NULL)
+    {
+        // Declare variables
+        double Azimuth;
+        double Azimuth1;
+        double Azimuth2;
+        double Azimuth3;
+        double Azimuth4;
+        double LocalHourAngleDegrees;
+
         // Convert to angles from hours (t -> H)
-        LocalHourAngleDegrees = LocalHourAngle * 15
+        LocalHourAngleDegrees = LocalHourAngle * 15;
 
         // Calculate Altitude (m)
         // sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H)
-        Altitude = math.degrees(math.asin(
-                math.sin(math.radians(Declination)) * math.sin(math.radians(Latitude)) +
-                math.cos(math.radians(Declination)) * math.cos(math.radians(Latitude)) * math.cos(math.radians(LocalHourAngleDegrees))
-                ))
+        Altitude = (180 / Pi) * (asin(
+                sin((Pi / 180) * (Declination)) * sin((Pi / 180) * (Latitude)) +
+                cos((Pi / 180) * (Declination)) * cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (LocalHourAngleDegrees))
+                ));
         // Normalize Altitude
         // Altitude: [-π/2,+π/2]
-        Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude)
+        Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude);
 
         // Calculate Azimuth (A)
         // sin(A) = - sin(H) * cos(δ) / cos(m)
         // Azimuth at given H Local Hour Angle
-        Azimuth1 = math.degrees(math.asin(
-                - math.sin(math.radians(LocalHourAngleDegrees)) * math.cos(math.radians(Declination)) / math.cos(math.radians(Altitude))
-                ))
+        Azimuth1 = (180 / Pi) * (asin(
+                - sin((Pi / 180) * (LocalHourAngleDegrees)) * cos((Pi / 180) * (Declination)) / cos((Pi / 180) * (Altitude))
+                ));
 
-        Azimuth1 = NormalizeZeroBounded(Azimuth1, 360)
+        Azimuth1 = NormalizeZeroBounded(Azimuth1, 360);
 
-        if(Azimuth1 <= 180):
-            Azimuth2 = 180 - Azimuth1
+        if(Azimuth1 <= 180)
+        {
+            Azimuth2 = 180 - Azimuth1;
+        }
 
-        elif(Azimuth1 > 180):
-            Azimuth2 = 540 - Azimuth1
+        else if(Azimuth1 > 180)
+        {
+            Azimuth2 = 540 - Azimuth1;
+        }
 
         // Calculate Azimuth (A) with a second method, to determine which one is the correct (A_1 or A_2?)
         // cos(A) = (sin(δ) - sin(φ) * sin(m)) / (cos(φ) * cos(m))
-        Azimuth3 = math.degrees(math.acos(
-                (math.sin(math.radians(Declination)) - math.sin(math.radians(Latitude)) * math.sin(math.radians(Altitude))) / 
-                (math.cos(math.radians(Latitude)) * math.cos(math.radians(Altitude)))
-        ))
+        Azimuth3 = (180 / Pi) * (acos(
+                (sin((Pi / 180) * (Declination)) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (Altitude))) / 
+                (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (Altitude)))
+                ));
 
-        Azimuth4 = - Azimuth3
+        Azimuth4 = - Azimuth3;
 
         // Normalize negative result
         // Azimuth: [0,+2π[
-        Azimuth4 = NormalizeZeroBounded(Azimuth4, 360)
+        Azimuth4 = NormalizeZeroBounded(Azimuth4, 360);
 
         // Compare Azimuth values
-        if(Azimuth1 + 3 > Azimuth3 and Azimuth1 - 3 < Azimuth3):
-            Azimuth = Azimuth1
+        if(Azimuth1 + 3 > Azimuth3 and Azimuth1 - 3 < Azimuth3)
+        {
+            Azimuth = Azimuth1;
+        }
 
-        elif(Azimuth1 + 3 > Azimuth4 and Azimuth1 - 3 < Azimuth4):
-            Azimuth = Azimuth1
+        else if(Azimuth1 + 3 > Azimuth4 and Azimuth1 - 3 < Azimuth4)
+        {
+            Azimuth = Azimuth1;
+        }
 
-        elif(Azimuth2 + 3 > Azimuth3 and Azimuth2 - 3 < Azimuth3):
-            Azimuth = Azimuth2
+        else if(Azimuth2 + 3 > Azimuth3 and Azimuth2 - 3 < Azimuth3)
+        {
+            Azimuth = Azimuth2;
+        }
 
-        elif(Azimuth2 + 3 > Azimuth4 and Azimuth2 - 3 < Azimuth4):
-            Azimuth = Azimuth2
+        else if(Azimuth2 + 3 > Azimuth4 and Azimuth2 - 3 < Azimuth4)
+        {
+            Azimuth = Azimuth2;
+        }
 
-        else:
-            std::cout << Azimuth1, Azimuth2, Azimuth3, Azimuth4)
+        else
+        {
+            std::cout << Azimuth1, Azimuth2, Azimuth3, Azimuth4);
+        }
 
         // Normalize Azimuth
         // Azimuth: [0,+2π[
-        Azimuth = NormalizeZeroBounded(Azimuth, 360)
+        Azimuth = NormalizeZeroBounded(Azimuth, 360);
 
-        return(Altitude, Azimuth)
+        std::vector<double> EquIToHor = {Altitude, Azimuth}
 
-    elif(Altitude != None):
+        return(EquIToHor);
+    }
+
+    else if(Altitude != NULL)
+    {
+
+        // Declare variables
+        double LHAcos;
+        double LocalHourAngleDegrees1;
+        double LocalHourAngleDegrees2;
+        double Azimuth1;
+        double Azimuth1_1;
+        double Azimuth1_2;
+        double Azimuth1_3;
+        double Azimuth1_4;
+
+        double Azimuth2;
+        double Azimuth2_1;
+        double Azimuth2_2;
+        double Azimuth2_3;
+        double Azimuth2_4;
+
         // Starting Equations: 
         // sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H)
         // We can calculate eg. setting/rising with the available data (m = 0°), or other things...
         // First let's calculate LHA:
         // cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)
-        LHAcos = (math.sin(math.radians(Altitude)) - math.sin(math.radians(Declination)) * math.sin(math.radians(Latitude))) / (math.cos(math.radians(Declination)) * math.cos(math.radians(Latitude)))
-        if(LHAcos <= 1 and LHAcos >= -1):
-            LocalHourAngleDegrees1 = math.degrees(math.acos(LHAcos))
-        elif(LHAcos > 1):
-            LocalHourAngleDegrees1 = math.degrees(math.acos(1))
-        elif(LHAcos < -1):
-            LocalHourAngleDegrees1 = math.degrees(math.acos(-1))
-        
+        LHAcos = (sin((Pi / 180) * (Altitude)) - sin((Pi / 180) * (Declination)) * sin((Pi / 180) * (Latitude))) / (cos((Pi / 180) * (Declination)) * cos((Pi / 180) * (Latitude)));
+        if(LHAcos <= 1 and LHAcos >= -1)
+        {
+            LocalHourAngleDegrees1 = (180 / Pi) * (acos(LHAcos));
+        }
 
+        else if(LHAcos > 1)
+        {
+            LocalHourAngleDegrees1 = (180 / Pi) * (acos(1));
+        }
+
+        else if(LHAcos < -1)
+        {
+            LocalHourAngleDegrees1 = (180 / Pi) * (acos(-1));
+        }
+        
         // acos(x) has two correct output on this interval
-        LocalHourAngleDegrees2 = - LocalHourAngleDegrees1
+        LocalHourAngleDegrees2 = - LocalHourAngleDegrees1;
 
         // Normalize LHAs:
-        LocalHourAngleDegrees1 = NormalizeZeroBounded(LocalHourAngleDegrees1, 360)
-        LocalHourAngleDegrees2 = NormalizeZeroBounded(LocalHourAngleDegrees2, 360)
+        LocalHourAngleDegrees1 = NormalizeZeroBounded(LocalHourAngleDegrees1, 360);
+        LocalHourAngleDegrees2 = NormalizeZeroBounded(LocalHourAngleDegrees2, 360);
 
         // Calculate Azimuth (A) for both Local Hour Angles!
         // Calculate Azimuth (A) for FIRST LOCAK HOUR ANGLE
         // sin(A) = - sin(H) * cos(δ) / cos(m)
         // Azimuth at given H Local Hour Angle
-        Azimuth1_1 = math.degrees(math.asin(
-                - math.sin(math.radians(LocalHourAngleDegrees2)) * math.cos(math.radians(Declination)) / math.cos(math.radians(Altitude))
-                ))
+        Azimuth1_1 = (180 / Pi) * (asin(
+                - sin((Pi / 180) * (LocalHourAngleDegrees2)) * cos((Pi / 180) * (Declination)) / cos((Pi / 180) * (Altitude))
+                ));
 
-        Azimuth1_1 = NormalizeZeroBounded(Azimuth1_1, 360)
+        Azimuth1_1 = NormalizeZeroBounded(Azimuth1_1, 360);
 
-        if(Azimuth1_1 <= 180):
-            Azimuth1_2 = 180 - Azimuth1_1
+        if(Azimuth1_1 <= 180)
+        {
+            Azimuth1_2 = 180 - Azimuth1_1;
+        }
 
-        elif(Azimuth1_1 > 180):
-            Azimuth1_2 = 540 - Azimuth1_1
+        else if(Azimuth1_1 > 180):
+            Azimuth1_2 = 540 - Azimuth1_1;
 
         // Calculate Azimuth (A) with a second method, to determine which one is the correct (A1_1 or A1_2?)
         // cos(A) = (sin(δ) - sin(φ) * sin(m)) / (cos(φ) * cos(m))
-        Azimuth1_3 = math.degrees(math.acos(
-                (math.sin(math.radians(Declination)) - math.sin(math.radians(Latitude)) * math.sin(math.radians(Altitude))) / 
-                (math.cos(math.radians(Latitude)) * math.cos(math.radians(Altitude)))
-        ))
+        Azimuth1_3 = (180 / Pi) * (acos(
+                (sin((Pi / 180) * (Declination)) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (Altitude))) / 
+                (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (Altitude)))
+                ));
 
-        Azimuth1_4 = - Azimuth1_3
+        Azimuth1_4 = - Azimuth1_3;
 
         // Normalize negative result
         // Azimuth: [0,+2π[
-        Azimuth1_4 = NormalizeZeroBounded(Azimuth1_4, 360)
+        Azimuth1_4 = NormalizeZeroBounded(Azimuth1_4, 360);
 
         // Compare Azimuth values
-        if(Azimuth1_1 + 3 > Azimuth1_3 and Azimuth1_1 - 3 < Azimuth1_3):
+        if(Azimuth1_1 + 3 > Azimuth1_3 and Azimuth1_1 - 3 < Azimuth1_3)
+        {
+            Azimuth1 = Azimuth1_1;
+        }
+
+        else if(Azimuth1_1 + 3 > Azimuth1_4 and Azimuth1_1 - 3 < Azimuth1_4)
+        {
             Azimuth1 = Azimuth1_1
+        }
 
-        elif(Azimuth1_1 + 3 > Azimuth1_4 and Azimuth1_1 - 3 < Azimuth1_4):
-            Azimuth1 = Azimuth1_1
-
-        elif(Azimuth1_2 + 3 > Azimuth1_3 and Azimuth1_2 - 3 < Azimuth1_3):
+        else if(Azimuth1_2 + 3 > Azimuth1_3 and Azimuth1_2 - 3 < Azimuth1_3)
+        {
             Azimuth1 = Azimuth1_2
+        }
 
-        elif(Azimuth1_2 + 3 > Azimuth1_4 and Azimuth1_2 - 3 < Azimuth1_4):
+        else if(Azimuth1_2 + 3 > Azimuth1_4 and Azimuth1_2 - 3 < Azimuth1_4)
+        {
             Azimuth1 = Azimuth1_2
+        }
 
-        else:
-            std::cout << Azimuth1_1, Azimuth1_2, Azimuth1_3, Azimuth1_4)
+        else
+        {
+            std::cout << Azimuth1_1, Azimuth1_2, Azimuth1_3, Azimuth1_4);
+        }
 
         // Calculate Azimuth (A) for SECOND LOCAL HOUR ANGLE
         // sin(A) = - sin(H) * cos(δ) / cos(m)
         // Azimuth at given H Local Hour Angle
-        Azimuth2_1 = math.degrees(math.asin(
-                - math.sin(math.radians(LocalHourAngleDegrees1)) * math.cos(math.radians(Declination)) / math.cos(math.radians(Altitude))
+        Azimuth2_1 = (180 / Pi) * (asin(
+                - sin((Pi / 180) * (LocalHourAngleDegrees1)) * cos((Pi / 180) * (Declination)) / cos((Pi / 180) * (Altitude))
                 ))
 
         Azimuth2_1 = NormalizeZeroBounded(Azimuth2_1, 360)
@@ -842,14 +976,14 @@ def EquIToHor(Latitude, RightAscension, Declination, Altitude=None, LocalSiderea
         if(Azimuth2_1 <= 180):
             Azimuth2_2 = 180 - Azimuth2_1
 
-        elif(Azimuth2_1 > 180):
+        else if(Azimuth2_1 > 180):
             Azimuth2_2 = 540 - Azimuth2_1
 
         // Calculate Azimuth (A) with a second method, to determine which one is the correct (A2_1 or A2_2?)
         // cos(A) = (sin(δ) - sin(φ) * sin(m)) / (cos(φ) * cos(m))
-        Azimuth2_3 = math.degrees(math.acos(
-                (math.sin(math.radians(Declination)) - math.sin(math.radians(Latitude)) * math.sin(math.radians(Altitude))) / 
-                (math.cos(math.radians(Latitude)) * math.cos(math.radians(Altitude)))
+        Azimuth2_3 = (180 / Pi) * (acos(
+                (sin((Pi / 180) * (Declination)) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (Altitude))) / 
+                (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (Altitude)))
         ))
 
         Azimuth2_4 = - Azimuth2_3
@@ -862,13 +996,13 @@ def EquIToHor(Latitude, RightAscension, Declination, Altitude=None, LocalSiderea
         if(Azimuth2_1 + 3 > Azimuth2_3 and Azimuth2_1 - 3 < Azimuth2_3):
             Azimuth2 = Azimuth2_1
 
-        elif(Azimuth2_1 + 3 > Azimuth2_4 and Azimuth2_1 - 3 < Azimuth2_4):
+        else if(Azimuth2_1 + 3 > Azimuth2_4 and Azimuth2_1 - 3 < Azimuth2_4):
             Azimuth2 = Azimuth2_1
 
-        elif(Azimuth2_2 + 3 > Azimuth2_3 and Azimuth2_2 - 3 < Azimuth2_3):
+        else if(Azimuth2_2 + 3 > Azimuth2_3 and Azimuth2_2 - 3 < Azimuth2_3):
             Azimuth2 = Azimuth2_2
 
-        elif(Azimuth2_2 + 3 > Azimuth2_4 and Azimuth2_2 - 3 < Azimuth2_4):
+        else if(Azimuth2_2 + 3 > Azimuth2_4 and Azimuth2_2 - 3 < Azimuth2_4):
             Azimuth2 = Azimuth2_2
 
         else:
@@ -880,7 +1014,12 @@ def EquIToHor(Latitude, RightAscension, Declination, Altitude=None, LocalSiderea
         // H_dil is the time, as long as the Object stays above the Horizon
         H_dil = abs(LocalHourAngleDegrees1 - LocalHourAngleDegrees2)
 
-        return(Altitude, Azimuth1, Azimuth2, H_dil)
+        std::vector<double> EquIToHor = {Altitude, Azimuth1, Azimuth2, H_dil}
+
+        return(EquIToHor);
+    }
+}
+
 
 // 4. Equatorial I to Equatorial II
 def EquIToEquII(RightAscension, LocalHourAngle):
@@ -896,13 +1035,13 @@ def EquIToEquII(RightAscension, LocalHourAngle):
 def EquIIToEquI(LocalSiderealTime, RightAscension, LocalHourAngle):
 
     // Calculate Right Ascension or Local Mean Sidereal Time
-    if(RightAscension != None and LocalHourAngle == None):
+    if(RightAscension != NULL and LocalHourAngle == NULL):
         LocalHourAngle = LocalSiderealTime - RightAscension
         // Normalize LHA
         // LHA: [0,24h[
         LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24)
 
-    elif(RightAscension == None and LocalHourAngle != None):
+    else if(RightAscension == NULL and LocalHourAngle != NULL):
         RightAscension = LocalSiderealTime - LocalHourAngle
         // Normalize Right Ascension
         // Right Ascension: [0,24h[
@@ -925,10 +1064,10 @@ def EquIIToHor(Latitude, RightAscension, Declination, Altitude, Azimuth, LocalSi
     Latitude = NormalizeSymmetricallyBoundedPI(Latitude)
     LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24)
     
-    if(RightAscension == None and LocalHourAngle != None):
+    if(RightAscension == NULL and LocalHourAngle != NULL):
         LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24)
 
-    elif(RightAscension != None and LocalHourAngle == None):
+    else if(RightAscension != NULL and LocalHourAngle == NULL):
         RightAscension = NormalizeZeroBounded(RightAscension, 24)
     
     Declination = NormalizeSymmetricallyBoundedPI_2(Declination)
@@ -976,8 +1115,8 @@ def GeogDistCalc(Latitude1, Latitude2, Longitude1, Longitude2):
     // Step 3.: d = R * hav_2
 
     // Step 1
-    hav_1 = ((math.sin(math.radians(Latitude2 - Latitude1) / 2))**2 +
-        (math.cos(math.radians(Latitude1)) * math.cos(math.radians(Latitude2)) * (math.sin(math.radians(Longitude2 - Longitude1) / 2))**2))
+    hav_1 = ((sin((Pi / 180) * (Latitude2 - Latitude1) / 2))**2 +
+        (cos((Pi / 180) * (Latitude1)) * cos((Pi / 180) * (Latitude2)) * (sin((Pi / 180) * (Longitude2 - Longitude1) / 2))**2))
 
     // Step 2
     hav_2 = 2 * math.atan2(math.sqrt(hav_1), math.sqrt(1-hav_1))
@@ -1005,8 +1144,8 @@ def GeogDistLocationCalc(Latitude1, Latitude2, Longitude1, Longitude2):
     // Step 3.: d = R * hav_2
 
     // Step 1
-    hav_1 = ((math.sin(math.radians(Latitude2 - Latitude1) / 2))**2 +
-        (math.cos(math.radians(Latitude1)) * math.cos(math.radians(Latitude2)) * (math.sin(math.radians(Longitude2 - Longitude1) / 2))**2))
+    hav_1 = ((sin((Pi / 180) * (Latitude2 - Latitude1) / 2))**2 +
+        (cos((Pi / 180) * (Latitude1)) * cos((Pi / 180) * (Latitude2)) * (sin((Pi / 180) * (Longitude2 - Longitude1) / 2))**2))
 
     // Step 2
     hav_2 = 2 * math.atan2(math.sqrt(hav_1), math.sqrt(1-hav_1))
@@ -1098,9 +1237,9 @@ def SunsCoordinatesCalc(Planet, Longitude, JulianDays):
     // 3. Equation of the Center
     // EquationOfCenter (C) is the Equation of the center value needed to calculate Lambda (see next equation)
     // EquationOfCenter = C_1 * sin(M) + C_2 * sin(2M) + C_3 * sin(3M) + C_4 * sin(4M) + C_5 * sin(5M) + C_6 * sin(6M)
-    EquationOfCenter = (OrbitDict[Planet + "C"][0] * math.sin(math.radians(MeanAnomaly)) + OrbitDict[Planet + "C"][1] * math.sin(math.radians(2 * MeanAnomaly)) + 
-                       OrbitDict[Planet + "C"][2] * math.sin(math.radians(3 * MeanAnomaly)) + OrbitDict[Planet + "C"][3] * math.sin(math.radians(4 * MeanAnomaly)) + 
-                       OrbitDict[Planet + "C"][4] * math.sin(math.radians(5 * MeanAnomaly)) + OrbitDict[Planet + "C"][5] * math.sin(math.radians(6 * MeanAnomaly)))
+    EquationOfCenter = (OrbitDict[Planet + "C"][0] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDict[Planet + "C"][1] * sin((Pi / 180) * (2 * MeanAnomaly)) + 
+                       OrbitDict[Planet + "C"][2] * sin((Pi / 180) * (3 * MeanAnomaly)) + OrbitDict[Planet + "C"][3] * sin((Pi / 180) * (4 * MeanAnomaly)) + 
+                       OrbitDict[Planet + "C"][4] * sin((Pi / 180) * (5 * MeanAnomaly)) + OrbitDict[Planet + "C"][5] * sin((Pi / 180) * (6 * MeanAnomaly)))
 
     // 4. Ecliptic Longitude
     // MeanEclLongitudeSun (L_sun) in the Mean Ecliptic Longitude
@@ -1115,16 +1254,16 @@ def SunsCoordinatesCalc(Planet, Longitude, JulianDays):
     // PlanetA_2, PlanetA_4 and PlanetA_6 (measured in degrees) are coefficients in the series expansion of the Sun's Right Ascension
     // They varie for different planets in the Solar System
     // RightAscensionSun = EclLongitudeSun + S ≈ EclLongitudeSun + PlanetA_2 * sin(2 * EclLongitudeSun) + PlanetA_4 * sin(4 * EclLongitudeSun) + PlanetA_6 * sin(6 * EclLongitudeSun)
-    RightAscensionSun = (EclLongitudeSun + OrbitDict[Planet + "A"][0] * math.sin(math.radians(2 * EclLongitudeSun)) + OrbitDict[Planet + "A"][1] * 
-                        math.sin(math.radians(4 * EclLongitudeSun)) + OrbitDict[Planet + "A"][2] * math.sin(math.radians(6 * EclLongitudeSun)))
+    RightAscensionSun = (EclLongitudeSun + OrbitDict[Planet + "A"][0] * sin((Pi / 180) * (2 * EclLongitudeSun)) + OrbitDict[Planet + "A"][1] * 
+                        sin((Pi / 180) * (4 * EclLongitudeSun)) + OrbitDict[Planet + "A"][2] * sin((Pi / 180) * (6 * EclLongitudeSun)))
 
     RightAscensionSun /= 15
 
     // 6./a Declination of the Sun (δ) (Wikipedia)
     // DeclinationSun (δSun) is the Declination of the Sun
     // 23.44° is Earth's maximum Axial Tilt toward's the Sun
-    //DeclinationSun = math.degrees(math.asin(
-    //       math.sin(math.radians(EclLongitudeSun)) * math.sin(math.radians(23.44)) ))
+    //DeclinationSun = (180 / Pi) * (asin(
+    //       sin((Pi / 180) * (EclLongitudeSun)) * sin((Pi / 180) * (23.44)) ))
     // Normalize Declination
     //DeclinationSun = NormalizeSymmetricallyBoundedPI_2(DeclinationSun)
 
@@ -1132,8 +1271,8 @@ def SunsCoordinatesCalc(Planet, Longitude, JulianDays):
     // PlanetD_1, PlanetD_3 and PlanetD_5 (measured in degrees) are coefficients in the series expansion of the Sun's Declination.
     // They varie for different planets in the Solar System.
     // DeclinationSun = PlanetD_1 * sin(EclLongitudeSun) + PlanetD_3 * (sin(EclLongitudeSun))^3 + PlanetD_5 * (sin(EclLongitudeSun))^5
-    DeclinationSun = (OrbitDict[Planet + "D"][0] * math.sin(math.radians(EclLongitudeSun)) + OrbitDict[Planet + "D"][1] * 
-                     (math.sin(math.radians(EclLongitudeSun)))**3 + OrbitDict[Planet + "D"][2] * (math.sin(math.radians(EclLongitudeSun)))**5)
+    DeclinationSun = (OrbitDict[Planet + "D"][0] * sin((Pi / 180) * (EclLongitudeSun)) + OrbitDict[Planet + "D"][1] * 
+                     (sin((Pi / 180) * (EclLongitudeSun)))**3 + OrbitDict[Planet + "D"][2] * (sin((Pi / 180) * (EclLongitudeSun)))**5)
 
 
     // 7. Solar Transit
@@ -1143,7 +1282,7 @@ def SunsCoordinatesCalc(Planet, Longitude, JulianDays):
     // Jtransit = J_x + 0.0053 * sin(MeanANomaly) - 0.0068 * sin(2 * L_sun)
     // "0.0053 * sin(MeanAnomaly) - 0.0069 * sin(2 * EclLongitudeSun)"  is a simplified version of the equation of time
     J_x = (JulianDays + 2451545) + OrbitDict[Planet + "J"][3] * (JulianDays - JAnomaly)
-    Jtransit = J_x + OrbitDict[Planet + "J"][1] * math.sin(math.radians(MeanAnomaly)) + OrbitDict[Planet + "J"][2] * math.sin(math.radians(2 * MeanEclLongitudeSun))
+    Jtransit = J_x + OrbitDict[Planet + "J"][1] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDict[Planet + "J"][2] * sin((Pi / 180) * (2 * MeanEclLongitudeSun))
 
 
     return(RightAscensionSun, DeclinationSun, EclLongitudeSun, Jtransit)
@@ -1152,9 +1291,9 @@ def SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSun, EclLongitude
 
     // 8./a Local Hour Angle of Sun (H)
     // H+ ≈ 90° + H_1 * sin(EclLongitudeSun) * tan(φ) + H_3 * sin(EclLongitudeSun)^3 * tan(φ) * (3 + tan(φ)^2) + H_5 * sin(EclLongitudeSun)^5 * tan(φ) * (15 + 10*tan(φ)^2 + 3 * tan(φ)^4))
-    LocalHourAngleSun_Pos = (90 + OrbitDict[Planet + "H"][0] * math.sin(math.radians(EclLongitudeSun)) * math.tan(math.radians(Latitude)) + OrbitDict[Planet + "H"][1] * 
-                            math.sin(math.radians((EclLongitudeSun))**3 * math.tan(math.radians(Latitude)) * (3 + math.tan(math.radians(Latitude))**2) + OrbitDict[Planet + "H"][2] * 
-                            math.sin(math.radians(EclLongitudeSun))**5 * math.tan(math.radians(Latitude)) * (15 + 10 * math.tan(math.radians(Latitude))**2 + 3 * math.tan(math.radians(Latitude))**4)))
+    LocalHourAngleSun_Pos = (90 + OrbitDict[Planet + "H"][0] * sin((Pi / 180) * (EclLongitudeSun)) * math.tan((Pi / 180) * (Latitude)) + OrbitDict[Planet + "H"][1] * 
+                            sin((Pi / 180) * ((EclLongitudeSun))**3 * math.tan((Pi / 180) * (Latitude)) * (3 + math.tan((Pi / 180) * (Latitude))**2) + OrbitDict[Planet + "H"][2] * 
+                            sin((Pi / 180) * (EclLongitudeSun))**5 * math.tan((Pi / 180) * (Latitude)) * (15 + 10 * math.tan((Pi / 180) * (Latitude))**2 + 3 * math.tan((Pi / 180) * (Latitude))**4)))
 
     // 8./b1 Local Hour Angle of Sun (H)
     // cos(H) = (sin(m_0) - sin(φ) * sin(δ)) / (cos(φ) * cos(δ))
@@ -1162,14 +1301,14 @@ def SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSun, EclLongitude
     // Latitude (φ) is the North Latitude of the Observer (north is positive, south is negative)
     // m_0 = Planet_RefCorr is a compensation of Altitude (m) in degrees, for the Sun's distorted shape, and the atmospherical refraction
     // The equation return two value, LHA1 and LHA2. We need that one, which is approximately equals to LHA_Pos
-    LHAcos = ((math.sin(math.radians(AltitudeOfSun + OrbitDict[Planet + "Orbit"][2])) - math.sin(math.radians(Latitude)) * math.sin(math.radians(DeclinationSun))) /
-            (math.cos(math.radians(Latitude)) * math.cos(math.radians(DeclinationSun))))
+    LHAcos = ((sin((Pi / 180) * (AltitudeOfSun + OrbitDict[Planet + "Orbit"][2])) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (DeclinationSun))) /
+            (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (DeclinationSun))))
     if(LHAcos <= 1 and LHAcos >= -1):
-        LocalHourAngleSun_Orig = math.degrees(math.acos(LHAcos))
-    elif(LHAcos > 1):
-        LocalHourAngleSun_Orig = math.degrees(math.acos(1))
-    elif(LHAcos < -1):
-        LocalHourAngleSun_Orig = math.degrees(math.acos(-1))
+        LocalHourAngleSun_Orig = (180 / Pi) * (acos(LHAcos))
+    else if(LHAcos > 1):
+        LocalHourAngleSun_Orig = (180 / Pi) * (acos(1))
+    else if(LHAcos < -1):
+        LocalHourAngleSun_Orig = (180 / Pi) * (acos(-1))
 
     //LocalHourAngleSun_Orig2 = - LocalHourAngleSun_Orig1
     
@@ -1365,132 +1504,132 @@ def AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue):
             ((aValue + bValue + cValue) < 360)):
             
             // Calculate angle Alpha
-            alphaValue = math.degrees(math.acos(
-                (math.cos(math.radians(aValue)) - math.cos(math.radians(bValue)) * math.cos(math.radians(cValue))) /
-                (math.sin(math.radians(bValue)) * math.sin(math.radians(cValue)))
+            alphaValue = (180 / Pi) * (acos(
+                (cos((Pi / 180) * (aValue)) - cos((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue))) /
+                (sin((Pi / 180) * (bValue)) * sin((Pi / 180) * (cValue)))
             ))
 
             // Calculate angle Beta
-            betaValue = math.degrees(math.acos(
-                (math.cos(math.radians(bValue)) - math.cos(math.radians(cValue)) * math.cos(math.radians(aValue))) /
-                (math.sin(math.radians(cValue)) * math.sin(math.radians(aValue)))
+            betaValue = (180 / Pi) * (acos(
+                (cos((Pi / 180) * (bValue)) - cos((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue))) /
+                (sin((Pi / 180) * (cValue)) * sin((Pi / 180) * (aValue)))
             ))
 
             // Calculate angle Gamma
-            gammaValue = math.degrees(math.acos(
-                (math.cos(math.radians(cValue)) - math.cos(math.radians(aValue)) * math.cos(math.radians(bValue))) /
-                (math.sin(math.radians(aValue)) * math.sin(math.radians(bValue)))
+            gammaValue = (180 / Pi) * (acos(
+                (cos((Pi / 180) * (cValue)) - cos((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue))) /
+                (sin((Pi / 180) * (aValue)) * sin((Pi / 180) * (bValue)))
             ))
 
         else:
             std::cout << ">> Length of the sides are invalid!\n>> They violate the triangle inequality!")
 
 
-    elif(aValue != 0 and bValue != 0 and gammaValue != 0):
+    else if(aValue != 0 and bValue != 0 and gammaValue != 0):
 
         // Calculate side C 
-        cValue = math.degrees(math.atan(
-            math.sqrt((math.sin(math.radians(aValue)) * math.cos(math.radians(bValue)) -
-            math.cos(math.radians(aValue)) * math.sin(math.radians(bValue)) * math.cos(math.radians(gammaValue)))**2 + 
-            (math.sin(math.radians(bValue)) * math.sin(math.radians(gammaValue)))**2) /
-            (math.cos(math.radians(aValue)) * math.cos(math.radians(bValue)) + 
-            math.sin(math.radians(aValue)) * math.sin(math.radians(aValue)) * math.cos(math.radians(gammaValue)))
+        cValue = (180 / Pi) * (math.atan(
+            math.sqrt((sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) -
+            cos((Pi / 180) * (aValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (gammaValue)))**2 + 
+            (sin((Pi / 180) * (bValue)) * sin((Pi / 180) * (gammaValue)))**2) /
+            (cos((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) + 
+            sin((Pi / 180) * (aValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (gammaValue)))
         ))
 
         // calculate angle Alpha
-        alphaValue = math.degrees(math.atan(
-            (math.sin(math.radians(aValue) * math.sin(math.radians(gammaValue)))) /
-            (math.sin(math.radians(bValue)) * math.cos(math.radians(aValue)) - 
-            math.cos(math.radians(bValue)) * math.sin(math.radians(aValue)) * math.cos(math.radians(gammaValue)))
+        alphaValue = (180 / Pi) * (math.atan(
+            (sin((Pi / 180) * (aValue) * sin((Pi / 180) * (gammaValue)))) /
+            (sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (aValue)) - 
+            cos((Pi / 180) * (bValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (gammaValue)))
         ))
 
         // Calculate angle Beta
-        betaValue = math.degrees(math.atan(
-            (math.sin(math.radians(bValue) * math.sin(math.radians(gammaValue)))) /
-            (math.sin(math.radians(aValue)) * math.cos(math.radians(bValue)) - 
-            math.cos(math.radians(aValue)) * math.sin(math.radians(bValue)) * math.cos(math.radians(gammaValue)))
+        betaValue = (180 / Pi) * (math.atan(
+            (sin((Pi / 180) * (bValue) * sin((Pi / 180) * (gammaValue)))) /
+            (sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) - 
+            cos((Pi / 180) * (aValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (gammaValue)))
         ))
 
-    elif(bValue != 0 and cValue != 0 and alphaValue != 0): 
+    else if(bValue != 0 and cValue != 0 and alphaValue != 0): 
 
         // Calculate side A 
-        aValue = math.degrees(math.atan(
-            math.sqrt((math.sin(math.radians(bValue)) * math.cos(math.radians(cValue)) -
-            math.cos(math.radians(bValue)) * math.sin(math.radians(cValue)) * math.cos(math.radians(alphaValue)))**2 + 
-            (math.sin(math.radians(cValue)) * math.sin(math.radians(alphaValue)))**2) /
-            (math.cos(math.radians(bValue)) * math.cos(math.radians(cValue)) + 
-            math.sin(math.radians(bValue)) * math.sin(math.radians(bValue)) * math.cos(math.radians(alphaValue)))
+        aValue = (180 / Pi) * (math.atan(
+            math.sqrt((sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) -
+            cos((Pi / 180) * (bValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (alphaValue)))**2 + 
+            (sin((Pi / 180) * (cValue)) * sin((Pi / 180) * (alphaValue)))**2) /
+            (cos((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) + 
+            sin((Pi / 180) * (bValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (alphaValue)))
         ))
 
         // calculate angle Gamma
-        betaValue = math.degrees(math.atan(
-            (math.sin(math.radians(bValue) * math.sin(math.radians(alphaValue)))) /
-            (math.sin(math.radians(cValue)) * math.cos(math.radians(bValue)) - 
-            math.cos(math.radians(cValue)) * math.sin(math.radians(bValue)) * math.cos(math.radians(alphaValue)))
+        betaValue = (180 / Pi) * (math.atan(
+            (sin((Pi / 180) * (bValue) * sin((Pi / 180) * (alphaValue)))) /
+            (sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (bValue)) - 
+            cos((Pi / 180) * (cValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (alphaValue)))
         ))
 
         // Calculate angle Alpha
-        gammaValue = math.degrees(math.atan(
-            (math.sin(math.radians(cValue) * math.sin(math.radians(alphaValue)))) /
-            (math.sin(math.radians(bValue)) * math.cos(math.radians(cValue)) - 
-            math.cos(math.radians(bValue)) * math.sin(math.radians(cValue)) * math.cos(math.radians(alphaValue)))
+        gammaValue = (180 / Pi) * (math.atan(
+            (sin((Pi / 180) * (cValue) * sin((Pi / 180) * (alphaValue)))) /
+            (sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) - 
+            cos((Pi / 180) * (bValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (alphaValue)))
         ))
     
-    elif(aValue != 0 and cValue != 0 and betaValue != 0):
+    else if(aValue != 0 and cValue != 0 and betaValue != 0):
 
         // Calculate side C 
-        bValue = math.degrees(math.atan(
-            math.sqrt((math.sin(math.radians(cValue)) * math.cos(math.radians(aValue)) -
-            math.cos(math.radians(cValue)) * math.sin(math.radians(aValue)) * math.cos(math.radians(betaValue)))**2 + 
-            (math.sin(math.radians(aValue)) * math.sin(math.radians(betaValue)))**2) /
-            (math.cos(math.radians(cValue)) * math.cos(math.radians(aValue)) + 
-            math.sin(math.radians(cValue)) * math.sin(math.radians(cValue)) * math.cos(math.radians(betaValue)))
+        bValue = (180 / Pi) * (math.atan(
+            math.sqrt((sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) -
+            cos((Pi / 180) * (cValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (betaValue)))**2 + 
+            (sin((Pi / 180) * (aValue)) * sin((Pi / 180) * (betaValue)))**2) /
+            (cos((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) + 
+            sin((Pi / 180) * (cValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (betaValue)))
         ))
 
         // calculate angle Alpha
-        gammaValue = math.degrees(math.atan(
-            (math.sin(math.radians(cValue) * math.sin(math.radians(betaValue)))) /
-            (math.sin(math.radians(aValue)) * math.cos(math.radians(cValue)) - 
-            math.cos(math.radians(aValue)) * math.sin(math.radians(cValue)) * math.cos(math.radians(betaValue)))
+        gammaValue = (180 / Pi) * (math.atan(
+            (sin((Pi / 180) * (cValue) * sin((Pi / 180) * (betaValue)))) /
+            (sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (cValue)) - 
+            cos((Pi / 180) * (aValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (betaValue)))
         ))
 
         // Calculate angle Beta
-        alphaValue = math.degrees(math.atan(
-            (math.sin(math.radians(aValue) * math.sin(math.radians(betaValue)))) /
-            (math.sin(math.radians(cValue)) * math.cos(math.radians(aValue)) - 
-            math.cos(math.radians(cValue)) * math.sin(math.radians(aValue)) * math.cos(math.radians(betaValue)))
+        alphaValue = (180 / Pi) * (math.atan(
+            (sin((Pi / 180) * (aValue) * sin((Pi / 180) * (betaValue)))) /
+            (sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) - 
+            cos((Pi / 180) * (cValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (betaValue)))
         ))
 
 
-    elif((aValue != 0 and bValue != 0 and alphaValue != 0) or (aValue != 0 and bValue != 0 and betaValue != 0) or 
+    else if((aValue != 0 and bValue != 0 and alphaValue != 0) or (aValue != 0 and bValue != 0 and betaValue != 0) or 
         (bValue != 0 and cValue != 0 and betaValue != 0) or (bValue != 0 and cValue != 0 and gammaValue != 0) or
         (aValue != 0 and cValue != 0 and betaValue != 0) or (aValue != 0 and cValue != 0 and gammaValue != 0)):
         pass
 
 
-    elif((aValue != 0 and betaValue != 0 and gammaValue != 0) or 
+    else if((aValue != 0 and betaValue != 0 and gammaValue != 0) or 
         (bValue != 0 and alphaValue != 0 and gammaValue != 0) or
         (cValue != 0 and alphaValue != 0 and betaValue != 0)):
         pass
 
     
-    elif((aValue != 0 and alphaValue != 0 and betaValue != 0) or (aValue != 0 and alphaValue != 0 and gammaValue != 0) or
+    else if((aValue != 0 and alphaValue != 0 and betaValue != 0) or (aValue != 0 and alphaValue != 0 and gammaValue != 0) or
         (bValue != 0 and betaValue != 0 and alphaValue != 0) or (bValue != 0 and betaValue != 0 and gammaValue != 0) or
         (cValue != 0 and gammaValue != 0 and alphaValue != 0) or (aValue != 0 and gammaValue != 0 and betaValue != 0)):
         pass
 
 
-    elif(alphaValue != 0 and betaValue != 0 and gammaValue != 0):
+    else if(alphaValue != 0 and betaValue != 0 and gammaValue != 0):
         pass
 
 
     else:
-        aValue = None
-        bValue = None
-        cValue = None
-        alphaValue = None
-        betaValue = None
-        gammaValue = None
+        aValue = NULL
+        bValue = NULL
+        cValue = NULL
+        alphaValue = NULL
+        betaValue = NULL
+        gammaValue = NULL
 
 
     return(aValue, bValue, cValue, alphaValue, betaValue, gammaValue)
@@ -1556,51 +1695,51 @@ def SundialParametersCalc(Latitude, LocalHourAngle, DeclinationSun):
 
     // Calculate Altitude (m)
     // sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H)
-    Altsin = math.sin(math.radians(DeclinationSun)) * math.sin(math.radians(Latitude)) + math.cos(math.radians(DeclinationSun)) * math.cos(math.radians(Latitude)) * math.cos(math.radians(LocalHourAngleDegrees))
+    Altsin = sin((Pi / 180) * (DeclinationSun)) * sin((Pi / 180) * (Latitude)) + cos((Pi / 180) * (DeclinationSun)) * cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (LocalHourAngleDegrees))
     if(Altsin <= 1):
-        Altitude = math.degrees(math.asin(Altsin))
+        Altitude = (180 / Pi) * (asin(Altsin))
         //std::cout << Altitude)
     else:
-        Altitude = math.degrees(math.asin(2 - Altsin))
+        Altitude = (180 / Pi) * (asin(2 - Altsin))
     // Normalize Altitude
     // Altitude: [-π/2,+π/2]
     Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude)
 
     // We should draw 1/tan(m) of the function of (AzimuthMax - AzimuthMin)
-    ShadowLength = 1/math.tan(math.radians(Altitude))
+    ShadowLength = 1/math.tan((Pi / 180) * (Altitude))
 
     '''// Calculate Azimuth (A)
     // sin(A) = - sin(H) * cos(δ) / cos(m)
     // Azimuth at given H Local Hour Angle
-    Azsin = - math.sin(math.radians(LocalHourAngleDegrees)) * math.cos(math.radians(DeclinationSun)) / math.cos(math.radians(Altitude))
+    Azsin = - sin((Pi / 180) * (LocalHourAngleDegrees)) * cos((Pi / 180) * (DeclinationSun)) / cos((Pi / 180) * (Altitude))
     if(Azsin <= 1 and Azsin >= -1):
-        Azimuth1 = math.degrees(math.asin(Azsin))
-    elif(Azsin > 1):
+        Azimuth1 = (180 / Pi) * (asin(Azsin))
+    else if(Azsin > 1):
         std::cout << Azsin)
-        Azimuth1 = 180 - math.degrees(math.asin(2 - Azsin))
+        Azimuth1 = 180 - (180 / Pi) * (asin(2 - Azsin))
     else:
         std::cout << Azsin)
-        Azimuth1 = - 180 + math.degrees(math.asin(2 + Azsin))
+        Azimuth1 = - 180 + (180 / Pi) * (asin(2 + Azsin))
 
     Azimuth1 = NormalizeZeroBounded(Azimuth1, 360)
 
     if(Azimuth1 <= 180):
         Azimuth2 = 180 - Azimuth1
 
-    elif(Azimuth1 > 180):
+    else if(Azimuth1 > 180):
         Azimuth2 = 540 - Azimuth1
 
     // Calculate Azimuth (A) with a second method, to determine which one is the correct (A_1 or A_2?)
     // cos(A) = (sin(δ) - sin(φ) * sin(m)) / (cos(φ) * cos(m))
-    Azcos = (math.sin(math.radians(DeclinationSun)) - math.sin(math.radians(Latitude)) * math.sin(math.radians(Altitude))) / (math.cos(math.radians(Latitude)) * math.cos(math.radians(Altitude)))
+    Azcos = (sin((Pi / 180) * (DeclinationSun)) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (Altitude))) / (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (Altitude)))
     if(Azcos <= 1 and Azcos >= -1):
-        Azimuth3 = math.degrees(math.acos(Azcos))
+        Azimuth3 = (180 / Pi) * (acos(Azcos))
 
-    elif(Azcos < -1):
-        Azimuth3 = 180 + math.degrees(math.asin(2 + Azcos))
+    else if(Azcos < -1):
+        Azimuth3 = 180 + (180 / Pi) * (asin(2 + Azcos))
 
     else:
-        Azimuth3 = math.degrees(math.asin(2 - Azcos))
+        Azimuth3 = (180 / Pi) * (asin(2 - Azcos))
 
     Azimuth3 = NormalizeZeroBounded(Azimuth3, 360)
 
@@ -1614,13 +1753,13 @@ def SundialParametersCalc(Latitude, LocalHourAngle, DeclinationSun):
     if(Azimuth1 + 3 > Azimuth3 and Azimuth1 - 3 < Azimuth3):
         Azimuth = Azimuth1
 
-    elif(Azimuth1 + 3 > Azimuth4 and Azimuth1 - 3 < Azimuth4):
+    else if(Azimuth1 + 3 > Azimuth4 and Azimuth1 - 3 < Azimuth4):
         Azimuth = Azimuth1
 
-    elif(Azimuth2 + 3 > Azimuth3 and Azimuth2 - 3 < Azimuth3):
+    else if(Azimuth2 + 3 > Azimuth3 and Azimuth2 - 3 < Azimuth3):
         Azimuth = Azimuth2
 
-    elif(Azimuth2 + 3 > Azimuth4 and Azimuth2 - 3 < Azimuth4):
+    else if(Azimuth2 + 3 > Azimuth4 and Azimuth2 - 3 < Azimuth4):
         Azimuth = Azimuth2
     
     else:
@@ -1674,7 +1813,7 @@ def SunAnalemma(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, Loca
     LocalHourAngle = LocalSiderealTime - RightAscensionSun
     // Normalize output
     LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24)
-    Altitude = None
+    Altitude = NULL
     Altitude, Azimuth = EquIToHor(Latitude, RightAscensionSun, DeclinationSun, Altitude, LocalSiderealTime, LocalHourAngle)
 
     return(LocalHourAngle, Altitude)
@@ -1772,7 +1911,7 @@ int main()
                             Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
                             break
                         
-                        elif(HorToEquILocationChoose == '2'):
+                        else if(HorToEquILocationChoose == '2'):
                             while(True):
                                 Location = input("> Location's name (type \'H\' for Help): ")
 
@@ -1812,8 +1951,8 @@ int main()
                             LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600
                             break
 
-                        elif(HorToEquIChoose == 'N' or HorToEquIChoose == 'n' or HorToEquIChoose == 'No' or HorToEquIChoose == 'no' or HorToEquIChoose == 'nO'):
-                            LocalSiderealTime = None
+                        else if(HorToEquIChoose == 'N' or HorToEquIChoose == 'n' or HorToEquIChoose == 'No' or HorToEquIChoose == 'no' or HorToEquIChoose == 'nO'):
+                            LocalSiderealTime = NULL
                             break
 
                         else:
@@ -1841,7 +1980,7 @@ int main()
                     std::cout << declinmsg.format(DeclinationHours, DeclinationMinutes, DeclinationSeconds))
                     std::cout << hourangmsg.format(LocalHourAngleHours, LocalHourAngleMinutes, LocalHourAngleSeconds))
                     
-                    if(LocalSiderealTime != None):
+                    if(LocalSiderealTime != NULL):
                         
                         RightAscensionHours = int(RightAscension)
                         RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60)
@@ -1859,7 +1998,7 @@ int main()
                 // ./ /____ 
                 // \_____(_)
                 // 2. Horizontal to Equatorial II Coordinate System
-                elif(CoordMode == '2'):
+                else if(CoordMode == '2'):
                     std::cout << ">> Conversion from Horizontal to Equatorial II Coordinate System")
                     std::cout << ">> Give Parameters!")
                     
@@ -1877,7 +2016,7 @@ int main()
                             Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
                             break
                         
-                        elif(HorToEquIILocationChoose == '2'):
+                        else if(HorToEquIILocationChoose == '2'):
                             while(True):
                                 Location = input("> Location's name (type \'H\' for Help): ")
 
@@ -1945,7 +2084,7 @@ int main()
                 // .___/ / 
                 // \____(_)
                 // 3. Equatorial I to Horizontal Coordinate System
-                elif(CoordMode == '3'):
+                else if(CoordMode == '3'):
                     std::cout << ">> Conversion from Equatorial I to Horizontal Coordinate System")
                     std::cout << ">> Give Parameters!\n")
                     
@@ -1964,7 +2103,7 @@ int main()
                             Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
                             break
                         
-                        elif(EquIToHorLocationChoose == '2'):
+                        else if(EquIToHorLocationChoose == '2'):
                             while(True):
                                 Location = input("> Location's name (type \'H\' for Help): ")
 
@@ -2003,7 +2142,7 @@ int main()
                             RAorDecEquIToHorChoose = input(">> Only Declination (write \'D\'), Or both of\n>> Right Ascension and Declination (write \'B\')?: ")
 
                             if(RAorDecEquIToHorChoose == 'D' or RAorDecEquIToHorChoose == 'd'):
-                                RightAscension = None
+                                RightAscension = NULL
 
                                 std::cout << "\n>> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                                 DeclinationHours = float(input("\n> Declination (δ) Hours: ") or "0")
@@ -2012,7 +2151,7 @@ int main()
                                 Declination = DeclinationHours + DeclinationMinutes/60 + DeclinationSeconds/3600
                                 break
 
-                            elif(RAorDecEquIToHorChoose == 'B' or RAorDecEquIToHorChoose == 'b'):
+                            else if(RAorDecEquIToHorChoose == 'B' or RAorDecEquIToHorChoose == 'b'):
                                 std::cout << "\n>> HINT: You can write RA and Declination as a Decimal Fraction.\n>> For this you need to write Hours as a float-type value, then\n>> You can Press Enter for both Minutes and Seconds.")
                                 RightAscensionHours = float(input("\n> Right Ascension (α) Hours: ") or "0")
                                 RightAscensionMinutes = float(input("> Right Ascension (α) Minutes: ") or "0")
@@ -2028,7 +2167,7 @@ int main()
                             else:
                                 std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'D\' or \'B\'!")
 
-                        elif(EquIToHorStellarChoose == '2'):
+                        else if(EquIToHorStellarChoose == '2'):
                             while(True):
                                 StellarObject = input("> Stellar object's name (type \'H\' for Help): ")
 
@@ -2053,11 +2192,11 @@ int main()
                                         RAorDecEquIToHorChoose = input(">> Only Declination (write \'D\'), Or both of\n>> Right Ascension and Declination (write \'B\')?: ")
 
                                         if(RAorDecEquIToHorChoose == 'D' or RAorDecEquIToHorChoose == 'd'):
-                                            RightAscension = None
+                                            RightAscension = NULL
                                             Declination = StellarDict[StellarObject][1]
                                             break
 
-                                        elif(RAorDecEquIToHorChoose == 'B' or RAorDecEquIToHorChoose == 'b'):
+                                        else if(RAorDecEquIToHorChoose == 'B' or RAorDecEquIToHorChoose == 'b'):
                                             RightAscension = StellarDict[StellarObject][0]
                                             Declination = StellarDict[StellarObject][1]
                                             break
@@ -2069,7 +2208,7 @@ int main()
                         else:
                             std::cout << ">>>> ERROR: Invalid option! Try Again!")
 
-                    if(RightAscension != None and Declination != None):
+                    if(RightAscension != NULL and Declination != NULL):
                         while(True):
                             std::cout << "\n>> Is Local Mean Sidereal Time (S) given?")
                             EquIToHorChoose1 = input(">> Write \'Y\' or \'N\' (Yes or No): ")
@@ -2081,11 +2220,11 @@ int main()
                                 LocalSiderealTimeSeconds = float(input("> Local Mean Sidereal Time (S) Seconds: ") or "0")
                                 LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600
 
-                                Altitude = None
+                                Altitude = NULL
                                 break
 
-                            elif(EquIToHorChoose1 == 'N' or EquIToHorChoose1 == 'n' or EquIToHorChoose1 == 'No' or EquIToHorChoose1 == 'no' or EquIToHorChoose1 == 'nO'):
-                                LocalSiderealTime = None
+                            else if(EquIToHorChoose1 == 'N' or EquIToHorChoose1 == 'n' or EquIToHorChoose1 == 'No' or EquIToHorChoose1 == 'no' or EquIToHorChoose1 == 'nO'):
+                                LocalSiderealTime = NULL
 
                                 std::cout << "\n>> Is Local Hour Angle given?")
                                 EquIToHorChoose2 = input(">> Write \'Y\' or \'N\' (Yes or No): ")
@@ -2097,21 +2236,21 @@ int main()
                                     LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
                                     LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
 
-                                    Altitude = None
+                                    Altitude = NULL
                                     break
 
-                                elif(EquIToHorChoose2 == 'N' or EquIToHorChoose2 == 'n' or EquIToHorChoose2 == 'No' or EquIToHorChoose2 == 'no' or EquIToHorChoose2 == 'nO'):
-                                    LocalHourAngle = None
+                                else if(EquIToHorChoose2 == 'N' or EquIToHorChoose2 == 'n' or EquIToHorChoose2 == 'No' or EquIToHorChoose2 == 'no' or EquIToHorChoose2 == 'nO'):
+                                    LocalHourAngle = NULL
                                     std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.")
 
-                                    Azimuth == None
+                                    Azimuth == NULL
                                     AltitudeHours = float(input("> Altitude (m) Hours: ") or "0")
                                     AltitudeMinutes = float(input("> Altitude (m) Minutes: ") or "0")
                                     AltitudeSeconds = float(input("> Altitude (m) Seconds: ") or "0")
                                     ALtitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600
                                     break
 
-                    elif(Declination != None and RightAscension == None):
+                    else if(Declination != NULL and RightAscension == NULL):
                         while(True):
                             std::cout << "\n>> Is Local Hour Angle (t) given?")
                             EquIToHorChooseD = input(">> Write \'Y\' or \'N\' (Yes or No): ")
@@ -2124,11 +2263,11 @@ int main()
                                 LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
                                 break
 
-                            elif(EquIToHorChooseD == 'N' or EquIToHorChooseD == 'n' or EquIToHorChooseD == 'No' or EquIToHorChooseD == 'no' or EquIToHorChooseD == 'nO'):
-                                LocalHourAngle = None
+                            else if(EquIToHorChooseD == 'N' or EquIToHorChooseD == 'n' or EquIToHorChooseD == 'No' or EquIToHorChooseD == 'no' or EquIToHorChooseD == 'nO'):
+                                LocalHourAngle = NULL
                                 std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.")
                                 std::cout << ">> HINT: You can write Altitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                                Azimuth == None
+                                Azimuth == NULL
 
                                 AltitudeHours = float(input("> Altitude (m) Hours: ") or "0")
                                 AltitudeMinutes = float(input("> Altitude (m) Minutes: ") or "0")
@@ -2142,15 +2281,15 @@ int main()
                     // Starting parameters could be:
                     // 1. Latitude, RightAscension, Declination, LocalSiderealTime   // φ,α,δ,S:  S,α -> t; t -> H; H,δ,φ -> m; H,δ,m -> A    // Output: A,m
                     // 2. Latitude, RightAscension, Declination, LocalHourAngle      // φ,α,δ,t:  t -> H; H,δ,φ -> m; H,δ,m -> A              // Output: A,m
-                    // 3. Latitude, RightAscension, Declination, Azimuth             // φ,α,δ,A:  Not Enough Parameters!                      // Output: None
+                    // 3. Latitude, RightAscension, Declination, Azimuth             // φ,α,δ,A:  Not Enough Parameters!                      // Output: NULL
                     // 4. Latitude, RightAscension, Declination, Altitude            // φ,α,δ,m:  m,δ,φ -> H; H,δ,m -> A                      // Output: A from m
-                    // 5. Latitude, RightAscension, LocalSiderealTime                // φ,α,S:    Not Enough Parameters!                      // Output: None
-                    // 6. Latitude, RightAscension, LocalHourAngle                   // φ,α,t:    Not Enough Parameters!                      // Output: None
-                    // 7. Latitude, RightAscension, Azimuth                          // φ,α,A:    Not Enough Parameters!                      // Output: None
-                    // 8. Latitude, RightAscension, Altitude                         // φ,α,m:    Not Enough Parameters!                      // Output: None
-                    // 9. Latitude, Declination, LocalSiderealTime                   // φ,δ,S:    Not Enough Parameters!                      // Output: None
+                    // 5. Latitude, RightAscension, LocalSiderealTime                // φ,α,S:    Not Enough Parameters!                      // Output: NULL
+                    // 6. Latitude, RightAscension, LocalHourAngle                   // φ,α,t:    Not Enough Parameters!                      // Output: NULL
+                    // 7. Latitude, RightAscension, Azimuth                          // φ,α,A:    Not Enough Parameters!                      // Output: NULL
+                    // 8. Latitude, RightAscension, Altitude                         // φ,α,m:    Not Enough Parameters!                      // Output: NULL
+                    // 9. Latitude, Declination, LocalSiderealTime                   // φ,δ,S:    Not Enough Parameters!                      // Output: NULL
                     // 10. Latitude, Declination, LocalHourAngle                     // φ,δ,t:    t -> H; H,δ,φ -> m; H,δ,m -> A              // Output: A,m
-                    // 11. Latitude, Declination, Azimuth                            // φ,δ,A:    Not Enough Parameters!                      // Output: None
+                    // 11. Latitude, Declination, Azimuth                            // φ,δ,A:    Not Enough Parameters!                      // Output: NULL
                     // 12. Latitude, Declination, Altitude                           // φ,δ,m:    m,δ,φ -> H; H,δ,m -> A                      // Output: A from m
                     // !!!! Now only those could be selected, which has any kind of output !!!!
 
@@ -2158,7 +2297,7 @@ int main()
                     // Used formulas:
                     // t = S - α
                     // sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H)
-                    if(LocalSiderealTime != None or LocalHourAngle != None):
+                    if(LocalSiderealTime != NULL or LocalHourAngle != NULL):
 
                         Altitude, Azimuth = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle)
 
@@ -2174,7 +2313,7 @@ int main()
                     // Used formulas:
                     // cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)
                     // sin(A) = - sin(H) * cos(δ) / cos(m)
-                    elif(Altitude != None):
+                    else if(Altitude != NULL):
                         Altitude, Azimuth1, Azimuth2, H_dil = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle)
 
                         // Print Results
@@ -2192,7 +2331,7 @@ int main()
                 // \___  |_ 
                 //     |_(_)
                 // 4. Equatorial I to Equatorial II Coordinate System
-                elif(CoordMode == '4'):
+                else if(CoordMode == '4'):
                     std::cout << ">> Conversion from Equatorial I to Equatorial II Coordinate System")
                     std::cout << ">> Give Parameters!")
 
@@ -2217,13 +2356,13 @@ int main()
                                     Declination = float(input("> Declination (δ): "))
                                     break
                                 
-                                elif(EquIToEquIIChoose == 'N' or EquIToEquIIChoose == 'n' or EquIToEquIIChoose == 'No' or EquIToEquIIChoose == 'no' or EquIToEquIIChoose == 'nO'):
-                                    Declination = None
+                                else if(EquIToEquIIChoose == 'N' or EquIToEquIIChoose == 'n' or EquIToEquIIChoose == 'No' or EquIToEquIIChoose == 'no' or EquIToEquIIChoose == 'nO'):
+                                    Declination = NULL
 
                                 else:
                                     std::cout << ">>>> ERROR: Invalid option! Try Again!")
                         
-                        elif(EquIToEquIIStellarChoose == '2'):
+                        else if(EquIToEquIIStellarChoose == '2'):
                             while(True):
                                 StellarObject = input("> Stellar object's name (type \'H\' for Help): ")
 
@@ -2253,8 +2392,8 @@ int main()
                                                 Declination = StellarDict[StellarObject][1]
                                                 break
 
-                                            elif(EquIToEquIIChoose == 'N' or EquIToEquIIChoose == 'n' or EquIToEquIIChoose == 'No' or EquIToEquIIChoose == 'no' or EquIToEquIIChoose == 'nO'):
-                                                Declination = None
+                                            else if(EquIToEquIIChoose == 'N' or EquIToEquIIChoose == 'n' or EquIToEquIIChoose == 'No' or EquIToEquIIChoose == 'no' or EquIToEquIIChoose == 'nO'):
+                                                Declination = NULL
 
                                             else:
                                                 std::cout << ">>>> ERROR: Invalid option! Try Again!")
@@ -2283,7 +2422,7 @@ int main()
                     sidermsg = "- Local Mean Sidereal Time (S): {0}:{1}:{2}"
                     std::cout << sidermsg.format(LocalSiderealTime))
                     
-                    if(Declination != None):
+                    if(Declination != NULL):
 
                         DeclinationHours = int(Declination)
                         DeclinationMinutes = int((Declination - DeclinationHours) * 60)
@@ -2304,7 +2443,7 @@ int main()
                 // /\__/ / 
                 // \____(_)
                 // 5. Equatorial II to Equatorial I Coordinate System
-                elif(CoordMode == '5'):
+                else if(CoordMode == '5'):
                     std::cout << ">> Conversion from Equatorial II to Equatorial I Coordinate System")
                     std::cout << ">> Give Parameters!")
 
@@ -2323,8 +2462,8 @@ int main()
                             Declination = float(input("> Declination (δ): "))
                             break
                         
-                        elif(EquIIToEquIChoose == 'N' or EquIIToEquIChoose == 'n' or EquIIToEquIChoose == 'No' or EquIIToEquIChoose == 'no' or EquIIToEquIChoose == 'nO'):
-                            Declination = None
+                        else if(EquIIToEquIChoose == 'N' or EquIIToEquIChoose == 'n' or EquIIToEquIChoose == 'No' or EquIIToEquIChoose == 'no' or EquIIToEquIChoose == 'nO'):
+                            Declination = NULL
 
                         else:
                             std::cout << ">>>> ERROR: Invalid option! Try Again!")
@@ -2333,17 +2472,17 @@ int main()
                         std::cout << ">> Which essential Parameter Is given?")
                         EquIIToEquIDecChoose = input(">> Right Ascension (write \'A\'), or Local Hour Angle in Hours (write \'T\')?: ")
                         if(EquIIToEquIDecChoose == 'A' or EquIIToEquIDecChoose == 'a'):
-                            LocalHourAngle = None
+                            LocalHourAngle = NULL
                             RightAscension = float(input("> Right Ascension (α): "))
                             break
 
-                        elif(EquIIToEquIDecChoose == 'T' or EquIIToEquIDecChoose == 't'):
+                        else if(EquIIToEquIDecChoose == 'T' or EquIIToEquIDecChoose == 't'):
                             std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                             LocalHourAngleHours = float(input("> Local Hour Angle (t) Hours: ") or "0")
                             LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
                             LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
                             LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
-                            RightAscension = None
+                            RightAscension = NULL
                             break
 
                         else:
@@ -2361,7 +2500,7 @@ int main()
                     RAmsg = "- Right Ascension (α): {0}h {1}m {2}s"
                     std::cout << RAmsg.format(RightAscension))
 
-                    if(Declination != None):
+                    if(Declination != NULL):
 
                         DeclinationHours = int(Declination)
                         DeclinationMinutes = int((Declination - DeclinationHours) * 60)
@@ -2387,7 +2526,7 @@ int main()
                 // | \_/ |_ 
                 // \_____(_)
                 // 6. Equatorial II to Horizontal Coordinate System
-                elif(CoordMode == '6'):
+                else if(CoordMode == '6'):
                     std::cout << ">> Conversion from Equatorial II to Horizontal Coordinate System")
                     std::cout << ">> Give Parameters!")
 
@@ -2406,7 +2545,7 @@ int main()
                             Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
                             break
 
-                        elif(EquIIToHorLocationChoose == '2'):
+                        else if(EquIIToHorLocationChoose == '2'):
                             while(True):
                                 Location = input("> Location's name (type \'H\' for Help): ")
 
@@ -2445,7 +2584,7 @@ int main()
                             std::cout << ">> Which essential Parameter Is given?")
                             EquIIToEquIDecChoose = input(">> Right Ascension (write \'A\'), or Local Hour Angle in Hours (write \'T\')?: ")
                             if(EquIIToEquIDecChoose == 'A' or EquIIToEquIDecChoose == 'a'):
-                                LocalHourAngle = None
+                                LocalHourAngle = NULL
                                 std::cout << ">> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                                 RightAscensionHours = float(input("> Right Ascension (α) Hours: ") or "0")
                                 RightAscensionMinutes = float(input("> Right Ascension (α) Minutes: ") or "0")
@@ -2453,19 +2592,19 @@ int main()
                                 RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600
                                 break
 
-                            elif(EquIIToEquIDecChoose == 'T' or EquIIToEquIDecChoose == 't'):
+                            else if(EquIIToEquIDecChoose == 'T' or EquIIToEquIDecChoose == 't'):
                                 std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                                 LocalHourAngleHours = float(input("> Local Hour Angle (t) Hours: ") or "0")
                                 LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
                                 LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
                                 LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
-                                RightAscension = None
+                                RightAscension = NULL
                                 break
 
                             else:
                                 std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'A\' or \'T\'!")
                         
-                        elif(EquIIToHorStellarChoose == '2'):
+                        else if(EquIIToHorStellarChoose == '2'):
                             while(True):
                                 StellarObject = input("> Stellar object's name (type \'H\' for Help): ")
 
@@ -2488,18 +2627,18 @@ int main()
                                         std::cout << ">> Which essential Parameter Is given?")
                                         EquIIToEquIDecChoose = input(">> Right Ascension (write \'A\'), or Local Hour Angle in Hours (write \'T\')?: ")
                                         if(EquIIToEquIDecChoose == 'A' or EquIIToEquIDecChoose == 'a'):
-                                            LocalHourAngle = None
+                                            LocalHourAngle = NULL
                                             RightAscension = StellarDict[StellarObject][0]
                                             break
 
-                                        elif(EquIIToEquIDecChoose == 'T' or EquIIToEquIDecChoose == 't'):
+                                        else if(EquIIToEquIDecChoose == 'T' or EquIIToEquIDecChoose == 't'):
                                             std::cout << ">> You should input LHA (t) manually!")
                                             std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                                             LocalHourAngleHours = float(input("> Local Hour Angle (t) Hours: ") or "0")
                                             LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
                                             LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
                                             LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
-                                            RightAscension = None
+                                            RightAscension = NULL
                                             break
 
                                         else:
@@ -2528,7 +2667,7 @@ int main()
                     std::cout << altitmsg.format(Altitude))
                     std::cout << '\n')
 
-                elif(CoordMode == 'Q' or CoordMode == 'q'):
+                else if(CoordMode == 'Q' or CoordMode == 'q'):
                     break
 
                 else:
@@ -2543,7 +2682,7 @@ int main()
         //                      __/ |                                        
         //                     |___/                                         
         // GEOGRAPHICAL DISTANCE CALCULATION
-        elif(mode == '2'):
+        else if(mode == '2'):
             while(True):
                 std::cout << ">> Geographical Distance Calculator\n")
                 std::cout << ">> Please choose a mode you'd like to use!")
@@ -2569,7 +2708,7 @@ int main()
                     distmsg = "\n>>> The Geographical Distance Between\n>>> {0}°,{1}°\n>>> and\n>>> {2}°,{3}°\n>>> is\n>>> {4:.3f} km\n"
                     std::cout << distmsg.format(Latitude1,Longitude1,Latitude2,Longitude2, Distance))
 
-                elif(DistMode == '2'):
+                else if(DistMode == '2'):
                     std::cout << ">> Calculate Distance of Choosen Predefined Locations\n")
                     std::cout << ">> Write the Names of Two Choosen Cities to the Input!")
                     while(True):
@@ -2621,7 +2760,7 @@ int main()
                     distmsg = "\n>>> The Geographical Distance Between\n>>> {0} and {1} is\n>>> {2:.3f} km\n"
                     std::cout << distmsg.format(Location1, Location2, Distance))
 
-                elif(DistMode == 'Q' or DistMode == 'q'):
+                else if(DistMode == 'Q' or DistMode == 'q'):
                     break
 
                 else:
@@ -2634,7 +2773,7 @@ int main()
         //  | |____| |  | |____) |  | |    | |___| (_| | | (__ 
         //  |______|_|  |_|_____/   |_|     \_____\__,_|_|\___|
         // LOCAL MEAN SIDEREAL TIME CALCULATION
-        elif(mode == '3'):
+        else if(mode == '3'):
             while(True):
                 std::cout << ">> Local Mean Sidereal Time Calculator\n")
                 std::cout << ">> Please choose a mode you'd like to use!")
@@ -2718,7 +2857,7 @@ int main()
                     sidmsg = "\n>>> The Local Mean Sidereal Time\n>>> at {0}:{1}:{2} UT, at location\n>>> {3}°,{4}° with\n>>> {5}:{6}:{7} GMST at 00:00:00 UT\n>>> is {8}:{9}:{10}\n\n"
                     std::cout << sidmsg.format(UnitedHours, UnitedMinutes, UnitedSeconds, Latitude, Longitude, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds, LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds))
 
-                elif(DistMode == '2'):
+                else if(DistMode == '2'):
                     std::cout << ">> Calculate LMST from the Coordinates of a Predefined Location\n")
                     std::cout << ">> Write the Name of a Choosen Location to the Input!")
 
@@ -2800,7 +2939,7 @@ int main()
                     sidmsg = "\n>>> The Local Mean Sidereal Time at {0}:{1}:{2} UT\n>>> in {3} with\n>>> {4}:{5}:{6} GMST at 00:00:00 UT\n>>> is {7}:{8}:{9}\n\n"
                     std::cout << sidmsg.format(UnitedHours, UnitedMinutes, UnitedSeconds, Location, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds, LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds))
 
-                elif(DistMode == 'Q' or DistMode == 'q'):
+                else if(DistMode == 'Q' or DistMode == 'q'):
                     break
 
                 else:
@@ -2816,7 +2955,7 @@ int main()
         //                        __/ |                               
         //                       |___/                                
         // DATETIME CALCULATION FOR TWILIGHTS
-        elif(mode == '4'):
+        else if(mode == '4'):
             while(True):
                 std::cout << ">> Calculate Datetimes of Twilights at Specific Location")
                 std::cout << ">> Please choose a mode you'd like to use!")
@@ -2847,7 +2986,7 @@ int main()
                     LongitudeSeconds = float(input("> Longitude (λ) Seconds: ") or "0")
                     Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
 
-                elif(TwiMode == '2'):
+                else if(TwiMode == '2'):
                     while(True):
                         std::cout << ">> Calculate Datetimes of Twilights from the Coordinates of a Predefined Location")
                         std::cout << ">> Write the Name of a Choosen Location to the Input!")
@@ -2873,7 +3012,7 @@ int main()
                             else:
                                 break
 
-                elif(TwiMode == 'Q' or TwiMode == 'q'):
+                else if(TwiMode == 'Q' or TwiMode == 'q'):
                     break
 
                 else:
@@ -2927,7 +3066,7 @@ int main()
                         suncoordmsg = ">>> Calculated Datetimes of Twilights at Coordinates \n>>> {0}, {1}:"
                         std::cout << suncoordmsg.format(Latitude, Longitude))
 
-                    elif(TwiMode == '2'):
+                    else if(TwiMode == '2'):
                         std::cout << "\n>>> Calculated Datetimes of Twilights at " + Location + ":")
 
                     msgdaylightrise = "\n>> Rising Daylight's time: {0}:{1}:{2} on {3}.{4}.{5}"
@@ -2973,7 +3112,7 @@ int main()
         //                                                     __/ |            
         //                                                    |___/             
         // Calculate Astronomical Triangles Parameters
-        elif(mode == '5'):
+        else if(mode == '5'):
             while(True):
                 std::cout << ">> Calculate Astronomical Triangles Parameters from given Ones")
                 std::cout << ">> Please choose a mode you'd like to use!")
@@ -2994,10 +3133,10 @@ int main()
                     betaValue = float(input("> Value for angle \'β\': ") or "0")
                     gammaValue = float(input("> Value for angle \'γ\': ") or "0")
 
-                elif(TrigMode == '2'):
+                else if(TrigMode == '2'):
                     pass
                 
-                elif(TrigMode == 'Q' or TrigMode == 'q'):
+                else if(TrigMode == 'Q' or TrigMode == 'q'):
                     break
 
                 else:
@@ -3029,7 +3168,7 @@ int main()
         //  /\__/ / |_| | | | | (_| | | (_| | |
         //  \____/ \__,_|_| |_|\__,_|_|\__,_|_|
         // Plot Sundial for Choosen Locations
-        elif(mode == '6'):
+        else if(mode == '6'):
             while(True):
                 std::cout << ">> Plot Sun's Path on a Sundial at Choosen Location on Earth")
                 std::cout << ">> Please choose a mode you'd like to use!")
@@ -3062,7 +3201,7 @@ int main()
                     Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
 
 
-                elif(SundialMode == '2'):
+                else if(SundialMode == '2'):
                     std::cout << ">> Plot a Sundial on a Predefined Location's Coordinates")
                     std::cout << ">> Write the Name of a Choosen Location to the Input!")
 
@@ -3088,7 +3227,7 @@ int main()
                             else:
                                 break
 
-                elif(SundialMode == 'Q' or SundialMode == 'q'):
+                else if(SundialMode == 'Q' or SundialMode == 'q'):
                     break
 
                 else:
@@ -3135,7 +3274,7 @@ int main()
 
                             break
 
-                        elif(SunDialChoose == 'N' or SunDialChoose == 'n' or SunDialChoose == 'No' or SunDialChoose == 'no' or SunDialChoose == 'nO'):
+                        else if(SunDialChoose == 'N' or SunDialChoose == 'n' or SunDialChoose == 'No' or SunDialChoose == 'no' or SunDialChoose == 'nO'):
                             break
 
                         else:
@@ -3613,7 +3752,7 @@ int main()
         //  | | | | | | | (_| | |  __/ | | | | | | | | | | (_| |
         //  \_| |_/_| |_|\__,_|_|\___|_| |_| |_|_| |_| |_|\__,_|
         // Draw Sun Analemma at Choosen Location on Earth
-        elif(mode == '7'):
+        else if(mode == '7'):
             while(True):
                 std::cout << ">> Plot the Sun Analemma at Choosen Location on Earth")
                 std::cout << ">> Please choose a mode you'd like to use!")
@@ -3646,7 +3785,7 @@ int main()
                     Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
 
 
-                elif(AnalemmaMode == '2'):
+                else if(AnalemmaMode == '2'):
                     std::cout << ">> Plot Analemma on a Predefined Location's Coordinates")
                     std::cout << ">> Write the Name of a Choosen Location to the Input!")
 
@@ -3672,7 +3811,7 @@ int main()
                             else:
                                 break
 
-                elif(AnalemmaMode == 'Q' or AnalemmaMode == 'q'):
+                else if(AnalemmaMode == 'Q' or AnalemmaMode == 'q'):
                     break
 
                 else:
@@ -3703,7 +3842,7 @@ int main()
                     if(AnalemmaMode == '1'):
                         plt.title("Sun Analemma at Cordinates " + str(Latitude) + "; " + str(Longitude))
 
-                    elif(AnalemmaMode == '2'):
+                    else if(AnalemmaMode == '2'):
                         plt.title("Sun Analemma at " + Location)
 
                     plt.plot(LocalHourAngleAnalemma, AltitudesAnalemma, '.')
@@ -3723,7 +3862,7 @@ int main()
         //  | | | | (_) | | | | | |  __/\ V  V / (_) | |  |   < 
         //  \_| |_/\___/|_| |_| |_|\___| \_/\_/ \___/|_|  |_|\_\
         // HOMEWORK MODE
-        elif(mode == 'Home' or mode == 'home' or mode == 'H' or mode == 'h' or sys.argv[0] == "H" or sys.argv[0] == "h"):
+        else if(mode == 'Home' or mode == 'home' or mode == 'H' or mode == 'h' or sys.argv[0] == "H" or sys.argv[0] == "h"):
 
             std::cout << "//////  Csillesz II end-semester homework results, solved by the program  //////")
             std::cout << "_________________________________________________________________________")
@@ -3755,7 +3894,7 @@ int main()
             Latitude = LocationDictFunc(Location)[0]
             RightAscensionVenus = 18 + 41/60 + 54/3600
             DeclinationVenus = -(24 + 4/60 + 9/3600)
-            Altitude, Azimuth1, Azimuth2, H_dil = EquIToHor(Latitude, RightAscensionVenus, DeclinationVenus, 0, None, None)
+            Altitude, Azimuth1, Azimuth2, H_dil = EquIToHor(Latitude, RightAscensionVenus, DeclinationVenus, 0, NULL, NULL)
 
             std::cout << ">>> Calculate Rising and Setting Local Time of Venus,\n>>> As seen from " + Location + ".")
             std::cout << ">>> Used formulas:")
@@ -3868,9 +4007,9 @@ int main()
             Longitude = LocationDictFunc(Location)[1]
             RightAscension = StellarDict[Star][0]
             Declination = StellarDict[Star][1]
-            Altitude = None
-            Azimuth = None
-            LocalHourAngle = None
+            Altitude = NULL
+            Azimuth = NULL
+            LocalHourAngle = NULL
             LocalHours = 20
             LocalMinutes = 45
             LocalSeconds = 0
@@ -4012,7 +4151,7 @@ int main()
 
         // MAIN MENU MODE
         // QUIT PROGRAM
-        elif(mode == 'Q' or mode == 'q'):
+        else if(mode == 'Q' or mode == 'q'):
             std::cout << "////////    Developed by Balazs Pal, ELTE    ////////")
             exit()
 
