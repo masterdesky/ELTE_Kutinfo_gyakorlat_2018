@@ -53,17 +53,14 @@
 ////////                                                                                       //////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//import sys
-//import math
-//import matplotlib.pyplot as plt
-//import numpy as np
-
 #include <iostream>
 #include <algorithm>
 #include <string>
 #include <cmath>
 #include <map>
 #include <vector>
+//#include "csill.h"
+
 
 // Current Version of the Csillész II Problem Solver
 std::string ActualVersion = "v1.32";
@@ -172,7 +169,7 @@ std::vector<double> StellarDictFunc(std::string Object)
     StellarDict["Vega"] = {18.61565, 38.78369};
     StellarDict["VYCanisMajoris"] = {7.38287, -25.767565};
 
-    return(StellarDict[Object])
+    return(StellarDict[Object]);
 }
 
 
@@ -180,78 +177,84 @@ std::vector<double> StellarDictFunc(std::string Object)
 // Format:
 // "PlanetNameX": [X_0, X_1, X_2 .., X_E.] or [X_1, X_3, ..., X_E] etc.
 // "PlanetNameOrbit": [Π, ε, Correction for Refraction and Sun's visible shape]
- = {
-    OrbitDict["MercuryM"] = {174.7948, 4.09233445}
-    OrbitDict["MercuryC"] = {23.4400, 2.9818, 0.5255, 0.1058, 0.0241, 0.0055, 0.0026}
-    OrbitDict["MercuryA"] = {-0.0000, 0.0000, 0.0000, 0.0000}
-    OrbitDict["MercuryD"] = {0.0351, 0.0000, 0.0000, 0.0000}
-    OrbitDict["MercuryJ"] = {45.3497, 11.4556, 0.00000, 175.9386}
-    OrbitDict["MercuryH"] = {0.035, 0.00000, 0.00000}
-    OrbitDict["MercuryOrbit"] = {230.3265, 0.0351, -0.69}
+std::vector<double> OrbitDictFunc(std::string Planet)
+{
 
-    OrbitDict["VenusM"] = {50.4161, 1.60213034}
-    OrbitDict["VenusC"] = {0.7758, 0.0033, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000}
-    OrbitDict["VenusA"] = {-0.0304, 0.00000, 0.00000, 0.0001}
-    OrbitDict["VenusD"] = {.6367, 0.0009, 0.00000, 0.0036}
-    OrbitDict["VenusJ"] = {52.1268, -0.2516, 0.0099, -116.7505}
-    OrbitDict["VenusH"] = {2.636, 0.001, 0.00000}
-    OrbitDict["VenusOrbit"] = {73.7576,	2.6376, -0.37}
+    std::map<std::string, std::vector<double>> OrbitDict;
 
-    OrbitDict["EarthM"] = {357.5291, 0.98560028}
-    OrbitDict["EarthJ"] = {0.0009, 0.0053, -0.0068, 1.0000000}
-    OrbitDict["EarthC"] = {1.9148, 0.0200, 0.0003, 0.00000, 0.00000, 0.00000, 0.00000}
-    OrbitDict["EarthA"] = {-2.4657, 0.0529, -0.0014, 0.0003}
-    OrbitDict["EarthD"] = {22.7908, 0.5991, 0.0492, 0.0003}
-    OrbitDict["EarthH"] = {22.137, 0.599, 0.016}
-    OrbitDict["EarthOrbit"] = {102.9373, 23.4393, -0.83}
+    OrbitDict["MercuryM"] = {174.7948, 4.09233445};
+    OrbitDict["MercuryC"] = {23.4400, 2.9818, 0.5255, 0.1058, 0.0241, 0.0055, 0.0026};
+    OrbitDict["MercuryA"] = {-0.0000, 0.0000, 0.0000, 0.0000};
+    OrbitDict["MercuryD"] = {0.0351, 0.0000, 0.0000, 0.0000};
+    OrbitDict["MercuryJ"] = {45.3497, 11.4556, 0.00000, 175.9386};
+    OrbitDict["MercuryH"] = {0.035, 0.00000, 0.00000};
+    OrbitDict["MercuryOrbit"] = {230.3265, 0.0351, -0.69};
 
-    OrbitDict["MarsM"] = {19.3730, 0.52402068}
-    OrbitDict["MarsC"] = {10.6912, 0.6228, 0.0503, 0.0046, 0.0005, 0.00000, 0.0001}
-    OrbitDict["MarsA"] = {-2.8608, 0.0713, -0.0022, 0.0004}
-    OrbitDict["MarsD"] = {24.3880, 0.7332, 0.0706, 0.0011}
-    OrbitDict["MarsJ"] = {0.9047, 0.0305, -0.0082, 1.027491}
-    OrbitDict["MarsH"] = {23.576, 0.733, 0.024}
-    OrbitDict["MarsOrbit"] = {71.0041, 25.1918, -0.17}
+    OrbitDict["VenusM"] = {50.4161, 1.60213034};
+    OrbitDict["VenusC"] = {0.7758, 0.0033, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000};
+    OrbitDict["VenusA"] = {-0.0304, 0.00000, 0.00000, 0.0001};
+    OrbitDict["VenusD"] = {.6367, 0.0009, 0.00000, 0.0036};
+    OrbitDict["VenusJ"] = {52.1268, -0.2516, 0.0099, -116.7505};
+    OrbitDict["VenusH"] = {2.636, 0.001, 0.00000};
+    OrbitDict["VenusOrbit"] = {73.7576,	2.6376, -0.37};
 
-    OrbitDict["JupiterM"] = {20.0202, 0.08308529}
-    OrbitDict["JupiterC"] = {5.5549, 0.1683, 0.0071, 0.0003, 0.00000, 0.00000, 0.0001}
-    OrbitDict["JupiterA"] = {-0.0425, 0.00000, 0.00000, 0.0001}
-    OrbitDict["JupiterD"] = {3.1173, 0.0015, 0.00000, 0.0034}
-    OrbitDict["JupiterJ"] = {0.3345, 0.0064, 0.00000, 0.4135778}
-    OrbitDict["JupiterH"] = {3.116, 0.002, 0.00000}
-    OrbitDict["JupiterOrbit"] = {237.1015, 3.1189, -0.05}
+    OrbitDict["EarthM"] = {357.5291, 0.98560028};
+    OrbitDict["EarthJ"] = {0.0009, 0.0053, -0.0068, 1.0000000};
+    OrbitDict["EarthC"] = {1.9148, 0.0200, 0.0003, 0.00000, 0.00000, 0.00000, 0.00000};
+    OrbitDict["EarthA"] = {-2.4657, 0.0529, -0.0014, 0.0003};
+    OrbitDict["EarthD"] = {22.7908, 0.5991, 0.0492, 0.0003};
+    OrbitDict["EarthH"] = {22.137, 0.599, 0.016};
+    OrbitDict["EarthOrbit"] = {102.9373, 23.4393, -0.83};
 
-    OrbitDict["SaturnM"] = {317.0207, 0.03344414}
-    OrbitDict["SaturnC"] = {6.3585, 0.2204, 0.0106, 0.0006, 0.00000, 0.00000, 0.0001}
-    OrbitDict["SaturnA"] = {-3.2338, 0.0909, -0.0031, 0.0009}
-    OrbitDict["SaturnD"] = {25.7696, 0.8640, 0.0949, 0.0010}
-    OrbitDict["SaturnJ"] = {0.0766, 0.0078, -0.0040, 0.4440276}
-    OrbitDict["SaturnH"] = {24.800, 0.864, 0.032}
-    OrbitDict["SaturnOrbit"] = {99.4587, 26.7285, -0.03}
+    OrbitDict["MarsM"] = {19.3730, 0.52402068};
+    OrbitDict["MarsC"] = {10.6912, 0.6228, 0.0503, 0.0046, 0.0005, 0.00000, 0.0001};
+    OrbitDict["MarsA"] = {-2.8608, 0.0713, -0.0022, 0.0004};
+    OrbitDict["MarsD"] = {24.3880, 0.7332, 0.0706, 0.0011};
+    OrbitDict["MarsJ"] = {0.9047, 0.0305, -0.0082, 1.027491};
+    OrbitDict["MarsH"] = {23.576, 0.733, 0.024};
+    OrbitDict["MarsOrbit"] = {71.0041, 25.1918, -0.17};
 
-    OrbitDict["UranusM"] = {141.0498, 0.01172834}
-    OrbitDict["UranusC"] = {5.3042, 0.1534, 0.0062, 0.0003, 0.00000, 0.00000, 0.0001}
-    OrbitDict["UranusA"] = {-42.5874, 12.8117, -2.6077, 17.6902}
-    OrbitDict["UranusD"] = {56.9083, -0.8433, 26.1648, 3.34}
-    OrbitDict["UranusJ"] = {0.1260, -0.0106, 0.0850, -0.7183165}
-    OrbitDict["UranusH"] = {28.680, -0.843, 8.722}
-    OrbitDict["UranusOrbit"] = {5.4634, 82.2298, -0.01}
+    OrbitDict["JupiterM"] = {20.0202, 0.08308529};
+    OrbitDict["JupiterC"] = {5.5549, 0.1683, 0.0071, 0.0003, 0.00000, 0.00000, 0.0001};
+    OrbitDict["JupiterA"] = {-0.0425, 0.00000, 0.00000, 0.0001};
+    OrbitDict["JupiterD"] = {3.1173, 0.0015, 0.00000, 0.0034};
+    OrbitDict["JupiterJ"] = {0.3345, 0.0064, 0.00000, 0.4135778};
+    OrbitDict["JupiterH"] = {3.116, 0.002, 0.00000};
+    OrbitDict["JupiterOrbit"] = {237.1015, 3.1189, -0.05};
 
-    OrbitDict["NeptunusM"] = {256.2250, 0.00598103}
-    OrbitDict["NeptunusC"] = {1.0302, 0.0058, 0.00000, 0.00000, 0.00000, 0.00000, 0.0001}
-    OrbitDict["NeptunusA"] = {-3.5214, 0.1078, -0.0039, 0.0163}
-    OrbitDict["NeptunusD"] = {26.7643, 0.9669, 0.1166, 0.060}
-    OrbitDict["NeptunusJ"] = {0.3841, 0.0019, -0.0066, 0.6712575}
-    OrbitDict["NeptunusH"] = {26.668, 0.967, 0.039}
-    OrbitDict["NeptunusOrbit"] = {182.2100, 27.8477, -0.01}
+    OrbitDict["SaturnM"] = {317.0207, 0.03344414};
+    OrbitDict["SaturnC"] = {6.3585, 0.2204, 0.0106, 0.0006, 0.00000, 0.00000, 0.0001};
+    OrbitDict["SaturnA"] = {-3.2338, 0.0909, -0.0031, 0.0009};
+    OrbitDict["SaturnD"] = {25.7696, 0.8640, 0.0949, 0.0010};
+    OrbitDict["SaturnJ"] = {0.0766, 0.0078, -0.0040, 0.4440276};
+    OrbitDict["SaturnH"] = {24.800, 0.864, 0.032};
+    OrbitDict["SaturnOrbit"] = {99.4587, 26.7285, -0.03};
 
-    OrbitDict["PlutoM"] = {14.882, 0.00396}
-    OrbitDict["PlutoC"] = {28.3150, 4.3408, 0.9214, 0.2235, 0.0627, 0.0174, 0.0096}
-    OrbitDict["PlutoA"] = {-19.3248, 3.0286, -0.4092, 0.5052}
-    OrbitDict["PlutoD"] = {49.8309, 4.9707, 5.5910, 0.19}
-    OrbitDict["PlutoJ"] = {4.5635, -0.5024, 0.3429, 6.387672}
-    OrbitDict["PlutoH"] = {38.648, 4.971, 1.864}
-    OrbitDict["PlutoOrbit"] = {184.5484, 119.6075, -0.01}
+    OrbitDict["UranusM"] = {141.0498, 0.01172834};
+    OrbitDict["UranusC"] = {5.3042, 0.1534, 0.0062, 0.0003, 0.00000, 0.00000, 0.0001};
+    OrbitDict["UranusA"] = {-42.5874, 12.8117, -2.6077, 17.6902};
+    OrbitDict["UranusD"] = {56.9083, -0.8433, 26.1648, 3.34};
+    OrbitDict["UranusJ"] = {0.1260, -0.0106, 0.0850, -0.7183165};
+    OrbitDict["UranusH"] = {28.680, -0.843, 8.722};
+    OrbitDict["UranusOrbit"] = {5.4634, 82.2298, -0.01};
+
+    OrbitDict["NeptunusM"] = {256.2250, 0.00598103};
+    OrbitDict["NeptunusC"] = {1.0302, 0.0058, 0.00000, 0.00000, 0.00000, 0.00000, 0.0001};
+    OrbitDict["NeptunusA"] = {-3.5214, 0.1078, -0.0039, 0.0163};
+    OrbitDict["NeptunusD"] = {26.7643, 0.9669, 0.1166, 0.060};
+    OrbitDict["NeptunusJ"] = {0.3841, 0.0019, -0.0066, 0.6712575};
+    OrbitDict["NeptunusH"] = {26.668, 0.967, 0.039};
+    OrbitDict["NeptunusOrbit"] = {182.2100, 27.8477, -0.01};
+
+    OrbitDict["PlutoM"] = {14.882, 0.00396};
+    OrbitDict["PlutoC"] = {28.3150, 4.3408, 0.9214, 0.2235, 0.0627, 0.0174, 0.0096};
+    OrbitDict["PlutoA"] = {-19.3248, 3.0286, -0.4092, 0.5052};
+    OrbitDict["PlutoD"] = {49.8309, 4.9707, 5.5910, 0.19};
+    OrbitDict["PlutoJ"] = {4.5635, -0.5024, 0.3429, 6.387672};
+    OrbitDict["PlutoH"] = {38.648, 4.971, 1.864};
+    OrbitDict["PlutoOrbit"] = {184.5484, 119.6075, -0.01};
+
+    return(OrbitDict[Planet]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -279,7 +282,7 @@ double NormalizeZeroBounded(double Parameter, double NonZeroBound)
 // Time is normalized into [0h,24h[ intervals
 std::vector<double> NormalizeZeroBoundedTime(double Time)
 {
-    int Multiply;
+    double Multiply;
 
     if(Time >= 24)
     {
@@ -349,8 +352,13 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
     // First normalize Time if abs(Time) >= 24
     std::vector<double> TimeMultiply = NormalizeZeroBoundedTime(Time);
 
-    Time = TimeMultiply[0];
-    Multiply = TimeMultiply[1];
+    // Declare variables
+    int Hours;
+    int Minutes;
+    int Seconds;
+    double CountingIndex;
+    double Time = TimeMultiply[0];
+    int Multiply = TimeMultiply[1];
 
     // CORRECTIONS IF MINUTES >= 60 or SECONDS >= 60
     Hours = int(Time);
@@ -441,7 +449,7 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
         CountingIndex = 0;
     }
 
-    while(True)
+    while(1)
     {
         if(Year%4 == 0 && (Year%100 != 0 || Year%400 == 0))
         {
@@ -505,7 +513,7 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
     }
 
 
-    std::vector<double> NormTimeParam = {Time, Hours, Minutes, Seconds, Year, Month, Day};
+    std::vector<auto> NormTimeParam = {Time, Hours, Minutes, Seconds, Year, Month, Day};
 
     return(NormTimeParam);
 }
@@ -1845,7 +1853,7 @@ int main()
     STARTMSG = "\n//////// Csillész II Problem Solver Program {0} ////////\n////////         Developed by Balázs Pál.         ////////\n\n"
     std::cout << STARTMSG.format(ActualVersion))
 
-    while(True):
+    while(1):
 
         std::cout << ">> MAIN MENU <<")
         std::cout << "(1) Coordinate System Conversion")
@@ -1872,7 +1880,7 @@ int main()
         //                                        |___/                              
         // COORDINATE SYSTEM CONVERSION
         if(mode == '1'):
-            while(True):
+            while(1):
                 std::cout << ">> Coordinate System Conversion")
                 std::cout << ">> Please choose which coordinate system conversion you'd like to make!")
                 std::cout << "(1) Horizontal to Equatorial I")
@@ -1902,7 +1910,7 @@ int main()
 
                     HorToEquILocationChoose = input(">> (1) User Defined, (2) Predefined: ")
 
-                    while(True):
+                    while(1):
                         if(HorToEquILocationChoose == '1'):
                             std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                             LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
@@ -1912,7 +1920,7 @@ int main()
                             break
                         
                         else if(HorToEquILocationChoose == '2'):
-                            while(True):
+                            while(1):
                                 Location = input("> Location's name (type \'H\' for Help): ")
 
                                 if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
@@ -1941,7 +1949,7 @@ int main()
                     Azimuth = float(input("> Azimuth (A): "))
 
                     std::cout << "Is Local Mean Sidereal Time given?")
-                    while(True):
+                    while(1):
                         HorToEquIChoose = input("Write \'Y\' or \'N\' (Yes or No)")
                         if(HorToEquIChoose == 'Y' or HorToEquIChoose == 'y' or HorToEquIChoose == 'Yes' or HorToEquIChoose == 'yes' or HorToEquIChoose == 'YEs' or HorToEquIChoose == 'yEs' or HorToEquIChoose == 'yeS' or HorToEquIChoose == 'YeS' or HorToEquIChoose == 'yES'):
                             std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
@@ -2007,7 +2015,7 @@ int main()
 
                     HorToEquIILocationChoose = input(">> (1) User Defined, (2) Predefined: ")
                     
-                    while(True):
+                    while(1):
                         if(HorToEquIILocationChoose == '1'):
                             std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                             LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
@@ -2017,7 +2025,7 @@ int main()
                             break
                         
                         else if(HorToEquIILocationChoose == '2'):
-                            while(True):
+                            while(1):
                                 Location = input("> Location's name (type \'H\' for Help): ")
 
                                 if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
@@ -2088,7 +2096,7 @@ int main()
                     std::cout << ">> Conversion from Equatorial I to Horizontal Coordinate System")
                     std::cout << ">> Give Parameters!\n")
                     
-                    while(True):
+                    while(1):
                         std::cout << ">>> LOCATION")
                         std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> Or would like to choose a predefined Location's Coordinates?")
                         std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for Predefined Locations' Coordinates!")
@@ -2104,7 +2112,7 @@ int main()
                             break
                         
                         else if(EquIToHorLocationChoose == '2'):
-                            while(True):
+                            while(1):
                                 Location = input("> Location's name (type \'H\' for Help): ")
 
                                 if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
@@ -2129,7 +2137,7 @@ int main()
                         else:
                             std::cout << ">>>> ERROR: Invalid option! Try Again!")
                     
-                    while(True):
+                    while(1):
                         std::cout << "\n>>> STELLAR OBJECT")
                         std::cout << ">> Would you like to give the stellar object's Coordinates by yourself,\n>> Or would like to choose a Predefined Object's Coordinates?")
                         std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for a Predefined Stellar Object's Coordinates!")
@@ -2168,7 +2176,7 @@ int main()
                                 std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'D\' or \'B\'!")
 
                         else if(EquIToHorStellarChoose == '2'):
-                            while(True):
+                            while(1):
                                 StellarObject = input("> Stellar object's name (type \'H\' for Help): ")
 
                                 if(StellarObject == "Help" or StellarObject == "help" or StellarObject == "H" or StellarObject == "h"):
@@ -2209,7 +2217,7 @@ int main()
                             std::cout << ">>>> ERROR: Invalid option! Try Again!")
 
                     if(RightAscension != NULL and Declination != NULL):
-                        while(True):
+                        while(1):
                             std::cout << "\n>> Is Local Mean Sidereal Time (S) given?")
                             EquIToHorChoose1 = input(">> Write \'Y\' or \'N\' (Yes or No): ")
 
@@ -2251,7 +2259,7 @@ int main()
                                     break
 
                     else if(Declination != NULL and RightAscension == NULL):
-                        while(True):
+                        while(1):
                             std::cout << "\n>> Is Local Hour Angle (t) given?")
                             EquIToHorChooseD = input(">> Write \'Y\' or \'N\' (Yes or No): ")
 
@@ -2340,7 +2348,7 @@ int main()
 
                     EquIToEquIIStellarChoose = input(">> (1) User Defined, (2) Predefined: ")
 
-                    while(True):
+                    while(1):
                         if(EquIToEquIIStellarChoose == '1'):
                             std::cout << ">> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, and type 0\n>> For both Minutes and Seconds.")
                             RightAscensionHours = float(input("> Right Ascension (α) Hours: ") or "0")
@@ -2349,7 +2357,7 @@ int main()
                             RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600
 
                             std::cout << ">> Is Declination given?")
-                            while(True):
+                            while(1):
                                 EquIToEquIIChoose = input(">> Write \'Y\' or \'N\' (Yes or No): ")
                                 
                                 if(EquIToEquIIChoose == 'Y' or EquIToEquIIChoose == 'y' or EquIToEquIIChoose == 'Yes' or EquIToEquIIChoose == 'yes' or EquIToEquIIChoose == 'YEs' or EquIToEquIIChoose == 'yEs' or EquIToEquIIChoose == 'yeS' or EquIToEquIIChoose == 'YeS' or EquIToEquIIChoose == 'yES'):
@@ -2363,7 +2371,7 @@ int main()
                                     std::cout << ">>>> ERROR: Invalid option! Try Again!")
                         
                         else if(EquIToEquIIStellarChoose == '2'):
-                            while(True):
+                            while(1):
                                 StellarObject = input("> Stellar object's name (type \'H\' for Help): ")
 
                                 if(StellarObject == "Help" or StellarObject == "help" or StellarObject == "H" or StellarObject == "h"):
@@ -2385,7 +2393,7 @@ int main()
                                         RightAscension = StellarDict[StellarObject][0]
 
                                         std::cout << ">> Is Declination given?")
-                                        while(True):
+                                        while(1):
                                             EquIToEquIIChoose = input(">> Write \'Y\' or \'N\' (Yes or No): ")
 
                                             if(EquIToEquIIChoose == 'Y' or EquIToEquIIChoose == 'y' or EquIToEquIIChoose == 'Yes' or EquIToEquIIChoose == 'yes' or EquIToEquIIChoose == 'YEs' or EquIToEquIIChoose == 'yEs' or EquIToEquIIChoose == 'yeS' or EquIToEquIIChoose == 'YeS' or EquIToEquIIChoose == 'yES'):
@@ -2455,7 +2463,7 @@ int main()
                     LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600
 
                     std::cout << ">> Is Declination given?")
-                    while(True):
+                    while(1):
                         EquIIToEquIChoose = input(">> Write \'Y\' or \'N\' (Yes or No): ")
                         
                         if(EquIIToEquIChoose == 'Y' or EquIIToEquIChoose == 'y' or EquIIToEquIChoose == 'Yes' or EquIIToEquIChoose == 'yes' or EquIIToEquIChoose == 'YEs' or EquIIToEquIChoose == 'yEs' or EquIIToEquIChoose == 'yeS' or EquIIToEquIChoose == 'YeS' or EquIIToEquIChoose == 'yES'):
@@ -2468,7 +2476,7 @@ int main()
                         else:
                             std::cout << ">>>> ERROR: Invalid option! Try Again!")
 
-                    while(True):
+                    while(1):
                         std::cout << ">> Which essential Parameter Is given?")
                         EquIIToEquIDecChoose = input(">> Right Ascension (write \'A\'), or Local Hour Angle in Hours (write \'T\')?: ")
                         if(EquIIToEquIDecChoose == 'A' or EquIIToEquIDecChoose == 'a'):
@@ -2530,7 +2538,7 @@ int main()
                     std::cout << ">> Conversion from Equatorial II to Horizontal Coordinate System")
                     std::cout << ">> Give Parameters!")
 
-                    while(True):
+                    while(1):
                         std::cout << ">>> LOCATION")
                         std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> Or would like to choose a predefined Location's Coordinates?")
                         std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for Predefined Locations' Coordinates!")
@@ -2546,7 +2554,7 @@ int main()
                             break
 
                         else if(EquIIToHorLocationChoose == '2'):
-                            while(True):
+                            while(1):
                                 Location = input("> Location's name (type \'H\' for Help): ")
 
                                 if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
@@ -2572,7 +2580,7 @@ int main()
                             std::cout << ">>>> ERROR: Invalid option! Try Again!")
 
 
-                    while(True):
+                    while(1):
                         std::cout << "\n>>> STELLAR OBJECT")
                         std::cout << ">> Would you like to give the stellar object's Coordinates by yourself,\n>> Or would like to choose a Predefined Object's Coordinates?")
                         std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for a Predefined Stellar Object's Coordinates!")
@@ -2605,7 +2613,7 @@ int main()
                                 std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'A\' or \'T\'!")
                         
                         else if(EquIIToHorStellarChoose == '2'):
-                            while(True):
+                            while(1):
                                 StellarObject = input("> Stellar object's name (type \'H\' for Help): ")
 
                                 if(StellarObject == "Help" or StellarObject == "help" or StellarObject == "H" or StellarObject == "h"):
@@ -2683,7 +2691,7 @@ int main()
         //                     |___/                                         
         // GEOGRAPHICAL DISTANCE CALCULATION
         else if(mode == '2'):
-            while(True):
+            while(1):
                 std::cout << ">> Geographical Distance Calculator\n")
                 std::cout << ">> Please choose a mode you'd like to use!")
                 std::cout << "(1) Positional Coordinates from User Input")
@@ -2711,7 +2719,7 @@ int main()
                 else if(DistMode == '2'):
                     std::cout << ">> Calculate Distance of Choosen Predefined Locations\n")
                     std::cout << ">> Write the Names of Two Choosen Cities to the Input!")
-                    while(True):
+                    while(1):
                         Location1 = input("> Location //1 (type \'H\' for Help): ")
 
                         if(Location1 == "Help" or Location1 == "help" or Location1 == "H" or Location1 == "h"):
@@ -2732,7 +2740,7 @@ int main()
                             else:
                                 break
 
-                    while(True):
+                    while(1):
                         Location2 = input("> Location //2 (type \'H\' for Help): ")
 
                         if(Location2 == "Help" or Location2 == "help" or Location2 == "H" or Location2 == "h"):
@@ -2774,7 +2782,7 @@ int main()
         //  |______|_|  |_|_____/   |_|     \_____\__,_|_|\___|
         // LOCAL MEAN SIDEREAL TIME CALCULATION
         else if(mode == '3'):
-            while(True):
+            while(1):
                 std::cout << ">> Local Mean Sidereal Time Calculator\n")
                 std::cout << ">> Please choose a mode you'd like to use!")
                 std::cout << "(1) Parameters from User Input")
@@ -2802,21 +2810,21 @@ int main()
                     Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
 
                     // Input Time Parameters
-                    while(True):
+                    while(1):
                         DateYear = int(input("> Year: "))
                         if(DateYear != 0):
                             break
                         else:
                             std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n")
 
-                    while(True):
+                    while(1):
                         DateMonth = int(input("> Month: "))
                         if(DateMonth > 0 and DateMonth < 13):
                             break
                         else:
                             std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n")
 
-                    while(True):
+                    while(1):
                         DateDay = int(input("> Day: "))
                         if(DateYear%4 == 0 and (DateYear%100 != 0 or DateYear%400 == 0)):
                             if(MonthLengthListLeapYear[DateMonth - 1] >= DateDay and DateDay > 0):
@@ -2831,21 +2839,21 @@ int main()
                                 daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
                                 std::cout << daysmsg.format(MonthLengthList[DateMonth - 1]))
 
-                    while(True):
+                    while(1):
                         LocalHours = float(input("> Local Hours: ") or "0")
                         if(LocalHours >= 0 and LocalHours < 24):
                             break
                         else:
                             std::cout << ">>>> ERROR: Hours should be inside [0,24[ interval!\n")
 
-                    while(True):
+                    while(1):
                         LocalMinutes = int(input("> Local Minutes: ") or "0")
                         if(LocalMinutes >= 0 and LocalMinutes <= 59):
                             break
                         else:
                             std::cout << ">>>> ERROR: Minutes should be inside [0,59] interval, and should be Integer!\n")
 
-                    while(True):
+                    while(1):
                         LocalSeconds = float(input("> Local Seconds: ") or "0")
                         if(LocalSeconds >= 0 and LocalSeconds < 60):
                             break
@@ -2862,7 +2870,7 @@ int main()
                     std::cout << ">> Write the Name of a Choosen Location to the Input!")
 
                     // Input Choosen Location's Name
-                    while(True):
+                    while(1):
                         Location = input("> Location's name (type \'H\' for Help): ")
 
                         if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
@@ -2883,14 +2891,14 @@ int main()
                                 break
 
                     // Input Time Parameters
-                    while(True):
+                    while(1):
                         DateYear = int(input("> Year: "))
                         if(DateYear != 0):
                             break
                         else:
                             std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n")
 
-                    while(True):
+                    while(1):
                         DateMonth = int(input("> Month: "))
                         if(DateMonth > 0 and DateMonth < 13):
                             break
@@ -2898,7 +2906,7 @@ int main()
                             std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n")
 
                     // Leap Year	Handling
-                    while(True):
+                    while(1):
                         DateDay = int(input("> Day: "))
                         if(DateYear%4 == 0 and (DateYear%100 != 0 or DateYear%400 == 0)):
                             if(MonthLengthListLeapYear[DateMonth - 1] >= DateDay and DateDay > 0):
@@ -2913,21 +2921,21 @@ int main()
                                 daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
                                 std::cout << daysmsg.format(MonthLengthList[DateMonth - 1]))
 
-                    while(True):
+                    while(1):
                         LocalHours = float(input("> Local Hours: ") or "0")
                         if(LocalHours >= 0 and LocalHours < 24):
                             break
                         else:
                             std::cout << ">>>> ERROR: Hours should be inside [0,24[ interval!\n")
 
-                    while(True):
+                    while(1):
                         LocalMinutes = int(input("> Local Minutes: ") or "0")
                         if(LocalMinutes >= 0 and LocalMinutes <= 59):
                             break
                         else:
                             std::cout << ">>>> ERROR: Minutes should be inside [0,59] interval, and should be Integer!\n")
 
-                    while(True):
+                    while(1):
                         LocalSeconds = float(input("> Local Seconds: ") or "0")
                         if(LocalSeconds >= 0 and LocalSeconds < 60):
                             break
@@ -2956,7 +2964,7 @@ int main()
         //                       |___/                                
         // DATETIME CALCULATION FOR TWILIGHTS
         else if(mode == '4'):
-            while(True):
+            while(1):
                 std::cout << ">> Calculate Datetimes of Twilights at Specific Location")
                 std::cout << ">> Please choose a mode you'd like to use!")
                 std::cout << "(1) Parameters from User Input")
@@ -2987,7 +2995,7 @@ int main()
                     Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
 
                 else if(TwiMode == '2'):
-                    while(True):
+                    while(1):
                         std::cout << ">> Calculate Datetimes of Twilights from the Coordinates of a Predefined Location")
                         std::cout << ">> Write the Name of a Choosen Location to the Input!")
 
@@ -3020,14 +3028,14 @@ int main()
 
                 if(TwiMode == '1' or TwiMode == '2'):
                     // Input Time Parameters
-                    while(True):
+                    while(1):
                         LocalDateYear = int(input("> Year: "))
                         if(LocalDateYear != 0):
                             break
                         else:
                             std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n")
 
-                    while(True):
+                    while(1):
                         LocalDateMonth = int(input("> Month: "))
                         if(LocalDateMonth > 0 and LocalDateMonth < 13):
                             break
@@ -3035,7 +3043,7 @@ int main()
                             std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n")
 
                     // Leap Year	Handling
-                    while(True):
+                    while(1):
                         LocalDateDay = int(input("> Day: "))
                         if(LocalDateYear%4 == 0 and (LocalDateYear%100 != 0 or LocalDateYear%400 == 0)):
                             if(MonthLengthListLeapYear[LocalDateMonth - 1] >= LocalDateDay and LocalDateDay > 0):
@@ -3113,7 +3121,7 @@ int main()
         //                                                    |___/             
         // Calculate Astronomical Triangles Parameters
         else if(mode == '5'):
-            while(True):
+            while(1):
                 std::cout << ">> Calculate Astronomical Triangles Parameters from given Ones")
                 std::cout << ">> Please choose a mode you'd like to use!")
                 std::cout << "(1) Parameters from User Input")
@@ -3169,7 +3177,7 @@ int main()
         //  \____/ \__,_|_| |_|\__,_|_|\__,_|_|
         // Plot Sundial for Choosen Locations
         else if(mode == '6'):
-            while(True):
+            while(1):
                 std::cout << ">> Plot Sun's Path on a Sundial at Choosen Location on Earth")
                 std::cout << ">> Please choose a mode you'd like to use!")
                 std::cout << "(1) Parameters from User Input")
@@ -3206,7 +3214,7 @@ int main()
                     std::cout << ">> Write the Name of a Choosen Location to the Input!")
 
                     // Input Choosen Location's Name
-                    while(True):
+                    while(1):
                         Location = input("> Location's name (type \'H\' for Help): ")
                         
                         if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
@@ -3236,7 +3244,7 @@ int main()
 
                 if(SundialMode == '1' or SundialMode == '2'):
                     std::cout << ">> For which Year would You like to Draw the Sundial?")
-                    while(True):
+                    while(1):
                         SunDialYear = float(input("> Choosen Year: "))
                         if(SunDialYear != 0):
                             break
@@ -3244,12 +3252,12 @@ int main()
                             std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n")
 
                     
-                    while(True):
+                    while(1):
                         std::cout << ">> Would you like to plot the Sun's path for a Choosen Date in This Year too?")
                         SunDialChoose = input(">> Write Y for Yes or N for No: ")
                         if(SunDialChoose == 'Y' or SunDialChoose == 'y' or SunDialChoose == 'Yes' or SunDialChoose == 'yes' or SunDialChoose == 'YEs' or SunDialChoose == 'yEs' or SunDialChoose == 'yeS' or SunDialChoose == 'YeS' or SunDialChoose == 'yES'):
                             // Input Time Parameters
-                            while(True):
+                            while(1):
                                 LocalDateMonth = int(input("> Month: "))
                                 if(LocalDateMonth > 0 and LocalDateMonth < 13):
                                     break
@@ -3257,7 +3265,7 @@ int main()
                                     std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n")
 
                             // Leap Year	Handling
-                            while(True):
+                            while(1):
                                 LocalDateDay = int(input("> Day: "))
                                 if(LocalDateYear%4 == 0 and (LocalDateYear%100 != 0 or LocalDateYear%400 == 0)):
                                     if(MonthLengthListLeapYear[LocalDateMonth - 1] >= LocalDateDay and LocalDateDay > 0):
@@ -3753,7 +3761,7 @@ int main()
         //  \_| |_/_| |_|\__,_|_|\___|_| |_| |_|_| |_| |_|\__,_|
         // Draw Sun Analemma at Choosen Location on Earth
         else if(mode == '7'):
-            while(True):
+            while(1):
                 std::cout << ">> Plot the Sun Analemma at Choosen Location on Earth")
                 std::cout << ">> Please choose a mode you'd like to use!")
                 std::cout << "(1) Parameters from User Input")
@@ -3790,7 +3798,7 @@ int main()
                     std::cout << ">> Write the Name of a Choosen Location to the Input!")
 
                     // Input Choosen Location's Name
-                    while(True):
+                    while(1):
                         Location = input("> Location's name (type \'H\' for Help): ")
                         
                         if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
@@ -3819,7 +3827,7 @@ int main()
 
 
                 if(AnalemmaMode == '1' or AnalemmaMode == '2'):
-                    while(True):
+                    while(1):
                         std::cout << ">> For which Year would You like to Draw the Analemma?")
                         AnalemmaYear = float(input("> Choosen Year: "))
                         if(AnalemmaYear != 0):
