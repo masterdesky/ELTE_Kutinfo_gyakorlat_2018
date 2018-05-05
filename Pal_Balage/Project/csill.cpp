@@ -345,7 +345,7 @@ double NormalizeSymmetricallyBoundedPI_2(double Parameter)
 
 }
 
-std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, int Day)
+std::vector<double> NormalizeTimeParameters(double Time, double Year, double Month, double Day)
 {
     // Function call: Time, Hours, Minutes, Seconds, Year, Month, Day = NormalizeTimeParameters(Time, Year, Month, Day)
 
@@ -353,12 +353,12 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
     std::vector<double> TimeMultiply = NormalizeZeroBoundedTime(Time);
 
     // Declare variables
-    int Hours;
-    int Minutes;
-    int Seconds;
+    double Hours;
+    double Minutes;
+    double Seconds;
     double CountingIndex;
     double Time = TimeMultiply[0];
-    int Multiply = TimeMultiply[1];
+    double Multiply = TimeMultiply[1];
 
     // CORRECTIONS IF MINUTES >= 60 or SECONDS >= 60
     Hours = int(Time);
@@ -376,9 +376,9 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
         Day += 1;
     }
 
-    if(Year%4 == 0 && (Year%100 != 0 || Year%400 == 0))
+    if(int(Year)%4 == 0 && (int(Year)%100 != 0 || int(Year)%400 == 0))
     {
-        if(Day > MonthLengthListLeapYear[Month - 1])
+        if(Day > MonthLengthListLeapYear[int(Month) - 1])
         {
             Month =+ 1;
         }
@@ -386,7 +386,7 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
 
     else
     {
-        if(Day > MonthLengthList[Month - 1])
+        if(Day > MonthLengthList[int(Month) - 1])
         {
             Month += 1;
         }
@@ -417,9 +417,9 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
         Day += 1;
     }
 
-    if(Year%4 == 0 && (Year%100 != 0 || Year%400 == 0))
+    if(int(Year)%4 == 0 && (int(Year)%100 != 0 || int(Year)%400 == 0))
     {
-        if(Day > MonthLengthListLeapYear[Month - 1])
+        if(Day > MonthLengthListLeapYear[int(Month) - 1])
         {
             Month =+ 1;
         }
@@ -427,7 +427,7 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
 
     else
     {
-        if(Day > MonthLengthList[Month - 1])
+        if(Day > MonthLengthList[int(Month) - 1])
             Month += 1;
     }
 
@@ -451,11 +451,11 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
 
     while(1)
     {
-        if(Year%4 == 0 && (Year%100 != 0 || Year%400 == 0))
+        if(int(Year)%4 == 0 && (int(Year)%100 != 0 || int(Year)%400 == 0))
         {
-            if(Day > MonthLengthListLeapYear[Month - 1])
+            if(Day > MonthLengthListLeapYear[int(Month) - 1])
             {
-                Day = Day - MonthLengthListLeapYear[Month - 1];
+                Day = Day - MonthLengthListLeapYear[int(Month) - 1];
                 Month = Month + 1;
                 if(Month == 13)
                 {
@@ -463,9 +463,9 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
                     Year = Year + 1;
                 }
 
-                if(Day > MonthLengthListLeapYear[Month - 1])
+                if(Day > MonthLengthListLeapYear[int(Month) - 1])
                 {
-                    CountingIndex = CountingIndex - MonthLengthListLeapYear[Month - 1];
+                    CountingIndex = CountingIndex - MonthLengthListLeapYear[int(Month) - 1];
                 }
 
                 else
@@ -481,11 +481,11 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
             }
         }
 
-        if(Year%4 != 0)
+        if(int(Year)%4 != 0)
         {
-            if(Day > MonthLengthList[Month - 1])
+            if(Day > MonthLengthList[int(Month) - 1])
             {
-                Day = Day - MonthLengthList[Month - 1];
+                Day = Day - MonthLengthList[int(Month) - 1];
                 Month = Month + 1;
                 if(Month == 13)
                 {
@@ -493,9 +493,9 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
                     Year = Year + 1;
                 }
 
-                if(Day > MonthLengthList[Month - 1])
+                if(Day > MonthLengthList[int(Month) - 1])
                 {
-                    CountingIndex = CountingIndex - MonthLengthList[Month - 1];
+                    CountingIndex = CountingIndex - MonthLengthList[int(Month) - 1];
                 }
                 
                 else
@@ -513,14 +513,18 @@ std::vector<double> NormalizeTimeParameters(double Time, int Year, int Month, in
     }
 
 
-    std::vector<auto> NormTimeParam = {Time, Hours, Minutes, Seconds, Year, Month, Day};
-
+    std::vector<double> NormTimeParam = {Time, Hours, Minutes, Seconds, Year, Month, Day};
     return(NormTimeParam);
 }
 
 // Normalization and Conversion of Local Time to United Time
-std::vector <double> LTtoUT(LocalHours, LocalMinutes, LocalSeconds, DateYear, DateMonth, DateDay)
+std::vector <double> LTtoUT(float Longitude, double LocalHours, double LocalMinutes, double LocalSeconds, double DateYear, double DateMonth, double DateDay)
 {
+
+    // Declare variables
+    double LocalTime;
+    double UnitedTime;
+
     // Calculate United Time
     LocalTime = LocalHours + LocalMinutes/60 + LocalSeconds/3600;
     // Normalize LT
@@ -532,12 +536,12 @@ std::vector <double> LTtoUT(LocalHours, LocalMinutes, LocalSeconds, DateYear, Da
     // ISN'T NEEDED
     if((DateMonth > 3 and DateMonth < 10) || ((DateMonth == 3 and DateDay >=25) || (DateMonth == 10 && (DateDay >= 8 && DateDay <=14))))
     {
-        UnitedTime = LocalTime - (round(Longitude/15, 0) + 1);
+        UnitedTime = LocalTime - (std::round(Longitude/15) + 1);
     }
 
     else
     {
-        UnitedTime = LocalTime - round(Longitude/15, 0);
+        UnitedTime = LocalTime - std::round(Longitude/15);
     }
 
     //UnitedTime = LocalTime - round(Longitude/15, 0)
@@ -545,13 +549,16 @@ std::vector <double> LTtoUT(LocalHours, LocalMinutes, LocalSeconds, DateYear, Da
     // Apply corrections if United Time is not in the correct format
     // returns: UnitedTime, UnitedHours, UnitedMinutes, UnitedSeconds, UnitedDateYear, UnitedDateMonth, UnitedDateDay
     std::vector<double> LTtoUTvec = NormalizeTimeParameters(UnitedTime, DateYear, DateMonth, DateDay);
-
     return(LTtoUTvec);
 
 }
 
-std::vector<double> UTtoLT(Latitude, UnitedHours, UnitedMinutes, UnitedSeconds, UnitedDateYear, UnitedDateMonth, UnitedDateDay)
+std::vector<double> UTtoLT(double Longitude, double UnitedHours, double UnitedMinutes, double UnitedSeconds, double UnitedDateYear, double UnitedDateMonth, double UnitedDateDay)
 {
+    // Declare variables
+    double UnitedTime;
+    double LocalTime;
+
     // Calculate United Time
     UnitedTime = UnitedHours + UnitedMinutes/60 + UnitedSeconds/3600;
     // Normalize LT
@@ -561,13 +568,15 @@ std::vector<double> UTtoLT(Latitude, UnitedHours, UnitedMinutes, UnitedSeconds, 
     // Summer: March 26/31 - October 8/14 LT+1
     // Winter: October 8/14 - March 26/31 LT+0
     // ISN'T NEEDED
-    if((UnitedDateMonth > 3 && UnitedDateMonth < 10) || ((UnitedDateMonth == 3 && UnitedDateDay >=25) || (UnitedDateMonth == 10 && (UnitedDateDay >= 8 && UnitedDateDay <=14)))):
-        LocalTime = UnitedTime + (round(Longitude/15, 0) + 1);
+    if((UnitedDateMonth > 3 && UnitedDateMonth < 10) || ((UnitedDateMonth == 3 && UnitedDateDay >=25) || (UnitedDateMonth == 10 && (UnitedDateDay >= 8 && UnitedDateDay <=14))))
+    {
+        LocalTime = UnitedTime + (std::round(Longitude/15) + 1);
+    }
 
-    else:
-        LocalTime = UnitedTime + round(Longitude/15, 0);
-
-    //LocalTime = UnitedTime + round(Longitude/15, 0)
+    else
+    {
+        LocalTime = UnitedTime + std::round(Longitude/15);
+    }
 
     // Apply corrections if Local Time is not in the correct format
     // returns: LocalTime, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay
@@ -585,7 +594,7 @@ std::vector<double> UTtoLT(Latitude, UnitedHours, UnitedMinutes, UnitedSeconds, 
 
 // Calculate Greenwich Mean Sidereal Time (GMST = S_0) at UT 00:00 on Given Date
 double CalculateGMST(float Longitude, double UnitedHoursForGMST, double UnitedMinutesForGMST, double UnitedSecondsForGMST, int UnitedDateYear, int UnitedDateMonth, int UnitedDateDay)
-
+{
     // JulianDays = UT days since J2000.0, including parts of a day
     // Could be + or - or 0
     //Dwhole = int(int(1461 * int(UnitedDateYear + 4800 + (UnitedDateMonth - 14) / 12)) / 4) + int((367 * (UnitedDateMonth - 2 - 12 * int((UnitedDateMonth - 14) / 12))) / 12) - int((3 * int((UnitedDateYear + 4900 + (UnitedDateMonth - 14)/12) / 100)) / 4) + UnitedDateDay - 32075
@@ -600,7 +609,7 @@ double CalculateGMST(float Longitude, double UnitedHoursForGMST, double UnitedMi
     double JulianCenturies = JulianDays / 36525;
 
     // Calculate GMST in Degrees
-    double GMSTDegrees = 280.46061837 + 360.98564736629 * JulianDays + 0.000388 * JulianCenturies**2;
+    double GMSTDegrees = 280.46061837 + 360.98564736629 * JulianDays + 0.000388 * pow(JulianCenturies, 2);
 
     // Normalize between to [0,+2π[
     GMSTDegrees = NormalizeZeroBounded(GMSTDegrees, 360);
@@ -609,6 +618,7 @@ double CalculateGMST(float Longitude, double UnitedHoursForGMST, double UnitedMi
     double GMST = GMSTDegrees / 15;
 
     return(GMST);
+}
 
 
 
@@ -622,8 +632,10 @@ double CalculateGMST(float Longitude, double UnitedHoursForGMST, double UnitedMi
 std::vector<double> HorToEquI(float Latitude, double Altitude, double Azimuth, double LocalSiderealTime)
 {
 
+    // Declare variables
     double RightAscension;
     double Declination;
+    double LocalHourAngle;
     double LocalHourAngleDegrees;
     double LocalHourAngleDegrees1_1;
     double LocalHourAngleDegrees1_2;
@@ -708,7 +720,7 @@ std::vector<double> HorToEquI(float Latitude, double Altitude, double Azimuth, d
     }
 
     // Normalize result [0,+2π[
-    LocalHourAngleDegrees = NormalizeZeroBounded(LocalHourAngleDegrees, 360)
+    LocalHourAngleDegrees = NormalizeZeroBounded(LocalHourAngleDegrees, 360);
     // Convert to hours from angles (H -> t)
     LocalHourAngle = LocalHourAngleDegrees / 15;
 
@@ -724,29 +736,31 @@ std::vector<double> HorToEquI(float Latitude, double Altitude, double Azimuth, d
         RightAscension = NULL;
     }
 
-    std::vector<double> HorToEquIvec = {Declination, LocalHourAngle, RightAscension};
-
+    std::vector<double> HorToEquIvec = {RightAscension, Declination, LocalHourAngle};
     return(HorToEquIvec);
-
 }
 
 // 2. Horizontal to Equatorial II
 std::vector<double> HorToEquII(float Latitude, double Altitude, double Azimuth, double LocalSiderealTime)
-
+{
     // First Convert Horizontal to Equatorial I Coordinates
     // returns: Declination, LocalHourAngle, RightAscension
     std::vector<double> DecLHARAHorToEquII = HorToEquI(Latitude, Altitude, Azimuth, LocalSiderealTime);
 
+    //Declare variables
+    double RightAscension = DecLHARAHorToEquII[0];
+    double Declination = DecLHARAHorToEquII[1];
+    double LocalHourAngle = DecLHARAHorToEquII[2];
+
     // Convert Equatorial I to Equatorial II
-    LocalSiderealTime = DecLHARAHorToEquII[1] + DecLHARAHorToEquII[2];
+    LocalSiderealTime = LocalHourAngle + RightAscension;
     // Normalize LMST
     // LMST: [0,24h[
     LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
 
-    std::vector<double> HorToEquIIvec = {Declination, RightAscension, LocalSiderealTime};
-
+    std::vector<double> HorToEquIIvec = {RightAscension, Declination, LocalSiderealTime};
     return(HorToEquIIvec);
-
+}
 
 // 3. Equatorial I to Horizontal
 std::vector<double> EquIToHor(float Latitude, double RightAscension, double Declination, double Altitude, double LocalSiderealTime, double LocalHourAngle)
@@ -856,16 +870,15 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
 
         else
         {
-            std::cout << Azimuth1, Azimuth2, Azimuth3, Azimuth4);
+            std::cout << Azimuth1 << Azimuth2 << Azimuth3 << Azimuth4;
         }
 
         // Normalize Azimuth
         // Azimuth: [0,+2π[
         Azimuth = NormalizeZeroBounded(Azimuth, 360);
 
-        std::vector<double> EquIToHor = {Altitude, Azimuth}
-
-        return(EquIToHor);
+        std::vector<double> EquIToHorvec1 = {Altitude, Azimuth};
+        return(EquIToHorvec1);
     }
 
     else if(Altitude != NULL)
@@ -886,6 +899,8 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
         double Azimuth2_2;
         double Azimuth2_3;
         double Azimuth2_4;
+
+        double H_dil;
 
         // Starting Equations: 
         // sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H)
@@ -930,8 +945,10 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
             Azimuth1_2 = 180 - Azimuth1_1;
         }
 
-        else if(Azimuth1_1 > 180):
+        else if(Azimuth1_1 > 180)
+        {
             Azimuth1_2 = 540 - Azimuth1_1;
+        }
 
         // Calculate Azimuth (A) with a second method, to determine which one is the correct (A1_1 or A1_2?)
         // cos(A) = (sin(δ) - sin(φ) * sin(m)) / (cos(φ) * cos(m))
@@ -954,22 +971,22 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
 
         else if(Azimuth1_1 + 3 > Azimuth1_4 and Azimuth1_1 - 3 < Azimuth1_4)
         {
-            Azimuth1 = Azimuth1_1
+            Azimuth1 = Azimuth1_1;
         }
 
         else if(Azimuth1_2 + 3 > Azimuth1_3 and Azimuth1_2 - 3 < Azimuth1_3)
         {
-            Azimuth1 = Azimuth1_2
+            Azimuth1 = Azimuth1_2;
         }
 
         else if(Azimuth1_2 + 3 > Azimuth1_4 and Azimuth1_2 - 3 < Azimuth1_4)
         {
-            Azimuth1 = Azimuth1_2
+            Azimuth1 = Azimuth1_2;
         }
 
         else
         {
-            std::cout << Azimuth1_1, Azimuth1_2, Azimuth1_3, Azimuth1_4);
+            std::cout << Azimuth1_1 << ' ' << Azimuth1_2 << ' ' << Azimuth1_3 << ' ' << Azimuth1_4 << '\n';
         }
 
         // Calculate Azimuth (A) for SECOND LOCAL HOUR ANGLE
@@ -977,91 +994,116 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
         // Azimuth at given H Local Hour Angle
         Azimuth2_1 = (180 / Pi) * (asin(
                 - sin((Pi / 180) * (LocalHourAngleDegrees1)) * cos((Pi / 180) * (Declination)) / cos((Pi / 180) * (Altitude))
-                ))
+                ));
 
-        Azimuth2_1 = NormalizeZeroBounded(Azimuth2_1, 360)
+        Azimuth2_1 = NormalizeZeroBounded(Azimuth2_1, 360);
 
-        if(Azimuth2_1 <= 180):
-            Azimuth2_2 = 180 - Azimuth2_1
+        if(Azimuth2_1 <= 180)
+        {
+            Azimuth2_2 = 180 - Azimuth2_1;
+        }
 
-        else if(Azimuth2_1 > 180):
-            Azimuth2_2 = 540 - Azimuth2_1
+        else if(Azimuth2_1 > 180)
+        {
+            Azimuth2_2 = 540 - Azimuth2_1;
+        }
 
         // Calculate Azimuth (A) with a second method, to determine which one is the correct (A2_1 or A2_2?)
         // cos(A) = (sin(δ) - sin(φ) * sin(m)) / (cos(φ) * cos(m))
         Azimuth2_3 = (180 / Pi) * (acos(
                 (sin((Pi / 180) * (Declination)) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (Altitude))) / 
                 (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (Altitude)))
-        ))
+                ));
 
-        Azimuth2_4 = - Azimuth2_3
+        Azimuth2_4 = - Azimuth2_3;
 
         // Normalize negative result
         // Azimuth: [0,+2π[
-        Azimuth2_4 = NormalizeZeroBounded(Azimuth2_4, 360)
+        Azimuth2_4 = NormalizeZeroBounded(Azimuth2_4, 360);
 
         // Compare Azimuth values
-        if(Azimuth2_1 + 3 > Azimuth2_3 and Azimuth2_1 - 3 < Azimuth2_3):
-            Azimuth2 = Azimuth2_1
+        if(Azimuth2_1 + 3 > Azimuth2_3 and Azimuth2_1 - 3 < Azimuth2_3)
+        {
+            Azimuth2 = Azimuth2_1;
+        }
 
-        else if(Azimuth2_1 + 3 > Azimuth2_4 and Azimuth2_1 - 3 < Azimuth2_4):
-            Azimuth2 = Azimuth2_1
+        else if(Azimuth2_1 + 3 > Azimuth2_4 and Azimuth2_1 - 3 < Azimuth2_4)
+        {
+            Azimuth2 = Azimuth2_1;
+        }
 
-        else if(Azimuth2_2 + 3 > Azimuth2_3 and Azimuth2_2 - 3 < Azimuth2_3):
-            Azimuth2 = Azimuth2_2
+        else if(Azimuth2_2 + 3 > Azimuth2_3 and Azimuth2_2 - 3 < Azimuth2_3)
+        {
+            Azimuth2 = Azimuth2_2;
+        }
 
-        else if(Azimuth2_2 + 3 > Azimuth2_4 and Azimuth2_2 - 3 < Azimuth2_4):
-            Azimuth2 = Azimuth2_2
+        else if(Azimuth2_2 + 3 > Azimuth2_4 and Azimuth2_2 - 3 < Azimuth2_4)
+        {
+            Azimuth2 = Azimuth2_2;
+        }
 
-        else:
-            std::cout << Azimuth2_1, Azimuth2_2, Azimuth2_3, Azimuth2_4)
-
+        else
+        {
+            std::cout << Azimuth2_1 << ' ' << Azimuth2_2 << ' ' << Azimuth2_3 << ' ' << Azimuth2_4 << '\n';
+        }
 
         // Calculate time between them
         // Use precalculated LHAs
         // H_dil is the time, as long as the Object stays above the Horizon
-        H_dil = abs(LocalHourAngleDegrees1 - LocalHourAngleDegrees2)
+        H_dil = abs(LocalHourAngleDegrees1 - LocalHourAngleDegrees2);
 
-        std::vector<double> EquIToHor = {Altitude, Azimuth1, Azimuth2, H_dil}
-
-        return(EquIToHor);
+        std::vector<double> EquIToHorvec2 = {Altitude, Azimuth1, Azimuth2, H_dil};
+        return(EquIToHorvec2);
     }
 }
 
 
 // 4. Equatorial I to Equatorial II
-def EquIToEquII(RightAscension, LocalHourAngle):
-    
-    LocalSiderealTime = LocalHourAngle + RightAscension
+double EquIToEquII(double RightAscension, double LocalHourAngle)
+{
+    // Declare variable
+    double LocalSiderealTime;
+
+    LocalSiderealTime = LocalHourAngle + RightAscension;
     // Normalize LMST
     // LMST: [0,24h[
-    LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24)
+    LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
 
-    return(LocalSiderealTime)
+    return(LocalSiderealTime);
+}
+
 
 // 5. Equatorial II to Equatorial I
-def EquIIToEquI(LocalSiderealTime, RightAscension, LocalHourAngle):
-
+std::vector<double> EquIIToEquI(double RightAscension, double LocalHourAngle, double LocalSiderealTime)
+{
     // Calculate Right Ascension or Local Mean Sidereal Time
-    if(RightAscension != NULL and LocalHourAngle == NULL):
-        LocalHourAngle = LocalSiderealTime - RightAscension
+    if(RightAscension != NULL and LocalHourAngle == NULL)
+    {
+        LocalHourAngle = LocalSiderealTime - RightAscension;
         // Normalize LHA
         // LHA: [0,24h[
-        LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24)
+        LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
+    }
 
-    else if(RightAscension == NULL and LocalHourAngle != NULL):
-        RightAscension = LocalSiderealTime - LocalHourAngle
+    else if(RightAscension == NULL and LocalHourAngle != NULL)
+    {
+        RightAscension = LocalSiderealTime - LocalHourAngle;
         // Normalize Right Ascension
         // Right Ascension: [0,24h[
-        RightAscension = NormalizeZeroBounded(RightAscension, 24)
+        RightAscension = NormalizeZeroBounded(RightAscension, 24);
+    }
 
-    else:
-        pass
+    else
+    {}
 
-    return(LocalHourAngle, RightAscension)
+    std::vector<double> EquIIToEquIvec = {RightAscension, LocalHourAngle};
+    return(EquIIToEquIvec);
+}
+
 
 // 6. Equatorial II to Horizontal
-def EquIIToHor(Latitude, RightAscension, Declination, Altitude, Azimuth, LocalSiderealTime, LocalHourAngle):
+std::vector<double> EquIIToHor(double Latitude, double RightAscension, double Declination, double Altitude, double Azimuth, double LocalHourAngle, double LocalSiderealTime)
+{
 
     // Initial Data Normalization
     // Latitude: [-π,+π]
@@ -1069,35 +1111,46 @@ def EquIIToHor(Latitude, RightAscension, Declination, Altitude, Azimuth, LocalSi
     // Local Hour Angle: [0h,24h[
     // Right Ascension: [0h,24h[
     // Declination: [-π/2,+π/2]
-    Latitude = NormalizeSymmetricallyBoundedPI(Latitude)
-    LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24)
+    Latitude = NormalizeSymmetricallyBoundedPI(Latitude);
+    LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
     
-    if(RightAscension == NULL and LocalHourAngle != NULL):
-        LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24)
+    if(RightAscension == NULL and LocalHourAngle != NULL)
+    {
+        LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
+    }
 
-    else if(RightAscension != NULL and LocalHourAngle == NULL):
-        RightAscension = NormalizeZeroBounded(RightAscension, 24)
-    
-    Declination = NormalizeSymmetricallyBoundedPI_2(Declination)
+    else if(RightAscension != NULL and LocalHourAngle == NULL)
+    {
+        RightAscension = NormalizeZeroBounded(RightAscension, 24);
+    }
+
+    Declination = NormalizeSymmetricallyBoundedPI_2(Declination);
 
     // Convert Equatorial II to Equatorial I
-    LocalHourAngle, RightAscension = EquIIToEquI(LocalSiderealTime, RightAscension, LocalHourAngle)
+    std::vector<double> EquIIToEquIvec = EquIIToEquI(LocalSiderealTime, RightAscension, LocalHourAngle);
+
+    RightAscension = EquIIToEquIvec[0];
+    LocalHourAngle = EquIIToEquIvec[1];
 
     // Normalization of Output Data
-    LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24)
-    RightAscension = NormalizeZeroBounded(RightAscension, 24)
+    LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
+    RightAscension = NormalizeZeroBounded(RightAscension, 24);
 
     // Convert Equatorial I to Horizontal
-    Altitude, Azimuth = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle)
+    std::vector<double> EquIToHorvec  = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle);
+
+    Altitude = EquIToHorvec[0];
+    Azimuth = EquIToHorvec[1];
 
     // Normalization of Output Data
     // Altitude: [-π/2,+π/2]
     // Azimuth: [0,+2π[
-    Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude)
-    Azimuth = NormalizeZeroBounded(Azimuth, 360)
+    Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude);
+    Azimuth = NormalizeZeroBounded(Azimuth, 360);
 
-    return(Altitude, Azimuth)
-
+    std::vector<double> EquIIToHorvec = {Altitude, Azimuth};
+    return(EquIIToHorvec);
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1107,15 +1160,21 @@ def EquIIToHor(Latitude, RightAscension, Declination, Altitude, Azimuth, LocalSi
 ////////////////////////////////////////////////////////////////////////////////
 
 // Calculate distances between coordinates
-def GeogDistCalc(Latitude1, Latitude2, Longitude1, Longitude2):
-    
+double GeogDistCalc(double Latitude1, double Latitude2, double Longitude1, double Longitude2)
+{
+
+    // Declare variables
+    double hav_1;
+    double hav_2;
+    double Distance;
+
     // Initial Data Normalization
     // Latitude: [-π,+π]
     // Longitude: [0,+2π[
-    Latitude1 = NormalizeSymmetricallyBoundedPI(Latitude1)
-    Latitude2 = NormalizeSymmetricallyBoundedPI(Latitude2)
-    Longitude1 = NormalizeZeroBounded(Longitude1, 360)
-    Longitude2 = NormalizeZeroBounded(Longitude2, 360)
+    Latitude1 = NormalizeSymmetricallyBoundedPI(Latitude1);
+    Latitude2 = NormalizeSymmetricallyBoundedPI(Latitude2);
+    Longitude1 = NormalizeZeroBounded(Longitude1, 360);
+    Longitude2 = NormalizeZeroBounded(Longitude2, 360);
 
     // Haversine formula:
     // Step 1.: hav_1 = (sin((φ2 - φ1) / 2))^2 + cos(φ1) ⋅ cos(φ2) ⋅ (sin((λ2 - λ1) / 2))^2
@@ -1123,46 +1182,17 @@ def GeogDistCalc(Latitude1, Latitude2, Longitude1, Longitude2):
     // Step 3.: d = R * hav_2
 
     // Step 1
-    hav_1 = ((sin((Pi / 180) * (Latitude2 - Latitude1) / 2))**2 +
-        (cos((Pi / 180) * (Latitude1)) * cos((Pi / 180) * (Latitude2)) * (sin((Pi / 180) * (Longitude2 - Longitude1) / 2))**2))
+    hav_1 = ( pow((sin((Pi / 180) * (Latitude2 - Latitude1) / 2)), 2) +
+            ( cos((Pi / 180) * (Latitude1)) * cos((Pi / 180) * (Latitude2)) * pow((sin((Pi / 180) * (Longitude2 - Longitude1) / 2)), 2) ));
 
     // Step 2
-    hav_2 = 2 * math.atan2(math.sqrt(hav_1), math.sqrt(1-hav_1))
+    hav_2 = 2 * atan2(sqrt(hav_1), sqrt(1-hav_1));
 
     // Step 3
-    Distance = R * hav_2
+    Distance = R * hav_2;
 
-    return(Distance)
-
-
-// Calculate distances between choosen cities
-def GeogDistLocationCalc(Latitude1, Latitude2, Longitude1, Longitude2):
-
-    // Initial Data Normalization
-    // Latitude: [-π,+π]
-    // Longitude: [0,+2π[
-    Latitude1 = NormalizeSymmetricallyBoundedPI(Latitude1)
-    Latitude2 = NormalizeSymmetricallyBoundedPI(Latitude2)
-    Longitude1 = NormalizeZeroBounded(Longitude1, 360)
-    Longitude2 = NormalizeZeroBounded(Longitude2, 360)
-
-    // Haversine formula:
-    // Step 1.: hav_1 = (sin((φ2 - φ1) / 2))^2 + cos(φ1) ⋅ cos(φ2) ⋅ (sin((λ2 - λ1) / 2))^2
-    // Step 2.: hav_2 = 2 * atan2(sqrt(hav_1),sqrt(1 - hav_1))
-    // Step 3.: d = R * hav_2
-
-    // Step 1
-    hav_1 = ((sin((Pi / 180) * (Latitude2 - Latitude1) / 2))**2 +
-        (cos((Pi / 180) * (Latitude1)) * cos((Pi / 180) * (Latitude2)) * (sin((Pi / 180) * (Longitude2 - Longitude1) / 2))**2))
-
-    // Step 2
-    hav_2 = 2 * math.atan2(math.sqrt(hav_1), math.sqrt(1-hav_1))
-
-    // Step 3
-    Distance = R * hav_2
-
-    return(Distance)
-
+    return(Distance);
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1172,100 +1202,138 @@ def GeogDistLocationCalc(Latitude1, Latitude2, Longitude1, Longitude2):
 ////////////////////////////////////////////////////////////////////////////////
 
 // Calculate LMST from Predefined Coordinates
-def LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, DateYear, DateMonth, DateDay):
-
+std::vector<double> LocalSiderealTimeCalc(double Longitude, double LocalHours, double LocalMinutes, double LocalSeconds, double DateYear, double DateMonth, double DateDay)
+{
     // Initial Data Normalization
     // Longitude: [0,+2π[
-    Longitude = NormalizeZeroBounded(Longitude, 360)
+    Longitude = NormalizeZeroBounded(Longitude, 360);
 
-    UnitedTime, UnitedHours, UnitedMinutes, UnitedSeconds, UnitedDateYear, UnitedDateMonth, UnitedDateDay = LTtoUT(LocalHours, LocalMinutes, LocalSeconds, DateYear, DateMonth, DateDay)
+    std::vector<double> LTtoUTvec = LTtoUT(Longitude, LocalHours, LocalMinutes, LocalSeconds, DateYear, DateMonth, DateDay);
+
+    double UnitedTime = LTtoUTvec[0];
+    double UnitedHours = LTtoUTvec[1];
+    double UnitedMinutes = LTtoUTvec[2];
+    double UnitedSeconds = LTtoUTvec[3];
+    double UnitedDateYear = LTtoUTvec[4];
+    double UnitedDateMonth = LTtoUTvec[5];
+    double UnitedDateDay = LTtoUTvec[6];
 
     // Calculate Greenwich Mean Sidereal Time (GMST)
     // Now UT = 00:00:00
-    UnitedHoursForGMST = 0
-    UnitedMinutesForGMST = 0
-    UnitedSecondsForGMST = 0
-    S_0 = CalculateGMST(Longitude, UnitedHoursForGMST, UnitedMinutesForGMST, UnitedSecondsForGMST, UnitedDateYear, UnitedDateMonth, UnitedDateDay)
+    double UnitedHoursForGMST = 0;
+    double UnitedMinutesForGMST = 0;
+    double UnitedSecondsForGMST = 0;
+    double S_0 = CalculateGMST(Longitude, UnitedHoursForGMST, UnitedMinutesForGMST, UnitedSecondsForGMST, UnitedDateYear, UnitedDateMonth, UnitedDateDay);
 
     // Greenwich Zero Time for Supervision
-    GreenwichSiderealTime, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds, SiderealDateYear, SiderealDateMonth, SiderealDateDay = NormalizeTimeParameters(S_0, DateYear, DateMonth, DateDay)
+    std::vector<double> NormTimeParamvec1 = NormalizeTimeParameters(S_0, DateYear, DateMonth, DateDay);
+
+    double GreenwichSiderealTime = NormTimeParamvec1[0];
+    double GreenwichSiderealHours = NormTimeParamvec1[1];
+    double GreenwichSiderealMinutes = NormTimeParamvec1[2];
+    double GreenwichSiderealSeconds = NormTimeParamvec1[3];
+    double SiderealDateYear =  NormTimeParamvec1[4];
+    double SiderealDateMonth = NormTimeParamvec1[5];
+    double SiderealDateDay = NormTimeParamvec1[6];
 
     // Calculate LMST
-    LMST = S_0 + Longitude/15 + dS * UnitedTime
+    double LMST = S_0 + Longitude/15 + dS * UnitedTime;
 
     // Norm LMST
-    LMSTNorm = NormalizeZeroBounded(LMST, 24)
+    double LMSTNorm = NormalizeZeroBounded(LMST, 24);
 
-    LocalSiderealTime, LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds, LocalDateYear, LocalDateMonth, LocalDateDay = NormalizeTimeParameters(LMSTNorm, DateYear, DateMonth, DateDay)
+    std::vector<double> NormTimeParamvec2 = NormalizeTimeParameters(LMSTNorm, DateYear, DateMonth, DateDay);
 
-    return(LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds,
-           UnitedHours, UnitedMinutes, UnitedSeconds, 
-           GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds)
+     double LocalSiderealTime = NormTimeParamvec2[0];
+     double LocalSiderealHours = NormTimeParamvec2[1];
+     double LocalSiderealMinutes = NormTimeParamvec2[2];
+     double LocalSiderealSeconds = NormTimeParamvec2[3];
+     double LocalDateYear = NormTimeParamvec2[4];
+     double LocalDateMonth = NormTimeParamvec2[5];
+     double LocalDateDay = NormTimeParamvec2[6];
+
+    std::vector<double> LocalSiderealTimeCalc = {LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds,
+                                                UnitedHours, UnitedMinutes, UnitedSeconds, 
+                                                GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds};
+
+    return(LocalSiderealTimeCalc);
+}
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 ////////////////                                                ////////////////
 ////////////////      4. CALCULATE DATETIMES OF TWILIGHTS       ////////////////
 ////////////////                                                ////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 // Calculate actual Julian Date
-def CalculateJulianDate(LocalDateYear, LocalDateMonth, LocalDateDay, UnitedHours, UnitedMinutes, UnitedSeconds):
+double CalculateJulianDate(double LocalDateYear, double LocalDateMonth, double LocalDateDay, double UnitedHours, double UnitedMinutes, double UnitedSeconds)
+{
+    // Declare variables
+    double Dwhole;
+    double Dfrac;
+    double JulianDays;
 
     // JulianDays = UT days since J2000.0, including parts of a day
     // Could be + or - or 0
-    //Dwhole = int(int(1461 * int(LocalDateYear + 4800 + (LocalDateMonth - 14) / 12)) / 4) + int((367 * (LocalDateMonth - 2 - 12 * int((LocalDateMonth - 14) / 12))) / 12) - int((3 * int((LocalDateYear + 4900 + (LocalDateMonth - 14)/12) / 100)) / 4) + LocalDateDay - 32075
-    //Dwhole = 367 * LocalDateYear - int(int(7 * (LocalDateYear + 5001 + (LocalDateMonth - 9) / 7)) / 4) + int((275 * LocalDateMonth) / 9) + LocalDateDay + 1729777
-    Dwhole = 367 * LocalDateYear - int(7 * (LocalDateYear + int((LocalDateMonth + 9) / 12)) / 4) + int(275 * LocalDateMonth / 9) + LocalDateDay - 730531.5
+    //Dwhole = int(int(1461 * int(LocalDateYear + 4800 + (LocalDateMonth - 14) / 12)) / 4) + int((367 * (LocalDateMonth - 2 - 12 * int((LocalDateMonth - 14) / 12))) / 12) - int((3 * int((LocalDateYear + 4900 + (LocalDateMonth - 14)/12) / 100)) / 4) + LocalDateDay - 32075;
+    //Dwhole = 367 * LocalDateYear - int(int(7 * (LocalDateYear + 5001 + (LocalDateMonth - 9) / 7)) / 4) + int((275 * LocalDateMonth) / 9) + LocalDateDay + 1729777.
+    Dwhole = 367 * LocalDateYear - int(7 * (LocalDateYear + int((LocalDateMonth + 9) / 12)) / 4) + int(275 * LocalDateMonth / 9) + LocalDateDay - 730531.5;
     //Dwhole = round(Dwhole, 0)
     // Dfrac: Fraction of the day
-    Dfrac = (UnitedHours + UnitedMinutes/60 + UnitedSeconds/3600)/24
+    Dfrac = (UnitedHours + UnitedMinutes/60 + UnitedSeconds/3600)/24;
     // Julian days
-    JulianDays = Dwhole + Dfrac
+    JulianDays = Dwhole + Dfrac;
 
-    return(JulianDays)
+    return(JulianDays);
+}
 
 // Calculate Sun's Position
-def SunsCoordinatesCalc(Planet, Longitude, JulianDays):
-
+std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, double JulianDays)
+{
     // 1. Mean Solar Noon
     // JAnomaly is an approximation of Mean Solar Time at WLongitude expressed as a Julian day with the day fraction
     // WLongitude is the longitude west (west is positive, east is negative) of the observer on the Earth
-    WLongitude = - Longitude
-    JAnomaly = (JulianDays - OrbitDict[Planet + "J"][0]) / OrbitDict[Planet + "J"][3] - WLongitude/360
+    double WLongitude = - Longitude;
+    std::string PlanetJ = Planet.append("J");
+    double JAnomaly = (JulianDays - OrbitDictFunc(PlanetJ)[0]) / OrbitDictFunc(PlanetJ)[3] - WLongitude/360;
 
     // 2. Solar Mean Anomaly
     // MeanAnomaly (M) is the Solar Mean Anomaly used in a few of next equations
     // MeanAnomaly = (M_0 + M_1 * (JulianDays-J2000)) and Norm to 360
-    MeanAnomaly = (OrbitDict[Planet + "M"][0] + OrbitDict[Planet + "M"][1] * JulianDays)
+    std::string PlanetM = Planet.append("M");
+    double MeanAnomaly = (OrbitDictFunc(PlanetM)[0] + OrbitDictFunc(PlanetM)[1] * JulianDays);
     // Normalize Result
-    MeanAnomaly = NormalizeZeroBounded(MeanAnomaly, 360)
+    MeanAnomaly = NormalizeZeroBounded(MeanAnomaly, 360);
 
     // 3. Equation of the Center
     // EquationOfCenter (C) is the Equation of the center value needed to calculate Lambda (see next equation)
     // EquationOfCenter = C_1 * sin(M) + C_2 * sin(2M) + C_3 * sin(3M) + C_4 * sin(4M) + C_5 * sin(5M) + C_6 * sin(6M)
-    EquationOfCenter = (OrbitDict[Planet + "C"][0] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDict[Planet + "C"][1] * sin((Pi / 180) * (2 * MeanAnomaly)) + 
-                       OrbitDict[Planet + "C"][2] * sin((Pi / 180) * (3 * MeanAnomaly)) + OrbitDict[Planet + "C"][3] * sin((Pi / 180) * (4 * MeanAnomaly)) + 
-                       OrbitDict[Planet + "C"][4] * sin((Pi / 180) * (5 * MeanAnomaly)) + OrbitDict[Planet + "C"][5] * sin((Pi / 180) * (6 * MeanAnomaly)))
+    std::string PlanetC = Planet.append("C");
+    double EquationOfCenter = (OrbitDictFunc(PlanetC)[0] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDictFunc(PlanetC)[1] * sin((Pi / 180) * (2 * MeanAnomaly)) + 
+                       OrbitDictFunc(PlanetC)[2] * sin((Pi / 180) * (3 * MeanAnomaly)) + OrbitDictFunc(PlanetC)[3] * sin((Pi / 180) * (4 * MeanAnomaly)) + 
+                       OrbitDictFunc(PlanetC)[4] * sin((Pi / 180) * (5 * MeanAnomaly)) + OrbitDictFunc(PlanetC)[5] * sin((Pi / 180) * (6 * MeanAnomaly)));
 
     // 4. Ecliptic Longitude
     // MeanEclLongitudeSun (L_sun) in the Mean Ecliptic Longitude
     // EclLongitudeSun (λ) is the Ecliptic Longitude
-    // OrbitDict[Planet + "Orbit"][0] is a value for the argument of perihelion
-    MeanEclLongitudeSun = MeanAnomaly + OrbitDict[Planet + "Orbit"][0] + 180
-    EclLongitudeSun = EquationOfCenter + MeanEclLongitudeSun
-    MeanEclLongitudeSun = NormalizeZeroBounded(MeanEclLongitudeSun, 360)
-    EclLongitudeSun = NormalizeZeroBounded(EclLongitudeSun, 360)
+    // OrbitDictFunc(PlanetOrbit)[0] is a value for the argument of perihelion
+    std::string PlanetOrbit = Planet.append("Orbit");
+    double MeanEclLongitudeSun = MeanAnomaly + OrbitDictFunc(PlanetOrbit)[0] + 180;
+    double EclLongitudeSun = EquationOfCenter + MeanEclLongitudeSun;
+    // Normalize Results
+    MeanEclLongitudeSun = NormalizeZeroBounded(MeanEclLongitudeSun, 360);
+    EclLongitudeSun = NormalizeZeroBounded(EclLongitudeSun, 360);
 
     // 5. Right Ascension of Sun (α)
     // PlanetA_2, PlanetA_4 and PlanetA_6 (measured in degrees) are coefficients in the series expansion of the Sun's Right Ascension
     // They varie for different planets in the Solar System
     // RightAscensionSun = EclLongitudeSun + S ≈ EclLongitudeSun + PlanetA_2 * sin(2 * EclLongitudeSun) + PlanetA_4 * sin(4 * EclLongitudeSun) + PlanetA_6 * sin(6 * EclLongitudeSun)
-    RightAscensionSun = (EclLongitudeSun + OrbitDict[Planet + "A"][0] * sin((Pi / 180) * (2 * EclLongitudeSun)) + OrbitDict[Planet + "A"][1] * 
-                        sin((Pi / 180) * (4 * EclLongitudeSun)) + OrbitDict[Planet + "A"][2] * sin((Pi / 180) * (6 * EclLongitudeSun)))
+    std::string PlanetA = Planet.append("A");
+    double RightAscensionSun = (EclLongitudeSun + OrbitDictFunc(PlanetA)[0] * sin((Pi / 180) * (2 * EclLongitudeSun)) + OrbitDictFunc(PlanetA)[1] * 
+                        sin((Pi / 180) * (4 * EclLongitudeSun)) + OrbitDictFunc(PlanetA)[2] * sin((Pi / 180) * (6 * EclLongitudeSun)));
 
-    RightAscensionSun /= 15
+    RightAscensionSun /= 15;
 
     // 6./a Declination of the Sun (δ) (Wikipedia)
     // DeclinationSun (δSun) is the Declination of the Sun
@@ -1279,8 +1347,9 @@ def SunsCoordinatesCalc(Planet, Longitude, JulianDays):
     // PlanetD_1, PlanetD_3 and PlanetD_5 (measured in degrees) are coefficients in the series expansion of the Sun's Declination.
     // They varie for different planets in the Solar System.
     // DeclinationSun = PlanetD_1 * sin(EclLongitudeSun) + PlanetD_3 * (sin(EclLongitudeSun))^3 + PlanetD_5 * (sin(EclLongitudeSun))^5
-    DeclinationSun = (OrbitDict[Planet + "D"][0] * sin((Pi / 180) * (EclLongitudeSun)) + OrbitDict[Planet + "D"][1] * 
-                     (sin((Pi / 180) * (EclLongitudeSun)))**3 + OrbitDict[Planet + "D"][2] * (sin((Pi / 180) * (EclLongitudeSun)))**5)
+    std::string PlanetD = Planet.append("D");
+    double DeclinationSun = (OrbitDictFunc(PlanetD)[0] * sin((Pi / 180) * (EclLongitudeSun)) + OrbitDictFunc(PlanetD)[1] * 
+                     pow((sin((Pi / 180) * (EclLongitudeSun))), 3) + OrbitDictFunc(PlanetD)[2] * pow((sin((Pi / 180) * (EclLongitudeSun))), 5));
 
 
     // 7. Solar Transit
@@ -1289,19 +1358,26 @@ def SunsCoordinatesCalc(Planet, Longitude, JulianDays):
     // 2451545.5 is midnight or the beginning of the equivalent Julian year reference
     // Jtransit = J_x + 0.0053 * sin(MeanANomaly) - 0.0068 * sin(2 * L_sun)
     // "0.0053 * sin(MeanAnomaly) - 0.0069 * sin(2 * EclLongitudeSun)"  is a simplified version of the equation of time
-    J_x = (JulianDays + 2451545) + OrbitDict[Planet + "J"][3] * (JulianDays - JAnomaly)
-    Jtransit = J_x + OrbitDict[Planet + "J"][1] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDict[Planet + "J"][2] * sin((Pi / 180) * (2 * MeanEclLongitudeSun))
+    std::string PlanetJ = Planet.append("J");
+    double J_x = (JulianDays + 2451545) + OrbitDictFunc(PlanetJ)[3] * (JulianDays - JAnomaly);
+    double Jtransit = J_x + OrbitDictFunc(PlanetJ)[1] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDictFunc(PlanetJ)[2] * sin((Pi / 180) * (2 * MeanEclLongitudeSun));
+
+    std::vector<double> SunsCoordinatesCalc = {RightAscensionSun, DeclinationSun, EclLongitudeSun, Jtransit};
+    return(SunsCoordinatesCalc);
+}
 
 
-    return(RightAscensionSun, DeclinationSun, EclLongitudeSun, Jtransit)
-
-def SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSun, EclLongitudeSun, AltitudeOfSun):
+std::vector<double> SunsLocalHourAngle(std::string Planet, double Latitude, double Longitude, double DeclinationSun, double EclLongitudeSun, double AltitudeOfSun)
+{
+    // Declare variables
+    double LocalHourAngleSun_Orig;
 
     // 8./a Local Hour Angle of Sun (H)
     // H+ ≈ 90° + H_1 * sin(EclLongitudeSun) * tan(φ) + H_3 * sin(EclLongitudeSun)^3 * tan(φ) * (3 + tan(φ)^2) + H_5 * sin(EclLongitudeSun)^5 * tan(φ) * (15 + 10*tan(φ)^2 + 3 * tan(φ)^4))
-    LocalHourAngleSun_Pos = (90 + OrbitDict[Planet + "H"][0] * sin((Pi / 180) * (EclLongitudeSun)) * math.tan((Pi / 180) * (Latitude)) + OrbitDict[Planet + "H"][1] * 
-                            sin((Pi / 180) * ((EclLongitudeSun))**3 * math.tan((Pi / 180) * (Latitude)) * (3 + math.tan((Pi / 180) * (Latitude))**2) + OrbitDict[Planet + "H"][2] * 
-                            sin((Pi / 180) * (EclLongitudeSun))**5 * math.tan((Pi / 180) * (Latitude)) * (15 + 10 * math.tan((Pi / 180) * (Latitude))**2 + 3 * math.tan((Pi / 180) * (Latitude))**4)))
+    std::string PlanetH = Planet.append("H");
+    double LocalHourAngleSun_Pos = (90 + OrbitDictFunc(PlanetH)[0] * sin((Pi / 180) * (EclLongitudeSun)) * tan((Pi / 180) * (Latitude)) + OrbitDictFunc(PlanetH)[1] * 
+                            sin((Pi / 180) * pow(((EclLongitudeSun)), 3) * tan((Pi / 180) * (Latitude)) * (3 + pow(tan((Pi / 180) * (Latitude)), 2)) + OrbitDictFunc(PlanetH)[2] * 
+                            pow(sin((Pi / 180) * (EclLongitudeSun)), 5) * tan((Pi / 180) * (Latitude)) * (15 + 10 * pow(tan((Pi / 180) * (Latitude)), 2) + 3 * pow(tan((Pi / 180) * (Latitude)), 4))));
 
     // 8./b1 Local Hour Angle of Sun (H)
     // cos(H) = (sin(m_0) - sin(φ) * sin(δ)) / (cos(φ) * cos(δ))
@@ -1309,32 +1385,44 @@ def SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSun, EclLongitude
     // Latitude (φ) is the North Latitude of the Observer (north is positive, south is negative)
     // m_0 = Planet_RefCorr is a compensation of Altitude (m) in degrees, for the Sun's distorted shape, and the atmospherical refraction
     // The equation return two value, LHA1 and LHA2. We need that one, which is approximately equals to LHA_Pos
-    LHAcos = ((sin((Pi / 180) * (AltitudeOfSun + OrbitDict[Planet + "Orbit"][2])) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (DeclinationSun))) /
-            (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (DeclinationSun))))
-    if(LHAcos <= 1 and LHAcos >= -1):
-        LocalHourAngleSun_Orig = (180 / Pi) * (acos(LHAcos))
-    else if(LHAcos > 1):
-        LocalHourAngleSun_Orig = (180 / Pi) * (acos(1))
-    else if(LHAcos < -1):
-        LocalHourAngleSun_Orig = (180 / Pi) * (acos(-1))
+    std::string PlanetOrbit = Planet.append("Orbit");
+    double LHAcos = ((sin((Pi / 180) * (AltitudeOfSun + OrbitDictFunc(PlanetOrbit)[2])) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (DeclinationSun))) /
+            (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (DeclinationSun))));
+    if(LHAcos <= 1 and LHAcos >= -1)
+    {
+        LocalHourAngleSun_Orig = (180 / Pi) * (acos(LHAcos));
+    }
+
+    else if(LHAcos > 1)
+    {
+        LocalHourAngleSun_Orig = (180 / Pi) * (acos(1));
+    }
+
+    else if(LHAcos < -1)
+    {
+        LocalHourAngleSun_Orig = (180 / Pi) * (acos(-1));
+    }
 
     //LocalHourAngleSun_Orig2 = - LocalHourAngleSun_Orig1
     
     // Normalize result for Hour Angles
-    LocalHourAngleSun_Pos = NormalizeZeroBounded(LocalHourAngleSun_Pos, 360)
-    LocalHourAngleSun_Orig = NormalizeZeroBounded(LocalHourAngleSun_Orig, 360)
+    LocalHourAngleSun_Pos = NormalizeZeroBounded(LocalHourAngleSun_Pos, 360);
+    LocalHourAngleSun_Orig = NormalizeZeroBounded(LocalHourAngleSun_Orig, 360);
 
-    return(LocalHourAngleSun_Pos, LocalHourAngleSun_Orig)
+    std::vector<double> SunsLocalHourAnglevec = {LocalHourAngleSun_Pos, LocalHourAngleSun_Orig};
+    return(SunsLocalHourAnglevec);
+}
 
 
-def CalculateCorrectionsForJ(Planet, Latitude, Longitude, AltitudeOfSun, JAlt_0):
-
+std::vector<double> CalculateCorrectionsForJ(std::string Planet, double Latitude, double Longitude, double AltitudeOfSun, double JAlt_0)
+{
     // Calculate Corrections for LHA of Sun
     RightAscensionSunCorr, DeclinationSunCorr, EclLongitudeSun, JtransitCorr = SunsCoordinatesCalc(Planet, Longitude, JAlt_0)
     LocalHourAngleSun_PosCorr, LocalHourAngleSun_OrigCorr = SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSunCorr, EclLongitudeSun, AltitudeOfSun)
 
 
     return(LocalHourAngleSun_PosCorr, LocalHourAngleSun_OrigCorr, RightAscensionSunCorr, DeclinationSunCorr, JtransitCorr)
+}
 
 def CalculateRiseAndSetTime(Planet, Latitude, Longitude, AltitudeOfSun, LocalDateYear, LocalDateMonth, LocalDateDay):
 
@@ -1537,7 +1625,7 @@ def AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue):
 
         // Calculate side C 
         cValue = (180 / Pi) * (math.atan(
-            math.sqrt((sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) -
+            sqrt((sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) -
             cos((Pi / 180) * (aValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (gammaValue)))**2 + 
             (sin((Pi / 180) * (bValue)) * sin((Pi / 180) * (gammaValue)))**2) /
             (cos((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) + 
@@ -1562,7 +1650,7 @@ def AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue):
 
         // Calculate side A 
         aValue = (180 / Pi) * (math.atan(
-            math.sqrt((sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) -
+            sqrt((sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) -
             cos((Pi / 180) * (bValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (alphaValue)))**2 + 
             (sin((Pi / 180) * (cValue)) * sin((Pi / 180) * (alphaValue)))**2) /
             (cos((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) + 
@@ -1587,7 +1675,7 @@ def AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue):
 
         // Calculate side C 
         bValue = (180 / Pi) * (math.atan(
-            math.sqrt((sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) -
+            sqrt((sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) -
             cos((Pi / 180) * (cValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (betaValue)))**2 + 
             (sin((Pi / 180) * (aValue)) * sin((Pi / 180) * (betaValue)))**2) /
             (cos((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) + 
@@ -1714,7 +1802,7 @@ def SundialParametersCalc(Latitude, LocalHourAngle, DeclinationSun):
     Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude)
 
     // We should draw 1/tan(m) of the function of (AzimuthMax - AzimuthMin)
-    ShadowLength = 1/math.tan((Pi / 180) * (Altitude))
+    ShadowLength = 1/tan((Pi / 180) * (Altitude))
 
     '''// Calculate Azimuth (A)
     // sin(A) = - sin(H) * cos(δ) / cos(m)
@@ -1808,7 +1896,7 @@ def SunAnalemma(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, Loca
     GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds) = LocalSiderealTimeCalc(Longitude, LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon)
 
     // Convert LT noon to UT noon time
-    UnitedTime, UnitedHours, UnitedMinutes, UnitedSeconds, UnitedDateYear, UnitedDateMonth, UnitedDateDay = LTtoUT(LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon)
+    UnitedTime, UnitedHours, UnitedMinutes, UnitedSeconds, UnitedDateYear, UnitedDateMonth, UnitedDateDay = LTtoUT(Longitude, LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon)
 
     // Calculate corresponding Julian Date
     JulianDays = CalculateJulianDate(UnitedDateYear, UnitedDateMonth, UnitedDateDay, UnitedHours, UnitedMinutes, UnitedSeconds)
@@ -2709,12 +2797,6 @@ int main()
                     Latitude2 = float(input("> Latitude //2 (φ2): "))
                     Longitude2 = float(input("> Longitude //2 (λ2): "))
 
-                    Distance = GeogDistCalc(Latitude1, Latitude2, Longitude1, Longitude2)
-                    // Convert Distance to Km
-                    Distance = float(Distance / 1000)
-
-                    distmsg = "\n>>> The Geographical Distance Between\n>>> {0}°,{1}°\n>>> and\n>>> {2}°,{3}°\n>>> is\n>>> {4:.3f} km\n"
-                    std::cout << distmsg.format(Latitude1,Longitude1,Latitude2,Longitude2, Distance))
 
                 else if(DistMode == '2'):
                     std::cout << ">> Calculate Distance of Choosen Predefined Locations\n")
@@ -2761,18 +2843,34 @@ int main()
                             else:
                                 break
 
-                    Distance = GeogDistLocationCalc(Latitude1, Latitude2, Longitude1, Longitude2)
+                    Distance = GeogDistCalc(Latitude1, Latitude2, Longitude1, Longitude2)
                     // Convert Distance to Km
                     Distance = float(Distance / 1000)
-
-                    distmsg = "\n>>> The Geographical Distance Between\n>>> {0} and {1} is\n>>> {2:.3f} km\n"
-                    std::cout << distmsg.format(Location1, Location2, Distance))
 
                 else if(DistMode == 'Q' or DistMode == 'q'):
                     break
 
                 else:
                     std::cout << ">>>> ERROR: Invalid option! Try Again!")
+
+                if(DistMode == 1 || DistMode == 2)
+                {
+                    Distance = GeogDistCalc(Latitude1, Latitude2, Longitude1, Longitude2)
+                    // Convert Distance to Km
+                    Distance = float(Distance / 1000)
+                    
+                    if(DistMode == 1)
+                    {
+                        distmsg = "\n>>> The Geographical Distance Between\n>>> {0}°,{1}°\n>>> and\n>>> {2}°,{3}°\n>>> is\n>>> {4:.3f} km\n"
+                        std::cout << distmsg.format(Latitude1,Longitude1,Latitude2,Longitude2, Distance))
+                    }
+
+                    else if(DistMode == 2)
+                    {
+                        distmsg = "\n>>> The Geographical Distance Between\n>>> {0} and {1} is\n>>> {2:.3f} km\n"
+                        std::cout << distmsg.format(Location1, Location2, Distance))
+                    }
+                }
 
         //   _      __  __  _____ _______    _____      _      
         //  | |    |  \/  |/ ____|__   __|  / ____|    | |     
