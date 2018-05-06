@@ -54,6 +54,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <sstream>
 #include <algorithm>
 #include <string>
 #include <cmath>
@@ -94,7 +95,7 @@ int MonthLengthListLeapYear[12] = {31,29,31,30,31,30,31,31,30,31,30,31};
 // "LocationName": [N Latitude (φ), E Longitude(λ)]
 // Latitude: + if N, - if S
 // Longitude: + if E, - if W
-std::vector<double> LocationDictFunc(std::string Location)
+std::map<std::string, std::vector<double>> LocationDictFunc()
 {
     std::map<std::string, std::vector<double>> LocationDict;
 
@@ -130,13 +131,13 @@ std::vector<double> LocationDictFunc(std::string Location)
     LocationDict["Washington"] = {47.7511, -120.7401};
     LocationDict["Zalaegerszeg"] = {46.8417, 16.8416};
 
-    return(LocationDict[Location]);
+    return(LocationDict);
 }
 
 // Predefined Equatorial I Coordinates of Some Notable Stellar Objects
 // Format:
 // "StarName": [Right Ascension (RA), Declination (δ)]
-std::vector<double> StellarDictFunc(std::string Object)
+std::map<std::string, std::vector<double>> StellarDictFunc()
 {
     std::map<std::string, std::vector<double>> StellarDict;
 
@@ -169,7 +170,7 @@ std::vector<double> StellarDictFunc(std::string Object)
     StellarDict["Vega"] = {18.61565, 38.78369};
     StellarDict["VYCanisMajoris"] = {7.38287, -25.767565};
 
-    return(StellarDict[Object]);
+    return(StellarDict);
 }
 
 
@@ -1416,173 +1417,372 @@ std::vector<double> SunsLocalHourAngle(std::string Planet, double Latitude, doub
 
 std::vector<double> CalculateCorrectionsForJ(std::string Planet, double Latitude, double Longitude, double AltitudeOfSun, double JAlt_0)
 {
+
+    // Declare vaiables
+    double RightAscensionSunCorr;
+    double DeclinationSunCorr;
+    double EclLongitudeSun;
+    double JtransitCorr;
+
+    double LocalHourAngleSun_PosCorr;
+    double LocalHourAngleSun_OrigCorr;
+
     // Calculate Corrections for LHA of Sun
-    RightAscensionSunCorr, DeclinationSunCorr, EclLongitudeSun, JtransitCorr = SunsCoordinatesCalc(Planet, Longitude, JAlt_0)
-    LocalHourAngleSun_PosCorr, LocalHourAngleSun_OrigCorr = SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSunCorr, EclLongitudeSun, AltitudeOfSun)
+    std::vector<double> SunsCoordinatesCalcvec = SunsCoordinatesCalc(Planet, Longitude, JAlt_0);
+    RightAscensionSunCorr = SunsCoordinatesCalcvec[0];
+    DeclinationSunCorr = SunsCoordinatesCalcvec[1];
+    EclLongitudeSun = SunsCoordinatesCalcvec[2];
+    JtransitCorr = SunsCoordinatesCalcvec[3];
+
+    std::vector<double> SunsLocalHourAnglevec = SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSunCorr, EclLongitudeSun, AltitudeOfSun);
+    LocalHourAngleSun_PosCorr = SunsLocalHourAnglevec[0];
+    LocalHourAngleSun_OrigCorr = SunsLocalHourAnglevec[1];
 
 
-    return(LocalHourAngleSun_PosCorr, LocalHourAngleSun_OrigCorr, RightAscensionSunCorr, DeclinationSunCorr, JtransitCorr)
+    std::vector<double> CalculateCorrectionsForJvec = {LocalHourAngleSun_PosCorr, LocalHourAngleSun_OrigCorr, RightAscensionSunCorr, DeclinationSunCorr, JtransitCorr};
+    return(CalculateCorrectionsForJvec);
 }
 
-def CalculateRiseAndSetTime(Planet, Latitude, Longitude, AltitudeOfSun, LocalDateYear, LocalDateMonth, LocalDateDay):
+std::vector<double> CalculateRiseAndSetTime(std::string Planet, double Latitude, double Longitude, double AltitudeOfSun, double LocalDateYear, double LocalDateMonth, double LocalDateDay)
+{
+    // Declare variables
+    double RightAscensionSun;
+    double DeclinationSun;
+    double EclLongitudeSun;
+    double Jtransit;
+
+    double LocalHourAngleSun_Pos;
+    double LocalHourAngleSun_Orig;
+
+    double JRise;
+    double JSet;
 
     // Calculate Actual Julian Date
     // Now UT = 0
-    UnitedHours = 0
-    UnitedMinutes = 0
-    UnitedSeconds = 0
-    JulianDays = CalculateJulianDate(LocalDateYear, LocalDateMonth, LocalDateDay, UnitedHours, UnitedMinutes, UnitedSeconds)
+    double UnitedHours = 0;
+    double UnitedMinutes = 0;
+    double UnitedSeconds = 0;
+    double JulianDays = CalculateJulianDate(LocalDateYear, LocalDateMonth, LocalDateDay, UnitedHours, UnitedMinutes, UnitedSeconds);
 
     // Calulate Sun's coordinates on sky
-    RightAscensionSun, DeclinationSun, EclLongitudeSun, Jtransit = SunsCoordinatesCalc(Planet, Longitude, JulianDays)
-    LocalHourAngleSun_Pos, LocalHourAngleSun_Orig = SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSun, EclLongitudeSun, AltitudeOfSun)
+    std::vector<double> SunsCoordinatesCalcvec = SunsCoordinatesCalc(Planet, Longitude, JulianDays);
+    RightAscensionSun = SunsCoordinatesCalcvec[0];
+    DeclinationSun = SunsCoordinatesCalcvec[1];
+    EclLongitudeSun = SunsCoordinatesCalcvec[2];
+    Jtransit = SunsCoordinatesCalcvec[3];
 
+    std::vector<double> SunsLocalHourAnglevec = SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSun, EclLongitudeSun, AltitudeOfSun);
+    LocalHourAngleSun_Pos = SunsLocalHourAnglevec[0];
+    LocalHourAngleSun_Orig = SunsLocalHourAnglevec[1];
 
-    '''std::cout << "LocalHourAngleSun_Pos: ", LocalHourAngleSun_Pos)
-    std::cout << "LocalHourAngleSun_Orig: ", LocalHourAngleSun_Orig)'''
+    /*
+    std::cout << "LocalHourAngleSun_Pos: ", LocalHourAngleSun_Pos;
+    std::cout << "LocalHourAngleSun_Orig: ", LocalHourAngleSun_Orig;
+    */
 
     // Calulate Rising and Setting Datetimes of the Sun
     // JRise is the actual Julian date of sunrise
     // JSet is the actual Julian date of sunset
-    JRise = Jtransit - LocalHourAngleSun_Orig / 360
-    JSet = Jtransit + LocalHourAngleSun_Orig / 360
+    JRise = Jtransit - LocalHourAngleSun_Orig / 360;
+    JSet = Jtransit + LocalHourAngleSun_Orig / 360;
 
-    '''LocalHourAngleSun_PosCorrRise, LocalHourAngleSun_OrigCorrRise, RightAscensionSunCorrRise, DeclinationSunCorrRise, JtransitCorrRise =  CalculateCorrectionsForJ(Planet, Latitude, Longitude, AltitudeOfSun, JRise)
+    /*
+    LocalHourAngleSun_PosCorrRise, LocalHourAngleSun_OrigCorrRise, RightAscensionSunCorrRise, DeclinationSunCorrRise, JtransitCorrRise =  CalculateCorrectionsForJ(Planet, Latitude, Longitude, AltitudeOfSun, JRise)
     LocalHourAngleSun_PosCorrSet, LocalHourAngleSun_OrigCorrSet, RightAscensionSunCorrSet, DeclinationSunCorrSet, JtransitCorrSet = CalculateCorrectionsForJ(Planet, Latitude, Longitude, AltitudeOfSun, JSet)
         
     std::cout << "LocalHourAngleSun_PosCorrRise: ", LocalHourAngleSun_PosCorrRise)
     std::cout << "LocalHourAngleSun_OrigCorrRise: ", LocalHourAngleSun_OrigCorrRise)
     std::cout << "LocalHourAngleSun_PosCorrSet: ", LocalHourAngleSun_PosCorrSet)
-    std::cout << "LocalHourAngleSun_OrigCorrSet: ", LocalHourAngleSun_OrigCorrSet)'''
+    std::cout << "LocalHourAngleSun_OrigCorrSet: ", LocalHourAngleSun_OrigCorrSet)
+    */
     
     // Apply Corrections
     //JRise -= (LocalHourAngleSun_Orig + LocalHourAngleSun_OrigCorrRise) / 360
     //JSet -= (LocalHourAngleSun_Orig - LocalHourAngleSun_OrigCorrSet) / 360
 
-    return(JRise, JSet)
+    std::vector<double> CalculateRiseAndSetTimevec = {JRise, JSet};
+    return(CalculateRiseAndSetTimevec);
+}
 
 
 // Calculate Sunrise and Sunset's Datetime
-def SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeOfSun, LocalDateYear, LocalDateMonth, LocalDateDay):
+std::vector<double> SunSetAndRiseDateTime(std::string Planet, double Latitude, double Longitude, double AltitudeOfSun, double LocalDateYear, double LocalDateMonth, double LocalDateDay)
+{
+    // Declare variables
+    double JRise;
+    double JSet;
 
-    JRise, JSet = CalculateRiseAndSetTime(Planet, Latitude, Longitude, AltitudeOfSun, LocalDateYear, LocalDateMonth, LocalDateDay)
+    double UTFracDayRise;
+    double UTFracDaySet;
+
+    std::vector<double> CalculateRiseAndSetTimevec = CalculateRiseAndSetTime(Planet, Latitude, Longitude, AltitudeOfSun, LocalDateYear, LocalDateMonth, LocalDateDay);
+    JRise = CalculateRiseAndSetTimevec[0];
+    JSet = CalculateRiseAndSetTimevec[1];
 
     // SUNRISE
-    double UTFracDayRise = JRise - int(JRise)
+    UTFracDayRise = JRise - int(JRise);
 
-    UTFracDayRise *= 24
+    UTFracDayRise *= 24;
 
-    SunRiseUT, SunRiseUTHours, SunRiseUTMinutes, SunRiseUTSeconds, SunRiseUTDateYear, SunRiseUTDateMonth, SunRiseUTDateDay = NormalizeTimeParameters(UTFracDayRise, LocalDateYear, LocalDateMonth, LocalDateDay)
+    std::vector<double> NormalizeTimeParametersRise = NormalizeTimeParameters(UTFracDayRise, LocalDateYear, LocalDateMonth, LocalDateDay);
+    double SunRiseUT = NormalizeTimeParametersRise[0];
+    double SunRiseUTHours = NormalizeTimeParametersRise[1];
+    double SunRiseUTMinutes = NormalizeTimeParametersRise[2];
+    double SunRiseUTSeconds = NormalizeTimeParametersRise[3];
+    double SunRiseUTDateYear = NormalizeTimeParametersRise[4];
+    double SunRiseUTDateMonth = NormalizeTimeParametersRise[5];
+    double SunRiseUTDateDay = NormalizeTimeParametersRise[6];
 
 
     // SUNSET
-    double UTFracDaySet = JSet - int(JSet)
+    UTFracDaySet = JSet - int(JSet);
 
-    UTFracDaySet *= 24
+    UTFracDaySet *= 24;
 
-    SunSetUT, SunSetUTHours, SunSetUTMinutes, SunSetUTSeconds, SunSetUTDateYear, SunSetUTDateMonth, SunSetUTDateDay = NormalizeTimeParameters(UTFracDaySet, LocalDateYear, LocalDateMonth, LocalDateDay)
+    std::vector<double> NormalizeTimeParametersSet = NormalizeTimeParameters(UTFracDaySet, LocalDateYear, LocalDateMonth, LocalDateDay);
+    double SunSetUT = NormalizeTimeParametersSet[0];
+    double SunSetUTHours = NormalizeTimeParametersSet[1];
+    double SunSetUTMinutes = NormalizeTimeParametersSet[2];
+    double SunSetUTSeconds = NormalizeTimeParametersSet[3];
+    double SunSetUTDateYear = NormalizeTimeParametersSet[4];
+    double SunSetUTDateMonth = NormalizeTimeParametersSet[5];
+    double SunSetUTDateDay = NormalizeTimeParametersSet[6];
+
+
 
     // Convert results to Local Time
-    LocalTimeRise, LocalHoursRise, LocalMinutesRise, LocalSecondsRise, LocalDateYearRise, LocalDateMonthRise, LocalDateDayRise = UTtoLT(Latitude, SunRiseUTHours, SunRiseUTMinutes, SunRiseUTSeconds, SunRiseUTDateYear, SunRiseUTDateMonth, SunRiseUTDateDay)
-    LocalTimeSet, LocalHoursSet, LocalMinutesSet, LocalSecondsSet, LocalDateYearSet, LocalDateMonthSet, LocalDateDaySet = UTtoLT(Latitude, SunSetUTHours, SunSetUTMinutes, SunSetUTSeconds, SunSetUTDateYear, SunSetUTDateMonth, SunSetUTDateDay)
+    std::vector<double> UTtoLTRise = UTtoLT(Latitude, SunRiseUTHours, SunRiseUTMinutes, SunRiseUTSeconds, SunRiseUTDateYear, SunRiseUTDateMonth, SunRiseUTDateDay);
+    double LocalTimeRise = UTtoLTRise[0];
+    double LocalHoursRise = UTtoLTRise[1];
+    double LocalMinutesRise = UTtoLTRise[2];
+    double LocalSecondsRise = UTtoLTRise[3];
+    double LocalDateYearRise = UTtoLTRise[4];
+    double LocalDateMonthRise = UTtoLTRise[5];
+    double LocalDateDayRise = UTtoLTRise[6];
 
-    return(LocalTimeSet, LocalHoursSet, LocalMinutesSet, LocalSecondsSet, LocalDateYearSet, LocalDateMonthSet, LocalDateDaySet, LocalTimeRise, LocalHoursRise, LocalMinutesRise, LocalSecondsRise, LocalDateYearRise, LocalDateMonthRise, LocalDateDayRise)
+    std::vector<double> UTtoLTSet = UTtoLT(Latitude, SunSetUTHours, SunSetUTMinutes, SunSetUTSeconds, SunSetUTDateYear, SunSetUTDateMonth, SunSetUTDateDay);
+    double LocalTimeSet = UTtoLTSet[0];
+    double LocalHoursSet = UTtoLTSet[1];
+    double LocalMinutesSet = UTtoLTSet[2];
+    double LocalSecondsSet = UTtoLTSet[3];
+    double LocalDateYearSet = UTtoLTSet[4];
+    double LocalDateMonthSet = UTtoLTSet[5];
+    double LocalDateDaySet = UTtoLTSet[6];
 
+    std::vector<double> SunSetAndRiseDateTimevec = {LocalTimeRise, LocalHoursRise, LocalMinutesRise, LocalSecondsRise, LocalDateYearRise, LocalDateMonthRise, LocalDateDayRise,
+                                                    LocalTimeSet, LocalHoursSet, LocalMinutesSet, LocalSecondsSet, LocalDateYearSet, LocalDateMonthSet, LocalDateDaySet};
 
-def TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay):
+    return(SunSetAndRiseDateTimevec);
+}
 
+std::vector<double> TwilightCalc(std::string Planet, double Latitude, double Longitude, double LocalDateYear, double LocalDateMonth, double LocalDateDay)
+{
     // Definition of differenc Twilights
     // Begin/End of Civil Twilight:          m = -6°
     // Begin/End of Nautical Twilight:       m = -12°
     // Begin/End of Astronomical Twilight:   m = -18°
-    int AltitudeDaylight = 0
-    int AltitudeCivil = -6
-    int AltitudeNaval = -12
-    int AltitudeAstro = -18
+    double AltitudeDaylight = 0;
+    double AltitudeCivil = -6;
+    double AltitudeNaval = -12;
+    double AltitudeAstro = -18;
+
 
     //Daylight
-    (LocalTimeSetDaylight, LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalDateYearSetDaylight, LocalDateMonthSetDaylight, LocalDateDaySetDaylight, 
-    LocalTimeRiseDaylight, LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseDaylight, LocalDateMonthRiseDaylight, LocalDateDayRiseDaylight) = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeDaylight, LocalDateYear, LocalDateMonth, LocalDateDay)
+    std::vector<double> SunSetAndRiseDateTimeDaylight = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeDaylight, LocalDateYear, LocalDateMonth, LocalDateDay);
+    double LocalTimeRiseDaylight = SunSetAndRiseDateTimeDaylight[0];
+    double LocalHoursRiseDaylight = SunSetAndRiseDateTimeDaylight[1];
+    double LocalMinutesRiseDaylight = SunSetAndRiseDateTimeDaylight[2];
+    double LocalSecondsRiseDaylight = SunSetAndRiseDateTimeDaylight[3];
+    double LocalDateYearRiseDaylight = SunSetAndRiseDateTimeDaylight[4];
+    double LocalDateMonthRiseDaylight = SunSetAndRiseDateTimeDaylight[5];
+    double LocalDateDayRiseDaylight = SunSetAndRiseDateTimeDaylight[6];
+    
+    double LocalTimeSetDaylight = SunSetAndRiseDateTimeDaylight[7];
+    double LocalHoursSetDaylight = SunSetAndRiseDateTimeDaylight[8];
+    double LocalMinutesSetDaylight = SunSetAndRiseDateTimeDaylight[9];
+    double LocalSecondsSetDaylight = SunSetAndRiseDateTimeDaylight[10];
+    double LocalDateYearSetDaylight = SunSetAndRiseDateTimeDaylight[11];
+    double LocalDateMonthSetDaylight = SunSetAndRiseDateTimeDaylight[12];
+    double LocalDateDaySetDaylight = SunSetAndRiseDateTimeDaylight[13];
+
 
     // Civil Twilight
-    (LocalTimeSetCivil, LocalHoursSetCivil, LocalMinutesSetCivil, LocalSecondsSetCivil, LocalDateYearSetCivil, LocalDateMonthSetCivil, LocalDateDaySetCivil, 
-    LocalTimeRiseCivil, LocalHoursRiseCivil, LocalMinutesRiseCivil, LocalSecondsRiseCivil, LocalDateYearRiseCivil, LocalDateMonthRiseCivil, LocalDateDayRiseCivil) = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeCivil, LocalDateYear, LocalDateMonth, LocalDateDay)
+    std::vector<double> SunSetAndRiseDateTimeCivil = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeCivil, LocalDateYear, LocalDateMonth, LocalDateDay);
+    double LocalTimeRiseCivil = SunSetAndRiseDateTimeCivil[0];
+    double LocalHoursRiseCivil = SunSetAndRiseDateTimeCivil[1];
+    double LocalMinutesRiseCivil = SunSetAndRiseDateTimeCivil[2];
+    double LocalSecondsRiseCivil = SunSetAndRiseDateTimeCivil[3];
+    double LocalDateYearRiseCivil = SunSetAndRiseDateTimeCivil[4];
+    double LocalDateMonthRiseCivil = SunSetAndRiseDateTimeCivil[5];
+    double LocalDateDayRiseCivil = SunSetAndRiseDateTimeCivil[6];
+
+    double LocalTimeSetCivil = SunSetAndRiseDateTimeCivil[7];
+    double LocalHoursSetCivil = SunSetAndRiseDateTimeCivil[8];
+    double LocalMinutesSetCivil = SunSetAndRiseDateTimeCivil[9];
+    double LocalSecondsSetCivil = SunSetAndRiseDateTimeCivil[10];
+    double LocalDateYearSetCivil = SunSetAndRiseDateTimeCivil[11];
+    double LocalDateMonthSetCivil = SunSetAndRiseDateTimeCivil[12];
+    double LocalDateDaySetCivil = SunSetAndRiseDateTimeCivil[13];
+
 
     // Nautical Twilight
-    (LocalTimeSetNaval, LocalHoursSetNaval, LocalMinutesSetNaval, LocalSecondsSetNaval, LocalDateYearSetNaval, LocalDateMonthSetNaval, LocalDateDaySetNaval, 
-    LocalTimeRiseNaval, LocalHoursRiseNaval, LocalMinutesRiseNaval, LocalSecondsRiseNaval, LocalDateYearRiseNaval, LocalDateMonthRiseNaval, LocalDateDayRiseNaval) = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeNaval, LocalDateYear, LocalDateMonth, LocalDateDay)
+    std::vector<double> SunSetAndRiseDateTimeNaval = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeNaval, LocalDateYear, LocalDateMonth, LocalDateDay);
+    double LocalTimeRiseNaval = SunSetAndRiseDateTimeNaval[0];
+    double LocalHoursRiseNaval = SunSetAndRiseDateTimeNaval[1];
+    double LocalMinutesRiseNaval = SunSetAndRiseDateTimeNaval[2];
+    double LocalSecondsRiseNaval = SunSetAndRiseDateTimeNaval[3];
+    double LocalDateYearRiseNaval = SunSetAndRiseDateTimeNaval[4];
+    double LocalDateMonthRiseNaval = SunSetAndRiseDateTimeNaval[5];
+    double LocalDateDayRiseNaval = SunSetAndRiseDateTimeNaval[6];
+
+    double LocalTimeSetNaval = SunSetAndRiseDateTimeNaval[7];
+    double LocalHoursSetNaval = SunSetAndRiseDateTimeNaval[8];
+    double LocalMinutesSetNaval = SunSetAndRiseDateTimeNaval[9];
+    double LocalSecondsSetNaval = SunSetAndRiseDateTimeNaval[10];
+    double LocalDateYearSetNaval = SunSetAndRiseDateTimeNaval[11];
+    double LocalDateMonthSetNaval = SunSetAndRiseDateTimeNaval[12];
+    double LocalDateDaySetNaval = SunSetAndRiseDateTimeNaval[13];
+
 
     // Astronomical Twilight
-    (LocalTimeSetAstro, LocalHoursSetAstro, LocalMinutesSetAstro, LocalSecondsSetAstro, LocalDateYearSetAstro, LocalDateMonthSetAstro, LocalDateDaySetAstro, 
-    LocalTimeRiseAstro, LocalHoursRiseAstro, LocalMinutesRiseAstro, LocalSecondsRiseAstro, LocalDateYearRiseAstro, LocalDateMonthRiseAstro, LocalDateDayRiseAstro) = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeAstro, LocalDateYear, LocalDateMonth, LocalDateDay)
+    std::vector<double> SunSetAndRiseDateTimeAstro = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeAstro, LocalDateYear, LocalDateMonth, LocalDateDay);
+    double LocalTimeRiseAstro = SunSetAndRiseDateTimeAstro[0];
+    double LocalHoursRiseAstro = SunSetAndRiseDateTimeAstro[1];
+    double LocalMinutesRiseAstro = SunSetAndRiseDateTimeAstro[2];
+    double LocalSecondsRiseAstro = SunSetAndRiseDateTimeAstro[3];
+    double LocalDateYearRiseAstro = SunSetAndRiseDateTimeAstro[4];
+    double LocalDateMonthRiseAstro = SunSetAndRiseDateTimeAstro[5];
+    double LocalDateDayRiseAstro = SunSetAndRiseDateTimeAstro[6];
+
+    double LocalTimeSetAstro = SunSetAndRiseDateTimeAstro[7];
+    double LocalHoursSetAstro = SunSetAndRiseDateTimeAstro[8];
+    double LocalMinutesSetAstro = SunSetAndRiseDateTimeAstro[9];
+    double LocalSecondsSetAstro = SunSetAndRiseDateTimeAstro[10];
+    double LocalDateYearSetAstro = SunSetAndRiseDateTimeAstro[11];
+    double LocalDateMonthSetAstro = SunSetAndRiseDateTimeAstro[12];
+    double LocalDateDaySetAstro = SunSetAndRiseDateTimeAstro[13];
+
+
+    // Declare variables for stepping a day
+    double LocalDateNextDay;
+    double LocalDateNextMonth;
+    double LocalDateNextYear;
 
     // Step +1 day
-    LocalDateNextDay = LocalDateDay + 1
+    LocalDateNextDay = LocalDateDay + 1;
 
-    if(LocalDateYear%4 == 0 and (LocalDateYear%100 != 0 or LocalDateYear%400 == 0)):
-        if(LocalDateNextDay > MonthLengthListLeapYear[LocalDateMonth - 1]):
-            LocalDateNextDay = 1
-            LocalDateNextMonth = LocalDateMonth + 1
-        else:
-            LocalDateNextDay = LocalDateDay + 1
-            LocalDateNextMonth = LocalDateMonth
+    if(int(LocalDateYear)%4 == 0 && (int(LocalDateYear)%100 != 0 || int(LocalDateYear)%400 == 0))
+    {
+        if(LocalDateNextDay > MonthLengthListLeapYear[int(LocalDateMonth) - 1])
+        {
+            LocalDateNextDay = 1;
+            LocalDateNextMonth = LocalDateMonth + 1;
+        }
+
+        else
+        {
+            LocalDateNextDay = LocalDateDay + 1;
+            LocalDateNextMonth = LocalDateMonth;
+        }
+    }
+    else
+    {
+        if(LocalDateNextDay > MonthLengthList[int(LocalDateMonth) - 1])
+        {
+            LocalDateNextDay = 1;
+            LocalDateNextMonth = LocalDateMonth + 1;
+        }
+
+        else
+        {
+            LocalDateNextDay = LocalDateDay + 1;
+            LocalDateNextMonth = LocalDateMonth;
+        }
+    }
+
+    if(LocalDateNextMonth > 12)
+    {
+        LocalDateNextMonth = 1;
+        LocalDateNextYear = LocalDateYear + 1;
+    }
     
-    else:
-        if(LocalDateNextDay > MonthLengthList[LocalDateMonth - 1]):
-            LocalDateNextDay = 1
-            LocalDateNextMonth = LocalDateMonth + 1
-        else:
-            LocalDateNextDay = LocalDateDay + 1
-            LocalDateNextMonth = LocalDateMonth
-
-    if(LocalDateNextMonth > 12):
-        LocalDateNextMonth = 1
-        LocalDateNextYear = LocalDateYear + 1
-
-    else:
-        LocalDateNextYear = LocalDateYear
+    else
+    {
+        LocalDateNextYear = LocalDateYear;
+    }
 
     // Astronomical Twilight Next Day
-    (LocalTimeSetAstro2, LocalHoursSetAstro2, LocalMinutesSetAstro2, LocalSecondsSetAstro2, LocalDateYearSetAstro2, LocalDateMonthSetAstro2, LocalDateDaySetAstro2, 
-    LocalTimeRiseAstro2, LocalHoursRiseAstro2, LocalMinutesRiseAstro2, LocalSecondsRiseAstro2, LocalDateYearRiseAstro2, LocalDateMonthRiseAstro2, LocalDateDayRiseAstro2) = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeAstro, LocalDateNextYear, LocalDateNextMonth, LocalDateNextDay)
+    std::vector<double> SunSetAndRiseDateTimeAstro2 = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeAstro, LocalDateNextYear, LocalDateNextMonth, LocalDateNextDay);
+    double LocalTimeRiseAstro2 = SunSetAndRiseDateTimeAstro2[0];
+    double LocalHoursRiseAstro2 = SunSetAndRiseDateTimeAstro2[1];
+    double LocalMinutesRiseAstro2 = SunSetAndRiseDateTimeAstro2[2];
+    double LocalSecondsRiseAstro2 = SunSetAndRiseDateTimeAstro2[3];
+    double LocalDateYearRiseAstro2 = SunSetAndRiseDateTimeAstro2[4];
+    double LocalDateMonthRiseAstro2 = SunSetAndRiseDateTimeAstro2[5];
+    double LocalDateDayRiseAstro2 = SunSetAndRiseDateTimeAstro2[6];
+
+    double LocalTimeSetAstro2 = SunSetAndRiseDateTimeAstro2[7];
+    double LocalHoursSetAstro2 = SunSetAndRiseDateTimeAstro2[8];
+    double LocalMinutesSetAstro2 = SunSetAndRiseDateTimeAstro2[9];
+    double LocalSecondsSetAstro2 = SunSetAndRiseDateTimeAstro2[10];
+    double LocalDateYearSetAstro2 = SunSetAndRiseDateTimeAstro2[11];
+    double LocalDateMonthSetAstro2 = SunSetAndRiseDateTimeAstro2[12];
+    double LocalDateDaySetAstro2 = SunSetAndRiseDateTimeAstro2[13];
 
     //std::cout << LocalTimeRiseAstro, LocalTimeSetAstro)
     //std::cout << LocalTimeRiseAstro2, LocalTimeSetAstro2)
 
     // Noon and Midnight
-    LocalTimeNoon = LocalTimeRiseDaylight + (LocalTimeSetDaylight - LocalTimeRiseDaylight) / 2
-    LocalTimeMidnight = LocalTimeSetAstro + (((24 - LocalTimeSetAstro) + LocalTimeRiseAstro2) / 2)
+    double LocalTimeNoon = LocalTimeRiseDaylight + (LocalTimeSetDaylight - LocalTimeRiseDaylight) / 2;
+    double LocalTimeMidnight = LocalTimeSetAstro + (((24 - LocalTimeSetAstro) + LocalTimeRiseAstro2) / 2);
 
-    //std::cout << LocalTimeMidnight)
+    //std::cout << LocalTimeMidnight;
     //LocalTimeMidnight = LocalTimeNoon + 12
 
     // Calc Noon Date
-    LocalDateDayNoon = LocalDateDayRiseAstro
-    LocalDateMonthNoon = LocalDateMonthRiseAstro
-    LocalDateYearNoon = LocalDateYearRiseAstro
+    double LocalDateDayNoon = LocalDateDayRiseAstro;
+    double LocalDateMonthNoon = LocalDateMonthRiseAstro;
+    double LocalDateYearNoon = LocalDateYearRiseAstro;
 
     // Calc initial Midnight Date
-    LocalDateDayMidnight = LocalDateDayRiseAstro
-    LocalDateMonthMidnight = LocalDateMonthRiseAstro
-    LocalDateYearMidnight = LocalDateYearRiseAstro
+    double LocalDateDayMidnight = LocalDateDayRiseAstro;
+    double LocalDateMonthMidnight = LocalDateMonthRiseAstro;
+    double LocalDateYearMidnight = LocalDateYearRiseAstro;
 
-    //std::cout << LocalDateDayMidnight)
+    //std::cout << LocalDateDayMidnight;
 
     // LT of Noon and Midnight
-    LocalTimeNoon, LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon = NormalizeTimeParameters(LocalTimeNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon)
-    LocalTimeMidnight, LocalHoursMidnight, LocalMinutesMidnight, LocalSecondsMidnight, LocalDateYearMidnight, LocalDateMonthMidnight, LocalDateDayMidnight = NormalizeTimeParameters(LocalTimeMidnight, LocalDateYearMidnight, LocalDateMonthMidnight, LocalDateDayMidnight)
+    std::vector<double> NormalizeTimeParametersNoon = NormalizeTimeParameters(LocalTimeNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon);
+    double LocalTimeNoon = NormalizeTimeParametersNoon[0];
+    double LocalHoursNoon = NormalizeTimeParametersNoon[1];
+    double LocalMinutesNoon = NormalizeTimeParametersNoon[2];
+    double LocalSecondsNoon = NormalizeTimeParametersNoon[3];
+    double LocalDateYearNoon = NormalizeTimeParametersNoon[4];
+    double LocalDateMonthNoon = NormalizeTimeParametersNoon[5];
+    double LocalDateDayNoon = NormalizeTimeParametersNoon[6];
 
-    return(LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon,
-            LocalHoursMidnight, LocalMinutesMidnight, LocalSecondsMidnight, LocalDateYearMidnight, LocalDateMonthMidnight, LocalDateDayMidnight,
-            LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseDaylight, LocalDateMonthRiseDaylight, LocalDateDayRiseDaylight,
-            LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalDateYearSetDaylight, LocalDateMonthSetDaylight, LocalDateDaySetDaylight,
-            LocalHoursRiseCivil, LocalMinutesRiseCivil, LocalSecondsRiseCivil, LocalDateYearRiseCivil, LocalDateMonthRiseCivil, LocalDateDayRiseCivil,
-            LocalHoursSetCivil, LocalMinutesSetCivil, LocalSecondsSetCivil, LocalDateYearSetCivil, LocalDateMonthSetCivil, LocalDateDaySetCivil,
-            LocalHoursRiseNaval, LocalMinutesRiseNaval, LocalSecondsRiseNaval, LocalDateYearRiseNaval, LocalDateMonthRiseNaval, LocalDateDayRiseNaval,
-            LocalHoursSetNaval, LocalMinutesSetNaval, LocalSecondsSetNaval, LocalDateYearSetNaval, LocalDateMonthSetNaval, LocalDateDaySetNaval,
-            LocalHoursRiseAstro, LocalMinutesRiseAstro, LocalSecondsRiseAstro, LocalDateYearSetAstro, LocalDateMonthSetAstro, LocalDateDaySetAstro,
-            LocalHoursSetAstro, LocalMinutesSetAstro, LocalSecondsSetAstro, LocalDateYearRiseAstro, LocalDateMonthRiseAstro, LocalDateDayRiseAstro)
+    std::vector<double> NormalizeTimeParametersMidnight = NormalizeTimeParameters(LocalTimeMidnight, LocalDateYearMidnight, LocalDateMonthMidnight, LocalDateDayMidnight);
+    double LocalTimeMidnight = NormalizeTimeParametersMidnight[0];
+    double LocalHoursMidnight = NormalizeTimeParametersMidnight[1];
+    double LocalMinutesMidnight = NormalizeTimeParametersMidnight[2];
+    double LocalSecondsMidnight = NormalizeTimeParametersMidnight[3];
+    double LocalDateYearMidnight = NormalizeTimeParametersMidnight[4];
+    double LocalDateMonthMidnight = NormalizeTimeParametersMidnight[5];
+    double LocalDateDayMidnight = NormalizeTimeParametersMidnight[6];
 
+    
+    std::vector<double> TwilightCalcvec = {LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon,
+                                           LocalHoursMidnight, LocalMinutesMidnight, LocalSecondsMidnight, LocalDateYearMidnight, LocalDateMonthMidnight, LocalDateDayMidnight,
+                                           LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseDaylight, LocalDateMonthRiseDaylight, LocalDateDayRiseDaylight,
+                                           LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalDateYearSetDaylight, LocalDateMonthSetDaylight, LocalDateDaySetDaylight,
+                                           LocalHoursRiseCivil, LocalMinutesRiseCivil, LocalSecondsRiseCivil, LocalDateYearRiseCivil, LocalDateMonthRiseCivil, LocalDateDayRiseCivil,
+                                           LocalHoursSetCivil, LocalMinutesSetCivil, LocalSecondsSetCivil, LocalDateYearSetCivil, LocalDateMonthSetCivil, LocalDateDaySetCivil,
+                                           LocalHoursRiseNaval, LocalMinutesRiseNaval, LocalSecondsRiseNaval, LocalDateYearRiseNaval, LocalDateMonthRiseNaval, LocalDateDayRiseNaval,
+                                           LocalHoursSetNaval, LocalMinutesSetNaval, LocalSecondsSetNaval, LocalDateYearSetNaval, LocalDateMonthSetNaval, LocalDateDaySetNaval,
+                                           LocalHoursRiseAstro, LocalMinutesRiseAstro, LocalSecondsRiseAstro, LocalDateYearSetAstro, LocalDateMonthSetAstro, LocalDateDaySetAstro,
+                                           LocalHoursSetAstro, LocalMinutesSetAstro, LocalSecondsSetAstro, LocalDateYearRiseAstro, LocalDateMonthRiseAstro, LocalDateDayRiseAstro};
+    return(TwilightCalcvec);
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1591,146 +1791,157 @@ def TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, Loc
 ////////////////                                                ////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-def AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue):
-
-    if(aValue != 0 and bValue != 0 and cValue != 0):
-        
-        if(((aValue + bValue) > cValue) and ((aValue + cValue) > bValue) and ((bValue + cValue) > aValue) and 
-            (abs(aValue - bValue) < cValue) and (abs(aValue - cValue) < bValue) and (abs(bValue - cValue) < aValue) and
-            ((aValue + bValue + cValue) < 360)):
+std::vector<double> AstroTriangles(double aValue, double bValue, double cValue, double alphaValue, double betaValue, double gammaValue)
+{
+    if(aValue != 0 && bValue != 0 && cValue != 0)
+    {
+        if(((aValue + bValue) > cValue) && ((aValue + cValue) > bValue) && ((bValue + cValue) > aValue) && 
+            (abs(aValue - bValue) < cValue) && (abs(aValue - cValue) < bValue) && (abs(bValue - cValue) < aValue) &&
+            ((aValue + bValue + cValue) < 360))
+        {
             
             // Calculate angle Alpha
             alphaValue = (180 / Pi) * (acos(
                 (cos((Pi / 180) * (aValue)) - cos((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue))) /
                 (sin((Pi / 180) * (bValue)) * sin((Pi / 180) * (cValue)))
-            ))
+            ));
 
             // Calculate angle Beta
             betaValue = (180 / Pi) * (acos(
                 (cos((Pi / 180) * (bValue)) - cos((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue))) /
                 (sin((Pi / 180) * (cValue)) * sin((Pi / 180) * (aValue)))
-            ))
+            ));
 
             // Calculate angle Gamma
             gammaValue = (180 / Pi) * (acos(
                 (cos((Pi / 180) * (cValue)) - cos((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue))) /
                 (sin((Pi / 180) * (aValue)) * sin((Pi / 180) * (bValue)))
-            ))
+            ));
+        }
 
-        else:
-            std::cout << ">> Length of the sides are invalid!\n>> They violate the triangle inequality!")
+        else
+        {
+            std::cout << ">> Length of the sides are invalid!\n>> They violate the triangle inequality!" << std::endl;
+        }
 
+    }
 
-    else if(aValue != 0 and bValue != 0 and gammaValue != 0):
-
+    else if(aValue != 0 && bValue != 0 && gammaValue != 0)
+    {
         // Calculate side C 
-        cValue = (180 / Pi) * (math.atan(
-            sqrt((sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) -
-            cos((Pi / 180) * (aValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (gammaValue)))**2 + 
-            (sin((Pi / 180) * (bValue)) * sin((Pi / 180) * (gammaValue)))**2) /
+        cValue = (180 / Pi) * (atan(
+            sqrt(pow((sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) -
+            cos((Pi / 180) * (aValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (gammaValue))), 2) + 
+            pow((sin((Pi / 180) * (bValue)) * sin((Pi / 180) * (gammaValue))), 2)) /
             (cos((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) + 
             sin((Pi / 180) * (aValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (gammaValue)))
-        ))
+        ));
 
         // calculate angle Alpha
-        alphaValue = (180 / Pi) * (math.atan(
+        alphaValue = (180 / Pi) * (atan(
             (sin((Pi / 180) * (aValue) * sin((Pi / 180) * (gammaValue)))) /
             (sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (aValue)) - 
             cos((Pi / 180) * (bValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (gammaValue)))
-        ))
+        ));
 
         // Calculate angle Beta
-        betaValue = (180 / Pi) * (math.atan(
+        betaValue = (180 / Pi) * (atan(
             (sin((Pi / 180) * (bValue) * sin((Pi / 180) * (gammaValue)))) /
             (sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (bValue)) - 
             cos((Pi / 180) * (aValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (gammaValue)))
-        ))
+        ));
+    }
 
-    else if(bValue != 0 and cValue != 0 and alphaValue != 0): 
+    else if(bValue != 0 && cValue != 0 && alphaValue != 0)
+    {
 
         // Calculate side A 
-        aValue = (180 / Pi) * (math.atan(
-            sqrt((sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) -
-            cos((Pi / 180) * (bValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (alphaValue)))**2 + 
-            (sin((Pi / 180) * (cValue)) * sin((Pi / 180) * (alphaValue)))**2) /
+        aValue = (180 / Pi) * (atan(
+            sqrt(pow((sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) -
+            cos((Pi / 180) * (bValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (alphaValue))), 2) + 
+            pow((sin((Pi / 180) * (cValue)) * sin((Pi / 180) * (alphaValue))), 2)) /
             (cos((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) + 
             sin((Pi / 180) * (bValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (alphaValue)))
-        ))
+        ));
 
         // calculate angle Gamma
-        betaValue = (180 / Pi) * (math.atan(
+        betaValue = (180 / Pi) * (atan(
             (sin((Pi / 180) * (bValue) * sin((Pi / 180) * (alphaValue)))) /
             (sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (bValue)) - 
             cos((Pi / 180) * (cValue)) * sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (alphaValue)))
-        ))
+        ));
 
         // Calculate angle Alpha
-        gammaValue = (180 / Pi) * (math.atan(
+        gammaValue = (180 / Pi) * (atan(
             (sin((Pi / 180) * (cValue) * sin((Pi / 180) * (alphaValue)))) /
             (sin((Pi / 180) * (bValue)) * cos((Pi / 180) * (cValue)) - 
             cos((Pi / 180) * (bValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (alphaValue)))
-        ))
-    
-    else if(aValue != 0 and cValue != 0 and betaValue != 0):
+        ));
+    }
+
+    else if(aValue != 0 && cValue != 0 && betaValue != 0)
+    {
 
         // Calculate side C 
-        bValue = (180 / Pi) * (math.atan(
-            sqrt((sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) -
-            cos((Pi / 180) * (cValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (betaValue)))**2 + 
-            (sin((Pi / 180) * (aValue)) * sin((Pi / 180) * (betaValue)))**2) /
+        bValue = (180 / Pi) * (atan(
+            sqrt(pow((sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) -
+            cos((Pi / 180) * (cValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (betaValue))), 2) + 
+            pow((sin((Pi / 180) * (aValue)) * sin((Pi / 180) * (betaValue))), 2)) /
             (cos((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) + 
             sin((Pi / 180) * (cValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (betaValue)))
-        ))
+        ));
 
         // calculate angle Alpha
-        gammaValue = (180 / Pi) * (math.atan(
+        gammaValue = (180 / Pi) * (atan(
             (sin((Pi / 180) * (cValue) * sin((Pi / 180) * (betaValue)))) /
             (sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (cValue)) - 
             cos((Pi / 180) * (aValue)) * sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (betaValue)))
-        ))
+        ));
 
         // Calculate angle Beta
-        alphaValue = (180 / Pi) * (math.atan(
+        alphaValue = (180 / Pi) * (atan(
             (sin((Pi / 180) * (aValue) * sin((Pi / 180) * (betaValue)))) /
             (sin((Pi / 180) * (cValue)) * cos((Pi / 180) * (aValue)) - 
             cos((Pi / 180) * (cValue)) * sin((Pi / 180) * (aValue)) * cos((Pi / 180) * (betaValue)))
-        ))
+        ));
+
+    }
+
+    else if((aValue != 0 && bValue != 0 && alphaValue != 0) || (aValue != 0 && bValue != 0 && betaValue != 0) || 
+        (bValue != 0 && cValue != 0 && betaValue != 0) || (bValue != 0 && cValue != 0 && gammaValue != 0) ||
+        (aValue != 0 && cValue != 0 && betaValue != 0) || (aValue != 0 && cValue != 0 && gammaValue != 0))
+    {}
 
 
-    else if((aValue != 0 and bValue != 0 and alphaValue != 0) or (aValue != 0 and bValue != 0 and betaValue != 0) or 
-        (bValue != 0 and cValue != 0 and betaValue != 0) or (bValue != 0 and cValue != 0 and gammaValue != 0) or
-        (aValue != 0 and cValue != 0 and betaValue != 0) or (aValue != 0 and cValue != 0 and gammaValue != 0)):
-        pass
-
-
-    else if((aValue != 0 and betaValue != 0 and gammaValue != 0) or 
-        (bValue != 0 and alphaValue != 0 and gammaValue != 0) or
-        (cValue != 0 and alphaValue != 0 and betaValue != 0)):
-        pass
+    else if((aValue != 0 && betaValue != 0 && gammaValue != 0) || 
+        (bValue != 0 && alphaValue != 0 && gammaValue != 0) ||
+        (cValue != 0 && alphaValue != 0 && betaValue != 0))
+    {}
 
     
-    else if((aValue != 0 and alphaValue != 0 and betaValue != 0) or (aValue != 0 and alphaValue != 0 and gammaValue != 0) or
-        (bValue != 0 and betaValue != 0 and alphaValue != 0) or (bValue != 0 and betaValue != 0 and gammaValue != 0) or
-        (cValue != 0 and gammaValue != 0 and alphaValue != 0) or (aValue != 0 and gammaValue != 0 and betaValue != 0)):
-        pass
+    else if((aValue != 0 && alphaValue != 0 && betaValue != 0) || (aValue != 0 && alphaValue != 0 && gammaValue != 0) ||
+        (bValue != 0 && betaValue != 0 && alphaValue != 0) || (bValue != 0 && betaValue != 0 && gammaValue != 0) ||
+        (cValue != 0 && gammaValue != 0 && alphaValue != 0) || (aValue != 0 && gammaValue != 0 && betaValue != 0))
+    {}
 
 
-    else if(alphaValue != 0 and betaValue != 0 and gammaValue != 0):
-        pass
+    else if(alphaValue != 0 && betaValue != 0 && gammaValue != 0)
+    {}
 
 
-    else:
-        aValue = NULL
-        bValue = NULL
-        cValue = NULL
-        alphaValue = NULL
-        betaValue = NULL
-        gammaValue = NULL
+    else
+    {
+        aValue = NULL;
+        bValue = NULL;
+        cValue = NULL;
+        alphaValue = NULL;
+        betaValue = NULL;
+        gammaValue = NULL;
+    }
 
-
-    return(aValue, bValue, cValue, alphaValue, betaValue, gammaValue)
-
-
+    std::vector<double> AstroTriangles = {aValue, bValue, cValue, alphaValue, betaValue, gammaValue};
+    return(AstroTriangles);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////                                                ////////////////
@@ -1738,73 +1949,140 @@ def AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue):
 ////////////////                                                ////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-def SundialPrecalculations(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay):
-
+std::vector<double> SundialPrecalculations(std::string Planet, double Latitude, double Longitude, double LocalDateYear, double LocalDateMonth, double LocalDateDay)
+{
     // We would like to calculate rising and setting time
-    AltitudeOfSun = 0
+    double AltitudeOfSun = 0;
 
     // Daylight start and end LT
-    (LocalTimeSetDaylight, LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalDateYearSetDaylight, LocalDateMonthSetDaylight, LocalDateDaySetDaylight, 
-    LocalTimeRiseDaylight, LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseDaylight, LocalDateMonthRiseDaylight, LocalDateDayRiseDaylight) = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeOfSun, LocalDateYear, LocalDateMonth, LocalDateDay)
+    std::vector<double> SunSetAndRiseDateTimeDaylight = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeOfSun, LocalDateYear, LocalDateMonth, LocalDateDay);
+    double LocalTimeRiseDaylight = SunSetAndRiseDateTimeDaylight[0];
+    double LocalHoursRiseDaylight = SunSetAndRiseDateTimeDaylight[1];
+    double LocalMinutesRiseDaylight = SunSetAndRiseDateTimeDaylight[2];
+    double LocalSecondsRiseDaylight = SunSetAndRiseDateTimeDaylight[3];
+    double LocalDateYearRiseDaylight = SunSetAndRiseDateTimeDaylight[4];
+    double LocalDateMonthRiseDaylight = SunSetAndRiseDateTimeDaylight[5];
+    double LocalDateDayRiseDaylight = SunSetAndRiseDateTimeDaylight[6];
+    
+    double LocalTimeSetDaylight = SunSetAndRiseDateTimeDaylight[7];
+    double LocalHoursSetDaylight = SunSetAndRiseDateTimeDaylight[8];
+    double LocalMinutesSetDaylight = SunSetAndRiseDateTimeDaylight[9];
+    double LocalSecondsSetDaylight = SunSetAndRiseDateTimeDaylight[10];
+    double LocalDateYearSetDaylight = SunSetAndRiseDateTimeDaylight[11];
+    double LocalDateMonthSetDaylight = SunSetAndRiseDateTimeDaylight[12];
+    double LocalDateDaySetDaylight = SunSetAndRiseDateTimeDaylight[13];
 
     // Calculate the Coordinates of the Sun's Apparent Position
     // Now UT = 0
-    UnitedHours = 0
-    UnitedMinutes = 0
-    UnitedSeconds = 0
-    JulianDays = CalculateJulianDate(LocalDateYear, LocalDateMonth, LocalDateDay, UnitedHours, UnitedMinutes, UnitedSeconds)
-    RightAscensionSun, DeclinationSun, EclLongitudeSun, Jtransit = SunsCoordinatesCalc(Planet, Longitude, JulianDays)
-    LocalHourAngleSun_Pos, LocalHourAngleSun_Orig = SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSun, EclLongitudeSun, AltitudeOfSun)
+    double UnitedHours = 0;
+    double UnitedMinutes = 0;
+    double UnitedSeconds = 0;
+    double JulianDays = CalculateJulianDate(LocalDateYear, LocalDateMonth, LocalDateDay, UnitedHours, UnitedMinutes, UnitedSeconds);
 
-    std::cout << "RA, Dec: ", RightAscensionSun, DeclinationSun)
+    std::vector<double> SunsCoordinatesCalcvec = SunsCoordinatesCalc(Planet, Longitude, JulianDays);
+    double RightAscensionSun = SunsCoordinatesCalcvec[0];
+    double DeclinationSun = SunsCoordinatesCalcvec[1];
+    double EclLongitudeSun = SunsCoordinatesCalcvec[2];
+    double Jtransit = SunsCoordinatesCalcvec[3];
+
+    std::vector<double> SunsLocalHourAnglevec = SunsLocalHourAngle(Planet, Latitude, Longitude, DeclinationSun, EclLongitudeSun, AltitudeOfSun);
+    double LocalHourAngleSun_Pos = SunsLocalHourAnglevec[0];
+    double LocalHourAngleSun_Orig = SunsLocalHourAnglevec[1];
+
+    std::cout << "RA, Dec: " << RightAscensionSun, DeclinationSun;
 
     // Calculate Local Mean Sidereal Time for both Rising and Setting time
-    LocalSiderealHoursRise, LocalSiderealMinutesRise, LocalSiderealSecondsRise, UnitedHoursRise, UnitedMinutesRise, UnitedSecondsRise, GreenwichSiderealHoursRise, GreenwichSiderealMinutesRise, GreenwichSiderealSecondsRise = LocalSiderealTimeCalc(Longitude, LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseDaylight, LocalDateMonthRiseDaylight, LocalDateDayRiseDaylight)
-    LocalSiderealHoursSet, LocalSiderealMinutesSet, LocalSiderealSecondsSet, UnitedHoursSet, UnitedMinutesSet, UnitedSecondsSet, GreenwichSiderealHoursSet, GreenwichSiderealMinutesSet, GreenwichSiderealSecondsSet = LocalSiderealTimeCalc(Longitude, LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalDateYearSetDaylight, LocalDateMonthSetDaylight, LocalDateDaySetDaylight)
+    std::vector<double> LocalSiderealTimeCalcRise = LocalSiderealTimeCalc(Longitude, LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseDaylight, LocalDateMonthRiseDaylight, LocalDateDayRiseDaylight);
+    double LocalSiderealHoursRise = LocalSiderealTimeCalcRise[0];
+    double LocalSiderealMinutesRise = LocalSiderealTimeCalcRise[1];
+    double LocalSiderealSecondsRise = LocalSiderealTimeCalcRise[2];
+    double UnitedHoursRise = LocalSiderealTimeCalcRise[3];
+    double UnitedMinutesRise = LocalSiderealTimeCalcRise[4];
+    double UnitedSecondsRise = LocalSiderealTimeCalcRise[5];
+    double GreenwichSiderealHoursRise = LocalSiderealTimeCalcRise[6];
+    double GreenwichSiderealMinutesRise = LocalSiderealTimeCalcRise[7];
+    double GreenwichSiderealSecondsRise = LocalSiderealTimeCalcRise[8];
+    
+    std::vector<double> LocalSiderealTimeCalcSet = LocalSiderealTimeCalc(Longitude, LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalDateYearSetDaylight, LocalDateMonthSetDaylight, LocalDateDaySetDaylight);
+    double LocalSiderealHoursSet = LocalSiderealTimeCalcSet[0];
+    double LocalSiderealMinutesSet = LocalSiderealTimeCalcSet[1];
+    double LocalSiderealSecondsSet = LocalSiderealTimeCalcSet[2];
+    double UnitedHoursSet = LocalSiderealTimeCalcSet[3];
+    double UnitedMinutesSet = LocalSiderealTimeCalcSet[4];
+    double UnitedSecondsSet = LocalSiderealTimeCalcSet[5];
+    double GreenwichSiderealHoursSet = LocalSiderealTimeCalcSet[6];
+    double GreenwichSiderealMinutesSet = LocalSiderealTimeCalcSet[7];
+    double GreenwichSiderealSecondsSet  = LocalSiderealTimeCalcSet[8];
 
     // Convert them to Decimal
-    LocalSiderealTimeRise = LocalSiderealHoursRise + LocalSiderealMinutesRise/60 + LocalSiderealSecondsRise/3600
-    LocalSiderealTimeSet = LocalSiderealHoursSet + LocalSiderealMinutesSet/60 + LocalSiderealSecondsSet/3600
+    double LocalSiderealTimeRise = LocalSiderealHoursRise + LocalSiderealMinutesRise/60 + LocalSiderealSecondsRise/3600;
+    double LocalSiderealTimeSet = LocalSiderealHoursSet + LocalSiderealMinutesSet/60 + LocalSiderealSecondsSet/3600;
 
     // Calculate Hour Angle of Rising and Setting Sun
-    LocalHourAngleRise = LocalSiderealTimeRise - RightAscensionSun
-    LocalHourAngleSet = LocalSiderealTimeSet - RightAscensionSun
+    double LocalHourAngleRise = LocalSiderealTimeRise - RightAscensionSun;
+    double LocalHourAngleSet = LocalSiderealTimeSet - RightAscensionSun;
 
-    std::cout << "Rise/Set LT: ", LocalTimeRiseDaylight, LocalTimeSetDaylight)
-    std::cout << "Rise/Set ST: ", LocalSiderealTimeRise, LocalSiderealTimeSet)
-    std::cout << "Rise/Set LHA: ", LocalHourAngleRise, LocalHourAngleSet)
+    std::cout << "Rise/Set LT: " << LocalTimeRiseDaylight << ' ' << LocalTimeSetDaylight;
+    std::cout << "Rise/Set ST: " << LocalSiderealTimeRise << ' ' << LocalSiderealTimeSet;
+    std::cout << "Rise/Set LHA: " << LocalHourAngleRise << ' ' << LocalHourAngleSet;
 
 
     // Normalize Results
-    LocalHourAngleRise = NormalizeZeroBounded(LocalHourAngleRise, 24)
-    LocalHourAngleSet = NormalizeZeroBounded(LocalHourAngleSet, 24)
+    LocalHourAngleRise = NormalizeZeroBounded(LocalHourAngleRise, 24);
+    LocalHourAngleSet = NormalizeZeroBounded(LocalHourAngleSet, 24);
 
-    std::cout << "Rise/Set LHA Nor: ", LocalHourAngleRise, LocalHourAngleSet)
-    std::cout << "\n")    
+    std::cout << "Rise/Set LHA Nor: " << LocalHourAngleRise << ' ' << LocalHourAngleSet;
+    std::cout << "\n";
 
-    return(LocalHourAngleRise, LocalHourAngleSet, DeclinationSun)
+    std::vector<double> SundialPrecalculationsvec = {LocalHourAngleRise, LocalHourAngleSet, DeclinationSun};
+    return(SundialPrecalculationsvec);
+}
 
-def SundialParametersCalc(Latitude, LocalHourAngle, DeclinationSun):
+
+std::vector<double> SundialParametersCalc(double Latitude, double LocalHourAngle, double DeclinationSun)
+{
+    // Declare variables
+    double LocalHourAngleDegrees;
+    double Altitude;
+    double Altsin;
+
+    double Azimuth;
+    /*
+    double Azsin;
+    double Azimuth1;
+    double Azimuth2;
+    double Azimuth3;
+    double Azimuth4;
+    */
+
+    double ShadowLength;
 
     // Convert to angles from hours (t -> H)
-    LocalHourAngleDegrees = LocalHourAngle * 15
+    LocalHourAngleDegrees = LocalHourAngle * 15;
 
     // Calculate Altitude (m)
     // sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H)
-    Altsin = sin((Pi / 180) * (DeclinationSun)) * sin((Pi / 180) * (Latitude)) + cos((Pi / 180) * (DeclinationSun)) * cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (LocalHourAngleDegrees))
-    if(Altsin <= 1):
-        Altitude = (180 / Pi) * (asin(Altsin))
-        //std::cout << Altitude)
-    else:
-        Altitude = (180 / Pi) * (asin(2 - Altsin))
+    Altsin = sin((Pi / 180) * (DeclinationSun)) * sin((Pi / 180) * (Latitude)) + cos((Pi / 180) * (DeclinationSun)) * cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (LocalHourAngleDegrees));
+    if(Altsin <= 1)
+    {
+        Altitude = (180 / Pi) * (asin(Altsin));
+        //std::cout << Altitude;
+    }
+
+    else
+    {
+        Altitude = (180 / Pi) * (asin(2 - Altsin));
+    }
+
     // Normalize Altitude
     // Altitude: [-π/2,+π/2]
-    Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude)
+    Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude);
 
     // We should draw 1/tan(m) of the function of (AzimuthMax - AzimuthMin)
-    ShadowLength = 1/tan((Pi / 180) * (Altitude))
+    ShadowLength = 1/tan((Pi / 180) * (Altitude));
 
-    '''// Calculate Azimuth (A)
+    /*
+    // Calculate Azimuth (A)
     // sin(A) = - sin(H) * cos(δ) / cos(m)
     // Azimuth at given H Local Hour Angle
     Azsin = - sin((Pi / 180) * (LocalHourAngleDegrees)) * cos((Pi / 180) * (DeclinationSun)) / cos((Pi / 180) * (Altitude))
@@ -1863,60 +2141,147 @@ def SundialParametersCalc(Latitude, LocalHourAngle, DeclinationSun):
 
     // Normalize Azimuth
     // Azimuth: [0,+2π[
-    Azimuth = NormalizeZeroBounded(Azimuth, 360)'''
+    Azimuth = NormalizeZeroBounded(Azimuth, 360)
+    */
 
-    Azimuth = 0
+    double Azimuth = 0;
 
-    return(Altitude, Azimuth, ShadowLength)
+    std::vector<double> SundialParametersCalcvec = {Altitude, Azimuth, ShadowLength};
+    return(SundialParametersCalcvec);
+}
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 ////////////////                                                ////////////////
 ////////////////             7. DRAW SUN ANALEMMA               ////////////////
 ////////////////                                                ////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-def SunAnalemma(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay):
+std::vector<double> SunAnalemma(std::string Planet, double Latitude, double Longitude, double LocalDateYear, double LocalDateMonth, double LocalDateDay)
+{
+    std::vector<double> TwilightCalcvec = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay);
 
-    (LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon,
-    LocalHoursMidnight, LocalMinutesMidnight, LocalSecondsMidnight, LocalDateYearMidnight, LocalDateMonthMidnight, LocalDateDayMidnight,
-    LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseDaylight, LocalDateMonthRiseDaylight, LocalDateDayRiseDaylight,
-    LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalDateYearSetDaylight, LocalDateMonthSetDaylight, LocalDateDaySetDaylight,
-    LocalHoursRiseCivil, LocalMinutesRiseCivil, LocalSecondsRiseCivil, LocalDateYearRiseCivil, LocalDateMonthRiseCivil, LocalDateDayRiseCivil,
-    LocalHoursSetCivil, LocalMinutesSetCivil, LocalSecondsSetCivil, LocalDateYearSetCivil, LocalDateMonthSetCivil, LocalDateDaySetCivil,
-    LocalHoursRiseNaval, LocalMinutesRiseNaval, LocalSecondsRiseNaval, LocalDateYearRiseNaval, LocalDateMonthRiseNaval, LocalDateDayRiseNaval,
-    LocalHoursSetNaval, LocalMinutesSetNaval, LocalSecondsSetNaval, LocalDateYearSetNaval, LocalDateMonthSetNaval, LocalDateDaySetNaval,
-    LocalHoursRiseAstro, LocalMinutesRiseAstro, LocalSecondsRiseAstro, LocalDateYearSetAstro, LocalDateMonthSetAstro, LocalDateDaySetAstro,
-    LocalHoursSetAstro, LocalMinutesSetAstro, LocalSecondsSetAstro, LocalDateYearRiseAstro, LocalDateMonthRiseAstro, LocalDateDayRiseAstro) = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay)
+    double LocalHoursNoon = TwilightCalcvec[0];
+    double LocalMinutesNoon = TwilightCalcvec[1];
+    double LocalSecondsNoon = TwilightCalcvec[2];
+    double LocalDateYearNoon = TwilightCalcvec[3];
+    double LocalDateMonthNoon = TwilightCalcvec[4];
+    double LocalDateDayNoon = TwilightCalcvec[5];
+    double LocalHoursMidnight = TwilightCalcvec[6];
+    double LocalMinutesMidnight = TwilightCalcvec[7];
+    double LocalSecondsMidnight = TwilightCalcvec[8];
+    double LocalDateYearMidnight = TwilightCalcvec[9];
+    double LocalDateMonthMidnight = TwilightCalcvec[10];
+    double LocalDateDayMidnight = TwilightCalcvec[11];
+
+    /*
+    double LocalHoursRiseDaylight = TwilightCalcvec[12];
+    double LocalMinutesRiseDaylight = TwilightCalcvec[13];
+    double LocalSecondsRiseDaylight = TwilightCalcvec[14];
+    double LocalDateYearRiseDaylight = TwilightCalcvec[15];
+    double LocalDateMonthRiseDaylight = TwilightCalcvec[16];
+    double LocalDateDayRiseDaylight = TwilightCalcvec[17];
+    double LocalHoursSetDaylight = TwilightCalcvec[18];
+    double LocalMinutesSetDaylight = TwilightCalcvec[19];
+    double LocalSecondsSetDaylight = TwilightCalcvec[20];
+    double LocalDateYearSetDaylight = TwilightCalcvec[21];
+    double LocalDateMonthSetDaylight = TwilightCalcvec[22];
+    double LocalDateDaySetDaylight = TwilightCalcvec[23];
+
+    double LocalHoursRiseCivil = TwilightCalcvec[24];
+    double LocalMinutesRiseCivil = TwilightCalcvec[25];
+    double LocalSecondsRiseCivil = TwilightCalcvec[26];
+    double LocalDateYearRiseCivil = TwilightCalcvec[27];
+    double LocalDateMonthRiseCivil = TwilightCalcvec[28];
+    double LocalDateDayRiseCivil = TwilightCalcvec[29];
+    double LocalHoursSetCivil = TwilightCalcvec[30];
+    double LocalMinutesSetCivil = TwilightCalcvec[31];
+    double LocalSecondsSetCivil = TwilightCalcvec[32];
+    double LocalDateYearSetCivil = TwilightCalcvec[33];
+    double LocalDateMonthSetCivil = TwilightCalcvec[34];
+    double LocalDateDaySetCivil = TwilightCalcvec[35];
+
+    double LocalHoursRiseNaval = TwilightCalcvec[36];
+    double LocalMinutesRiseNaval = TwilightCalcvec[37];
+    double LocalSecondsRiseNaval = TwilightCalcvec[38];
+    double LocalDateYearRiseNaval = TwilightCalcvec[39];
+    double LocalDateMonthRiseNaval = TwilightCalcvec[40];
+    double LocalDateDayRiseNaval = TwilightCalcvec[41];
+    double LocalHoursSetNaval = TwilightCalcvec[42];
+    double LocalMinutesSetNaval = TwilightCalcvec[43];
+    double LocalSecondsSetNaval = TwilightCalcvec[44];
+    double LocalDateYearSetNaval = TwilightCalcvec[45];
+    double LocalDateMonthSetNaval = TwilightCalcvec[46];
+    double LocalDateDaySetNaval = TwilightCalcvec[47];
+
+    double LocalHoursRiseAstro = TwilightCalcvec[48];
+    double LocalMinutesRiseAstro = TwilightCalcvec[49];
+    double LocalSecondsRiseAstro = TwilightCalcvec[50];
+    double LocalDateYearSetAstro = TwilightCalcvec[51];
+    double LocalDateMonthSetAstro = TwilightCalcvec[52];
+    double LocalDateDaySetAstro = TwilightCalcvec[53];
+    double LocalHoursSetAstro = TwilightCalcvec[54];
+    double LocalMinutesSetAstro = TwilightCalcvec[55];
+    double LocalSecondsSetAstro = TwilightCalcvec[56];
+    double LocalDateYearRiseAstro = TwilightCalcvec[57];
+    double LocalDateMonthRiseAstro = TwilightCalcvec[58];
+    double LocalDateDayRiseAstro = TwilightCalcvec[59];
+    */
 
     // Calculate Local Mean Sidereal Time
-    (LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds,
-    UnitedHours, UnitedMinutes, UnitedSeconds, 
-    GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds) = LocalSiderealTimeCalc(Longitude, LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon)
+    std::vector<double> LocalSiderealTimeCalcNoon = LocalSiderealTimeCalc(Longitude, LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon);
+    double LocalSiderealHours = LocalSiderealTimeCalcNoon[0];
+    double LocalSiderealMinutes = LocalSiderealTimeCalcNoon[1];
+    double LocalSiderealSeconds = LocalSiderealTimeCalcNoon[2];
+    double UnitedHoursNoon = LocalSiderealTimeCalcNoon[3];
+    double UnitedMinutesNoon = LocalSiderealTimeCalcNoon[4];
+    double UnitedSecondsNoon = LocalSiderealTimeCalcNoon[5];
+    double GreenwichSiderealHours = LocalSiderealTimeCalcNoon[6];
+    double GreenwichSiderealMinutes = LocalSiderealTimeCalcNoon[7];
+    double GreenwichSiderealSeconds = LocalSiderealTimeCalcNoon[8];
 
     // Convert LT noon to UT noon time
-    UnitedTime, UnitedHours, UnitedMinutes, UnitedSeconds, UnitedDateYear, UnitedDateMonth, UnitedDateDay = LTtoUT(Longitude, LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon)
+    std::vector<double> LTtoUTvec = LTtoUT(Longitude, LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon);
+    double UnitedTime = LTtoUTvec[0];
+    double UnitedHours = LTtoUTvec[1];
+    double UnitedMinutes = LTtoUTvec[2];
+    double UnitedSeconds = LTtoUTvec[3];
+    double UnitedDateYear = LTtoUTvec[4];
+    double UnitedDateMonth = LTtoUTvec[5];
+    double UnitedDateDay = LTtoUTvec[6];
 
     // Calculate corresponding Julian Date
-    JulianDays = CalculateJulianDate(UnitedDateYear, UnitedDateMonth, UnitedDateDay, UnitedHours, UnitedMinutes, UnitedSeconds)
+    double JulianDays = CalculateJulianDate(UnitedDateYear, UnitedDateMonth, UnitedDateDay, UnitedHours, UnitedMinutes, UnitedSeconds);
 
     // Calculate Sun's position at this time
-    RightAscensionSun, DeclinationSun, EclLongitudeSun, Jtransit = SunsCoordinatesCalc(Planet, Longitude, JulianDays)
+    std::vector<double> SunsCoordinatesCalcvec = SunsCoordinatesCalc(Planet, Longitude, JulianDays);
+    double RightAscensionSun = SunsCoordinatesCalcvec[0];
+    double DeclinationSun = SunsCoordinatesCalcvec[1];
+    double EclLongitudeSun = SunsCoordinatesCalcvec[2];
+    double Jtransit = SunsCoordinatesCalcvec[3];
 
     // Convert to horizontal
-    LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600
-    LocalHourAngle = LocalSiderealTime - RightAscensionSun
+    double LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600;
+    double LocalHourAngle = LocalSiderealTime - RightAscensionSun;
     // Normalize output
-    LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24)
-    Altitude = NULL
-    Altitude, Azimuth = EquIToHor(Latitude, RightAscensionSun, DeclinationSun, Altitude, LocalSiderealTime, LocalHourAngle)
+    LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
+    
+    // Initial input
+    double Altitude = NULL;
 
-    return(LocalHourAngle, Altitude)
+    std::vector<double> EquIToHorvec = EquIToHor(Latitude, RightAscensionSun, DeclinationSun, Altitude, LocalSiderealTime, LocalHourAngle);
+    Altitude = EquIToHorvec[0];
+    double Azimuth = EquIToHorvec[1];
+
+    std::vector<double> SunAnalemmavec = {LocalHourAngle, Altitude};
+    return(SunAnalemmavec);
+}
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////                ...     ..      ..                                                     ////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+////////                ...     ..      ..                                                 ////////
 ////                x*8888x.:*8888: -"888:                 @88>                                ////
 ////               X   48888X `8888H  8888                 %8P                                 ////
 ////              X8x.  8888X  8888X  !888>                       x@88k u@88c.                 ////
@@ -1928,35 +2293,41 @@ def SunAnalemma(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, Loca
 ////               .8888Xf.888x:!    X888X.: 9888  9888    888&   "*88*" 8888"                 ////
 ////              :""888":~"888"     `888*"  "888*""888"   R888"    ""   'Y"                   ////
 ////                  "~'    "~        ""                   ""                                 ////
-////////                                                                                       ////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////  ////////                                                                             ////////  //////
-  ////////  //////                                                                         //////  ////////
-        ////                                                                           ////
-  //   //////                                                                             //////   //
-   ////////                                                                                 ////////
+////////                                                                                   ////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///  ////                                                                                 ////  ///
+  ////  ///                                                                            ///  ////
+          //                                                                         //
+  //   ///                                                                             ///   //
+   ////                                                                                  ////
+
 int main()
 {
     // Print version info
-    STARTMSG = "\n//////// Csillész II Problem Solver Program {0} ////////\n////////         Developed by Balázs Pál.         ////////\n\n"
-    std::cout << STARTMSG.format(ActualVersion))
+    std::stringstream STARTMSG;
+    STARTMSG << "\n//////// Csillész II Problem Solver Program " << ActualVersion << "////////\n////////         Developed by Balázs Pál.         ////////\n\n";
+    std::string STARTMSGstring = STARTMSG.str();
+    std::cout << STARTMSGstring;
 
-    while(1):
+    while(1)
+    {
+        std::cout << ">> MAIN MENU <<\n";
+        std::cout << "(1) Coordinate System Conversion\n";
+        std::cout << "(2) Geographical Distances\n";
+        std::cout << "(3) Local Mean Sidereal Time\n";
+        std::cout << "(4) Datetimes of Twilights\n";
+        std::cout << "(5) Solve Astronomical Triangles\n";
+        std::cout << "(6) Plot Sun's Path on Sundial\n";
+        std::cout << "(7) Plot Sun's Analemma\n";
+        std::cout << "(H) Solve End-Semester Homework\n";
+        std::cout << "(Q) Quit Program\n";
 
-        std::cout << ">> MAIN MENU <<")
-        std::cout << "(1) Coordinate System Conversion")
-        std::cout << "(2) Geographical Distances")
-        std::cout << "(3) Local Mean Sidereal Time")
-        std::cout << "(4) Datetimes of Twilights")
-        std::cout << "(5) Solve Astronomical Triangles")
-        std::cout << "(6) Plot Sun's Path on Sundial")
-        std::cout << "(7) Plot Sun's Analemma")
-        std::cout << "(H) Solve End-Semester Homework")
-        std::cout << "(Q) Quit Program\n")
 
         // Choose mode by user input
-        mode = input("> Choose a mode and press enter...: ")
-        std::cout << '\n\n')
+        std::string mode;
+        std::cout << "> Choose a mode and press enter...: ";
+        std::cin >> mode;
+        std::cout << '\n\n';
 
         //    _____                    _    _____              _____                 
         //   / ____|                  | |  / ____|            / ____|                
@@ -1967,20 +2338,25 @@ int main()
         //                                         __/ |                             
         //                                        |___/                              
         // COORDINATE SYSTEM CONVERSION
-        if(mode == '1'):
-            while(1):
-                std::cout << ">> Coordinate System Conversion")
-                std::cout << ">> Please choose which coordinate system conversion you'd like to make!")
-                std::cout << "(1) Horizontal to Equatorial I")
-                std::cout << "(2) Horizontal to Equatorial II")
-                std::cout << "(3) Equatorial I to Horizontal")
-                std::cout << "(4) Equatorial I to Equatorial II")
-                std::cout << "(5) Equatorial II to Equatorial I")
-                std::cout << "(6) Equatorial II to Horizontal")
-                std::cout << "(Q) Quit to Main Menu\n")
-                CoordMode = input("> Choose a number and press enter...:")
+        if(mode.compare("1") == 0)
+        {
+            while(1)
+            {
+                std::cout << ">> Coordinate System Conversion\n";
+                std::cout << ">> Please choose which coordinate system conversion you'd like to make!\n";
+                std::cout << "(1) Horizontal to Equatorial I\n";
+                std::cout << "(2) Horizontal to Equatorial II\n";
+                std::cout << "(3) Equatorial I to Horizontal\n";
+                std::cout << "(4) Equatorial I to Equatorial II\n";
+                std::cout << "(5) Equatorial II to Equatorial I\n";
+                std::cout << "(6) Equatorial II to Horizontal\n";
+                std::cout << "(Q) Quit to Main Menu\n";
 
-                std::cout << '\n')
+                std::string CoordMode;
+                std::cout << "> Choose a number and press enter...: ";
+                std::cin >> CoordMode;
+
+                std::cout << '\n';
 
                 //  __  
                 // /  | 
@@ -1989,103 +2365,216 @@ int main()
                 // _| |__
                 // \___(_)
                 // 1. Horizontal to Equatorial I Coordinate System
-                if(CoordMode == '1'):
-                    std::cout << ">> Conversion from Horizontal to Equatorial I Coordinate System")
-                    std::cout << ">> Give Parameters!")
+                if(CoordMode.compare("1") == 0)
+                {
+                    std::cout << ">> Conversion from Horizontal to Equatorial I Coordinate System\n";
+                    std::cout << ">> Give Parameters!\n";
 
-                    std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> or would like to choose a predefined Location's Coordinates?")
-                    std::cout << ">> Write \'1\' for User defined Coordinates, and write \'2\' for Predefined Locations' Coordinates!")
+                    std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> or would like to choose a predefined Location's Coordinates?\n";
+                    std::cout << ">> Write \'1\' for User defined Coordinates, and write \'2\' for Predefined Locations' Coordinates!\n";
 
-                    HorToEquILocationChoose = input(">> (1) User Defined, (2) Predefined: ")
+                    std::string HorToEquILocationChoose;
+                    std::cout << ">> (1) User Defined, (2) Predefined: ";
+                    std::cin >> HorToEquILocationChoose;
+                    std::cout << '\n';
 
-                    while(1):
-                        if(HorToEquILocationChoose == '1'):
-                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                            LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
-                            LatitudeMinutes = float(input("> Latitude (φ) Minutes: ") or "0")
-                            LatitudeSeconds = float(input("> Latitude (φ) Seconds: ") or "0")
-                            Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
-                            break
+                    double Latitude;
+                    double LocalSiderealTime;
+
+                    while(1)
+                    {
+                        if(HorToEquILocationChoose.compare("1") == 0)
+                        {
+                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
+                            
+                            double LatitudeHours;
+                            double LatitudeMinutes;
+                            double LatitudeSeconds;
+                            
+                            std::cout << "> Latitude (φ) Hours: ";
+                            std::cin >> LatitudeHours;
+                            std::cout << '\n';
+                            std::cout << "> Latitude (φ) Minutes: ";
+                            std::cin >> LatitudeMinutes;
+                            std::cout << '\n';
+                            std::cout << "> Latitude (φ) Seconds: ";
+                            std::cin >> LatitudeSeconds;
+                            std::cout << '\n';
+                            Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
+                            break;
+                        }
                         
-                        else if(HorToEquILocationChoose == '2'):
-                            while(1):
-                                Location = input("> Location's name (type \'H\' for Help): ")
+                        else if(HorToEquILocationChoose.compare("2") == 0)
+                        {
+                            while(1)
+                            {
+                                std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
-                                if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
-                                    std::cout << "\n>> Predefined Locations you can choose from:")
-                                    for keys in LocationDict.items():
-                                        std::cout << keys)
-                                    std::cout << '\n')
-                                
-                                else:
-                                    try:
-                                        Latitude = LocationDictFunc(Location)[0]
+                                std::string Location;
+                                std::cout << "> Location's name (type \'H\' for Help): ";
+                                std::cin >> Location;
+                                std::cout << '\n';
 
-                                    except KeyError:
-                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!")
-                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
-                                        
-                                    else:
-                                        break
+                                if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
+                                {
+                                    std::cout << "\n>> Predefined Locations you can choose from:";
 
-                            break
-                                
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                                    for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                                    {
+                                        std::cout << Locations->first << " " << Locations->second[0] << " " << Locations->second[1] << "\n";
+                                    }
 
-                    Altitude = float(input("> Altitude (m): "))
-                    Azimuth = float(input("> Azimuth (A): "))
+                                    std::cout << '\n';
+                                }
 
-                    std::cout << "Is Local Mean Sidereal Time given?")
-                    while(1):
-                        HorToEquIChoose = input("Write \'Y\' or \'N\' (Yes or No)")
-                        if(HorToEquIChoose == 'Y' or HorToEquIChoose == 'y' or HorToEquIChoose == 'Yes' or HorToEquIChoose == 'yes' or HorToEquIChoose == 'YEs' or HorToEquIChoose == 'yEs' or HorToEquIChoose == 'yeS' or HorToEquIChoose == 'YeS' or HorToEquIChoose == 'yES'):
-                            std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                            LocalSiderealTimeHours = float(input("> Local Mean Sidereal Time (S) Hours: ") or "0")
-                            LocalSiderealTimeMinutes = float(input("> Local Mean Sidereal Time (S) Minutes: ") or "0")
-                            LocalSiderealTimeSeconds = float(input("> Local Mean Sidereal Time (S) Seconds: ") or "0")
-                            LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600
-                            break
+                                else
+                                {
+                                    try
+                                    {
+                                        Latitude = LocationDict[Location][0];
+                                    
+                                        if(LocationDict.find(Location) != LocationDict.end())
+                                        {
+                                            throw Location;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    catch(std::string Location)
+                                    {
+                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!";
+                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!";
+                                    }
+                                }
+                            }
+                            break;
+                        }
 
-                        else if(HorToEquIChoose == 'N' or HorToEquIChoose == 'n' or HorToEquIChoose == 'No' or HorToEquIChoose == 'no' or HorToEquIChoose == 'nO'):
-                            LocalSiderealTime = NULL
-                            break
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                        }
+                    }
 
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                    double AltitudeHours;
+                    double AltitudeMinutes;
+                    double AltitudeSeconds;
+                    double AzimuthHours;
+                    double AzimuthMinutes;
+                    double AzimuthSeconds;
+
+                    std::cout << "> Altitude (m) Hours: ";
+                    std::cin >> AltitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Altitude (m) Minutes: ";
+                    std::cin >> AltitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Altitude (m) Seconds: ";
+                    std::cin >> AltitudeSeconds;
+                    std::cout << '\n';
+                    double Altitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600;
+
+                    std::cout <<  "> Azimuth (A) Hours: ";
+                    std::cin >> AzimuthHours;
+                    std::cout << '\n';
+                    std::cout <<  "> Azimuth (A) Minutes: ";
+                    std::cin >> AzimuthMinutes;
+                    std::cout << '\n';
+                    std::cout <<  "> Azimuth (A) Seconds: ";
+                    std::cin >> AzimuthSeconds;
+                    std::cout << '\n';
+                    double Azimuth = AzimuthHours + AzimuthMinutes/60 + AzimuthSeconds/3600;
+
+                    std::cout << "Is Local Mean Sidereal Time given?";
+                    while(1)
+                    {
+                        std::string HorToEquIChoose;
+                        std::cout << "Write \'Y\' or \'N\' (Yes or No)";
+                        std::cin >> HorToEquIChoose;
+                        std::cout << '\n';
+
+                        if(HorToEquIChoose == "Y" or HorToEquIChoose == "y" or HorToEquIChoose == "Yes" or HorToEquIChoose == "yes" or HorToEquIChoose == "YEs" or HorToEquIChoose == "yEs" or HorToEquIChoose == "yeS" or HorToEquIChoose == "YeS" or HorToEquIChoose == "yES")
+                        {
+                            std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
+                            double LocalSiderealTimeHours;
+                            double LocalSiderealTimeMinutes;
+                            double LocalSiderealTimeSeconds;
+
+                            std::cout << "> Local Mean Sidereal Time (S) Hours: ";
+                            std::cin >> LocalSiderealTimeHours;
+                            std::cout << '\n';
+                            std::cout << "> Local Mean Sidereal Time (S) Minutes: ";
+                            std::cin >> LocalSiderealTimeMinutes;
+                            std::cout << '\n';
+                            std::cout << "> Local Mean Sidereal Time (S) Seconds: ";
+                            std::cin >> LocalSiderealTimeSeconds;
+                            std::cout << '\n';
+                            LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600;
+
+                            break;
+                        }
+
+                        else if(HorToEquIChoose.compare("N") == 0 || HorToEquIChoose.compare("n") == 0 || HorToEquIChoose.compare("No") || HorToEquIChoose.compare("no") || HorToEquIChoose.compare("nO"))
+                        {
+                            LocalSiderealTime = NULL;
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                        }
+                    }
 
                     // Used Formulas:
                     // sin(δ) = sin(m) * sin(φ) + cos(m) * cos(φ) * cos(A)
                     // sin(H) = - sin(A) * cos(m) / cos(δ)
                     // α = S – t
-                    Declination, LocalHourAngle, RightAscension = HorToEquI(Latitude, Altitude, Azimuth, LocalSiderealTime)
+                    std::vector<double> HorToEquIoutputVec = HorToEquI(Latitude, Altitude, Azimuth, LocalSiderealTime);
+                    double RightAscension = HorToEquIoutputVec[0];
+                    double Declination = HorToEquIoutputVec[1];
+                    double LocalHourAngle = HorToEquIoutputVec[2];
 
-                    DeclinationHours = int(Declination)
-                    DeclinationMinutes = int((Declination - DeclinationHours) * 60)
-                    DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60)
+                    int DeclinationHours = int(Declination);
+                    int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
+                    int DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60);
 
-                    LocalHourAngleHours = int(LocalHourAngle)
-                    LocalHourAngleMinutes = int((LocalHourAngle - LocalHourAngleHours) * 60)
-                    LocalHourAngleSeconds = int((((LocalHourAngle - LocalHourAngleHours) * 60) - LocalHourAngleMinutes) * 60)
+                    int LocalHourAngleHours = int(LocalHourAngle);
+                    int LocalHourAngleMinutes = int((LocalHourAngle - LocalHourAngleHours) * 60);
+                    int LocalHourAngleSeconds = int((((LocalHourAngle - LocalHourAngleHours) * 60) - LocalHourAngleMinutes) * 60);
 
                     // Print Results
-                    std::cout << "\n> Calculated parameters in Equatorial I Coord. Sys.:")
+                    std::cout << "\n> Calculated parameters in Equatorial I Coord. Sys.:";
                     
-                    declinmsg = "- Declination (δ): {0}° {1}\' {2}\""
-                    hourangmsg = "- Local Hour Angle (t): {0}h {1}m {2}s"
-                    std::cout << declinmsg.format(DeclinationHours, DeclinationMinutes, DeclinationSeconds))
-                    std::cout << hourangmsg.format(LocalHourAngleHours, LocalHourAngleMinutes, LocalHourAngleSeconds))
+                    std::stringstream declinmsg;
+                    std::stringstream hourangmsg;
+                    declinmsg << "- Declination (δ): "<< DeclinationHours << "°" << DeclinationMinutes << "\'" << DeclinationSeconds << "\"";
+                    hourangmsg << "- Local Hour Angle (t): " << DeclinationHours<< "h" << DeclinationMinutes << "m" << DeclinationSeconds << "s";
                     
-                    if(LocalSiderealTime != NULL):
+                    std::string declinmsgstr = declinmsg.str();
+                    std::string hourangmsgstr = hourangmsg.str();
+
+                    std::cout << declinmsgstr << '\n';
+                    std::cout << hourangmsgstr << '\n';
+                    
+                    if(LocalSiderealTime != NULL)
+                    {
                         
-                        RightAscensionHours = int(RightAscension)
-                        RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60)
-                        RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60)
+                        int RightAscensionHours = int(RightAscension);
+                        int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
+                        int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
 
-                        RAmsg = "- Right Ascension (α): {0}h {1}m {2}s"
-                        std::cout << RAmsg.format(RightAscensionHours, RightAscensionMinutes, RightAscensionSeconds))
+                        std::stringstream RAmsg;
+                        RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
+                        std::string RAmsgstr = RAmsg.str();
+                        std::cout << RAmsgstr << '\n';
+                    }
 
-                    std::cout << '\n')
+                    std::cout << '\n';
+                }
+
 
                 //  _____   
                 // / __  \  
@@ -2094,84 +2583,182 @@ int main()
                 // ./ /____ 
                 // \_____(_)
                 // 2. Horizontal to Equatorial II Coordinate System
-                else if(CoordMode == '2'):
-                    std::cout << ">> Conversion from Horizontal to Equatorial II Coordinate System")
-                    std::cout << ">> Give Parameters!")
+                else if(CoordMode.compare("2") == 0)
+                {
+                    std::cout << ">> Conversion from Horizontal to Equatorial II Coordinate System\n";
+                    std::cout << ">> Give Parameters!\n";
                     
-                    std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> or would like to choose a predefined Location's Coordinates?")
-                    std::cout << ">> Write \'1\' for User defined Coordinates, and write \'2\' for Predefined Locations' Coordinates!")
+                    std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> or would like to choose a predefined Location's Coordinates?\n";
+                    std::cout << ">> Write \'1\' for User defined Coordinates, and write \'2\' for Predefined Locations' Coordinates!\n";
 
-                    HorToEquIILocationChoose = input(">> (1) User Defined, (2) Predefined: ")
+                    std::string HorToEquIILocationChoose;
+                    std::cout << ">> (1) User Defined, (2) Predefined: ";
+                    std::cin >> HorToEquIILocationChoose;
+                    std::cout << "\n";
+
+                    double Latitude;
+                    double LocalSiderealTime;
                     
-                    while(1):
-                        if(HorToEquIILocationChoose == '1'):
-                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                            LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
-                            LatitudeMinutes = float(input("> Latitude (φ) Minutes: ") or "0")
-                            LatitudeSeconds = float(input("> Latitude (φ) Seconds: ") or "0")
-                            Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
-                            break
+                    while(1)
+                    {
+                        if(HorToEquIILocationChoose.compare("1") == 0)
+                        {
+                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                            
+                            double LatitudeHours;
+                            double LatitudeMinutes;
+                            double LatitudeSeconds;
+                            
+                            std::cout << "> Latitude (φ) Hours: ";
+                            std::cin >> LatitudeHours;
+                            std::cout << '\n';
+                            std::cout << "> Latitude (φ) Minutes: ";
+                            std::cin >> LatitudeMinutes;
+                            std::cout << '\n';
+                            std::cout << "> Latitude (φ) Seconds: ";
+                            std::cin >> LatitudeSeconds;
+                            std::cout << '\n';
+                            Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
+                            break;
+                        }
                         
-                        else if(HorToEquIILocationChoose == '2'):
-                            while(1):
-                                Location = input("> Location's name (type \'H\' for Help): ")
+                        else if(HorToEquIILocationChoose.compare("2") == 0)
+                        {
+                            while(1)
+                            {
+                                std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
-                                if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
-                                    std::cout << "\n>> Predefined Locations you can choose from:")
-                                    for keys in LocationDict.items():
-                                        std::cout << keys)
-                                    std::cout << '\n')
-                                
-                                else:
-                                    try:
-                                        Latitude = LocationDictFunc(Location)[0]
+                                std::string Location;
+                                std::cout << "> Location's name (type \'H\' for Help): ";
+                                std::cin >> Location;
+                                std::cout << '\n';
 
-                                    except KeyError:
-                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!")
-                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
-                                        
-                                    else:
-                                        break
+                                if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
+                                {
+                                    std::cout << "\n>> Predefined Locations you can choose from:";
 
-                            break
-                                
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                                    for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                                    {
+                                        std::cout << Locations->first << " " << Locations->second[0] << " " << Locations->second[1] << "\n";
+                                    }
 
-                    Altitude = float(input("> Altitude (m): "))
-                    Azimuth = float(input("> Azimuth (A): "))
+                                    std::cout << '\n';
+                                }
+
+                                else
+                                {
+                                    try
+                                    {
+                                        Latitude = LocationDict[Location][0];
+                                    
+                                        if(LocationDict.find(Location) != LocationDict.end())
+                                        {
+                                            throw Location;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    catch(std::string Location)
+                                    {
+                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!";
+                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!";
+                                    }
+                                }
+                            }
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                        }
+                    }
+
+                    double AltitudeHours;
+                    double AltitudeMinutes;
+                    double AltitudeSeconds;
+                    double AzimuthHours;
+                    double AzimuthMinutes;
+                    double AzimuthSeconds;
+
+                    std::cout << "> Altitude (m) Hours: ";
+                    std::cin >> AltitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Altitude (m) Minutes: ";
+                    std::cin >> AltitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Altitude (m) Seconds: ";
+                    std::cin >> AltitudeSeconds;
+                    std::cout << '\n';
+                    double Altitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600;
+
+                    std::cout <<  "> Azimuth (A) Hours: ";
+                    std::cin >> AzimuthHours;
+                    std::cout << '\n';
+                    std::cout <<  "> Azimuth (A) Minutes: ";
+                    std::cin >> AzimuthMinutes;
+                    std::cout << '\n';
+                    std::cout <<  "> Azimuth (A) Seconds: ";
+                    std::cin >> AzimuthSeconds;
+                    std::cout << '\n';
+                    double Azimuth = AzimuthHours + AzimuthMinutes/60 + AzimuthSeconds/3600;
                     
-                    std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LocalSiderealTimeHours = float(input("> Local Mean Sidereal Time (S) Hours: ") or "0")
-                    LocalSiderealTimeMinutes = float(input("> Local Mean Sidereal Time (S) Minutes: ") or "0")
-                    LocalSiderealTimeSeconds = float(input("> Local Mean Sidereal Time (S) Seconds: ") or "0")
-                    LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600
+                    std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
+                    double LocalSiderealTimeHours;
+                    double LocalSiderealTimeMinutes;
+                    double LocalSiderealTimeSeconds;
 
-                    Declination, RightAscension, LocalSiderealTime = HorToEquII(Latitude, Altitude, Azimuth, LocalSiderealTime)
+                    std::cout << "> Local Mean Sidereal Time (S) Hours: ";
+                    std::cin >> LocalSiderealTimeHours;
+                    std::cout << '\n';
+                    std::cout << "> Local Mean Sidereal Time (S) Minutes: ";
+                    std::cin >> LocalSiderealTimeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Local Mean Sidereal Time (S) Seconds: ";
+                    std::cin >> LocalSiderealTimeSeconds;
+                    std::cout << '\n';
+                    LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600;
 
-                    DeclinationHours = int(Declination)
-                    DeclinationMinutes = int((Declination - DeclinationHours) * 60)
-                    DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60)
+                    std::vector<double> HorToEquIIoutputVec = HorToEquII(Latitude, Altitude, Azimuth, LocalSiderealTime);
+                    double RightAscension = HorToEquIIoutputVec[0];
+                    double Declination = HorToEquIIoutputVec[1];
+                    double LocalSiderealTime = HorToEquIIoutputVec[2];
 
-                    RightAscensionHours = int(RightAscension)
-                    RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60)
-                    RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60)
+                    int DeclinationHours = int(Declination);
+                    int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
+                    int DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60);
 
-                    LocalSiderealTimeHours = int(LocalSiderealTime)
-                    LocalSiderealTimeMinutes = int((LocalSiderealTime - LocalSiderealTimeHours) * 60)
-                    LocalSiderealTimeSeconds = int((((LocalSiderealTime - LocalSiderealTimeHours) * 60) - LocalSiderealTimeMinutes) * 60)
+                    int RightAscensionHours = int(RightAscension);
+                    int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
+                    int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
+
+                    int LocalSiderealTimeHours = int(LocalSiderealTime);
+                    int LocalSiderealTimeMinutes = int((LocalSiderealTime - LocalSiderealTimeHours) * 60);
+                    int LocalSiderealTimeSeconds = int((((LocalSiderealTime - LocalSiderealTimeHours) * 60) - LocalSiderealTimeMinutes) * 60);
 
 
                     // Print Results
-                    std::cout << "\n> Calculated Parameters in Equatorial II Coord. Sys.:")
+                    std::cout << "\n> Calculated Parameters in Equatorial II Coord. Sys.:";
 
-                    declinmsg = "- Declination (δ): {0}° {1}\' {2}\""
-                    RAmsg = "- Right Ascension (α): {0}h {1}m {2}s"
-                    sidermsg = "- Local Mean Sidereal Time (S): {0}:{1}:{2}\n"
-                    std::cout << declinmsg.format(DeclinationHours, DeclinationMinutes, DeclinationSeconds))
-                    std::cout << RAmsg.format(RightAscensionHours, RightAscensionMinutes, RightAscensionSeconds))
-                    std::cout << sidermsg.format(LocalSiderealTimeHours, LocalSiderealTimeMinutes, LocalSiderealTimeSeconds))
-                    std::cout << '\n')
+                    std::stringstream declinmsg;
+                    declinmsg << "- Declination (δ): " << DeclinationHours << "°" << DeclinationMinutes << "\'" << DeclinationSeconds << "\"";
+                    std::string declinmsgstr = declinmsg.str();
+                    std::cout << declinmsgstr << '\n';
+
+                    std::stringstream RAmsg;
+                    RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
+                    std::string RAmsgstr = RAmsg.str();
+                    std::cout << RAmsgstr << '\n';
+
+                    std::stringstream sidermsg;
+                    sidermsg << "- Local Mean Sidereal Time (S): " << LocalSiderealTimeHours << "h" << LocalSiderealTimeMinutes << "m" << LocalSiderealTimeSeconds << "s";
+                    std::string sidermsgstr = sidermsg.str();
+                    std::cout << sidermsgstr << '\n';
+
+                    std::cout << '\n';
+                }
 
                 //  _____  
                 // |____ | 
@@ -2180,9 +2767,10 @@ int main()
                 // .___/ / 
                 // \____(_)
                 // 3. Equatorial I to Horizontal Coordinate System
-                else if(CoordMode == '3'):
-                    std::cout << ">> Conversion from Equatorial I to Horizontal Coordinate System")
-                    std::cout << ">> Give Parameters!\n")
+                else if(CoordMode.compare("3") == 0)
+                {
+                    std::cout << ">> Conversion from Equatorial I to Horizontal Coordinate System";
+                    std::cout << ">> Give Parameters!\n";
                     
                     while(1):
                         std::cout << ">>> LOCATION")
@@ -2309,7 +2897,7 @@ int main()
                             std::cout << "\n>> Is Local Mean Sidereal Time (S) given?")
                             EquIToHorChoose1 = input(">> Write \'Y\' or \'N\' (Yes or No): ")
 
-                            if(EquIToHorChoose1 == 'Y' or EquIToHorChoose1 == 'y' or EquIToHorChoose1 == 'Yes' or EquIToHorChoose1 == 'yes' or EquIToHorChoose1 == 'YEs' or EquIToHorChoose1 == 'yEs' or EquIToHorChoose1 == 'yeS' or EquIToHorChoose1 == 'YeS' or EquIToHorChoose1 == 'yES'):
+                            if(EquIToHorChoose1 == "Y" or EquIToHorChoose1 == "y" or EquIToHorChoose1 == "Yes" or EquIToHorChoose1 == "yes" or EquIToHorChoose1 == "YEs" or EquIToHorChoose1 == "yEs" or EquIToHorChoose1 == "yeS" or EquIToHorChoose1 == "YeS" or EquIToHorChoose1 == "yES"):
                                 std::cout << "\n>> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                                 LocalSiderealTimeHours = float(input("\n> Local Mean Sidereal Time (S) Hours: ") or "0")
                                 LocalSiderealTimeMinutes = float(input("> Local Mean Sidereal Time (S) Minutes: ") or "0")
@@ -2325,7 +2913,7 @@ int main()
                                 std::cout << "\n>> Is Local Hour Angle given?")
                                 EquIToHorChoose2 = input(">> Write \'Y\' or \'N\' (Yes or No): ")
 
-                                if(EquIToHorChoose2 == 'Y' or EquIToHorChoose2 == 'y' or EquIToHorChoose2 == 'Yes' or EquIToHorChoose2 == 'yes' or EquIToHorChoose2 == 'YEs' or EquIToHorChoose2 == 'yEs' or EquIToHorChoose2 == 'yeS' or EquIToHorChoose2 == 'YeS' or EquIToHorChoose2 == 'yES'):
+                                if(EquIToHorChoose2 == "Y" or EquIToHorChoose2 == "y" or EquIToHorChoose2 == "Yes" or EquIToHorChoose2 == "yes" or EquIToHorChoose2 == "YEs" or EquIToHorChoose2 == "yEs" or EquIToHorChoose2 == "yeS" or EquIToHorChoose2 == "YeS" or EquIToHorChoose2 == "yES"):
                                     std::cout << "\n>> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                                     LocalHourAngleHours = float(input("\n> Local Hour Angle (t) Hours: ") or "0")
                                     LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
@@ -2351,7 +2939,7 @@ int main()
                             std::cout << "\n>> Is Local Hour Angle (t) given?")
                             EquIToHorChooseD = input(">> Write \'Y\' or \'N\' (Yes or No): ")
 
-                            if(EquIToHorChooseD == 'Y' or EquIToHorChooseD == 'y' or EquIToHorChooseD == 'Yes' or EquIToHorChooseD == 'yes' or EquIToHorChooseD == 'YEs' or EquIToHorChooseD == 'yEs' or EquIToHorChooseD == 'yeS' or EquIToHorChooseD == 'YeS' or EquIToHorChooseD == 'yES'):
+                            if(EquIToHorChooseD == "Y" or EquIToHorChooseD == "y" or EquIToHorChooseD == "Yes" or EquIToHorChooseD == "yes" or EquIToHorChooseD == "YEs" or EquIToHorChooseD == "yEs" or EquIToHorChooseD == "yeS" or EquIToHorChooseD == "YeS" or EquIToHorChooseD == "yES"):
                                 std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
                                 LocalHourAngleHours = float(input("> Local Hour Angle (t) Hours: ") or "0")
                                 LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
@@ -2419,7 +3007,8 @@ int main()
                         azimmsg = "- Rising and Setting Azimuths (A) are:\n- {0}° and {1}°"
                         std::cout << azimmsg.format(Azimuth1, Azimuth2))
                         std::cout << '\n')
-                        
+                }
+
                 //    ___   
                 //   /   |  
                 //  / /| |  
@@ -2448,7 +3037,7 @@ int main()
                             while(1):
                                 EquIToEquIIChoose = input(">> Write \'Y\' or \'N\' (Yes or No): ")
                                 
-                                if(EquIToEquIIChoose == 'Y' or EquIToEquIIChoose == 'y' or EquIToEquIIChoose == 'Yes' or EquIToEquIIChoose == 'yes' or EquIToEquIIChoose == 'YEs' or EquIToEquIIChoose == 'yEs' or EquIToEquIIChoose == 'yeS' or EquIToEquIIChoose == 'YeS' or EquIToEquIIChoose == 'yES'):
+                                if(EquIToEquIIChoose == "Y" or EquIToEquIIChoose == "y" or EquIToEquIIChoose == "Yes" or EquIToEquIIChoose == "yes" or EquIToEquIIChoose == "YEs" or EquIToEquIIChoose == "yEs" or EquIToEquIIChoose == "yeS" or EquIToEquIIChoose == "YeS" or EquIToEquIIChoose == "yES"):
                                     Declination = float(input("> Declination (δ): "))
                                     break
                                 
@@ -2465,8 +3054,8 @@ int main()
                                 if(StellarObject == "Help" or StellarObject == "help" or StellarObject == "H" or StellarObject == "h"):
                                     std::cout << "\n>> Predefined Objects you can choose from:")
                                     for keys in StellarDict.items():
-                                        std::cout << keys)
-                                    std::cout << '\n')
+                                        std::cout << keys
+                                    std::cout << '\n';
                                 
                                 else:
                                     try:
@@ -2484,7 +3073,7 @@ int main()
                                         while(1):
                                             EquIToEquIIChoose = input(">> Write \'Y\' or \'N\' (Yes or No): ")
 
-                                            if(EquIToEquIIChoose == 'Y' or EquIToEquIIChoose == 'y' or EquIToEquIIChoose == 'Yes' or EquIToEquIIChoose == 'yes' or EquIToEquIIChoose == 'YEs' or EquIToEquIIChoose == 'yEs' or EquIToEquIIChoose == 'yeS' or EquIToEquIIChoose == 'YeS' or EquIToEquIIChoose == 'yES'):
+                                            if(EquIToEquIIChoose == "Y" or EquIToEquIIChoose == "y" or EquIToEquIIChoose == "Yes" or EquIToEquIIChoose == "yes" or EquIToEquIIChoose == "YEs" or EquIToEquIIChoose == "yEs" or EquIToEquIIChoose == "yeS" or EquIToEquIIChoose == "YeS" or EquIToEquIIChoose == "yES"):
                                                 Declination = StellarDict[StellarObject][1]
                                                 break
 
@@ -2554,7 +3143,7 @@ int main()
                     while(1):
                         EquIIToEquIChoose = input(">> Write \'Y\' or \'N\' (Yes or No): ")
                         
-                        if(EquIIToEquIChoose == 'Y' or EquIIToEquIChoose == 'y' or EquIIToEquIChoose == 'Yes' or EquIIToEquIChoose == 'yes' or EquIIToEquIChoose == 'YEs' or EquIIToEquIChoose == 'yEs' or EquIIToEquIChoose == 'yeS' or EquIIToEquIChoose == 'YeS' or EquIIToEquIChoose == 'yES'):
+                        if(EquIIToEquIChoose == "Y" or EquIIToEquIChoose == "y" or EquIIToEquIChoose == "Yes" or EquIIToEquIChoose == "yes" or EquIIToEquIChoose == "YEs" or EquIIToEquIChoose == "yEs" or EquIIToEquIChoose == "yeS" or EquIIToEquIChoose == "YeS" or EquIIToEquIChoose == "yES"):
                             Declination = float(input("> Declination (δ): "))
                             break
                         
@@ -2763,12 +3352,17 @@ int main()
                     std::cout << altitmsg.format(Altitude))
                     std::cout << '\n')
 
-                else if(CoordMode == 'Q' or CoordMode == 'q'):
+                else if(CoordMode == 'Q' or CoordMode == 'q')
+                {
                     break
+                }
 
-                else:
-                    std::cout << ">>>> ERROR: Invalid option! Try Again!\n")
-
+                else
+                {
+                    std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                }
+            }
+        }
         //    _____                    _____  _     _      _____      _      
         //   / ____|                  |  __ \(_)   | |    / ____|    | |     
         //  | |  __  ___  ___   __ _  | |  | |_ ___| |_  | |     __ _| | ___ 
@@ -3353,7 +3947,7 @@ int main()
                     while(1):
                         std::cout << ">> Would you like to plot the Sun's path for a Choosen Date in This Year too?")
                         SunDialChoose = input(">> Write Y for Yes or N for No: ")
-                        if(SunDialChoose == 'Y' or SunDialChoose == 'y' or SunDialChoose == 'Yes' or SunDialChoose == 'yes' or SunDialChoose == 'YEs' or SunDialChoose == 'yEs' or SunDialChoose == 'yeS' or SunDialChoose == 'YeS' or SunDialChoose == 'yES'):
+                        if(SunDialChoose == "Y" or SunDialChoose == "y" or SunDialChoose == "Yes" or SunDialChoose == "yes" or SunDialChoose == "YEs" or SunDialChoose == "yEs" or SunDialChoose == "yeS" or SunDialChoose == "YeS" or SunDialChoose == "yES"):
                             // Input Time Parameters
                             while(1):
                                 LocalDateMonth = int(input("> Month: "))
@@ -3389,7 +3983,7 @@ int main()
                     MeasureNumber = 1000
                     FineTuned = 1000
 
-                    if(SunDialChoose == 'Y' or SunDialChoose == 'y' or SunDialChoose == 'Yes' or SunDialChoose == 'yes' or SunDialChoose == 'YEs' or SunDialChoose == 'yEs' or SunDialChoose == 'yeS' or SunDialChoose == 'YeS' or SunDialChoose == 'yES'):
+                    if(SunDialChoose == "Y" or SunDialChoose == "y" or SunDialChoose == "Yes" or SunDialChoose == "yes" or SunDialChoose == "YEs" or SunDialChoose == "yEs" or SunDialChoose == "yeS" or SunDialChoose == "YeS" or SunDialChoose == "yES"):
 
                         std::cout << "Choosen Date:")
                         ////// CHOOSEN DATE //////
