@@ -2406,9 +2406,9 @@ int main()
                         
                         else if(HorToEquILocationChoose.compare("2") == 0)
                         {
+                            std::cout << ">> Predefined Parameters\n";
                             while(1)
                             {
-                                std::cout << ">> Predefined Parameters\n";
                                 std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
                                 std::string Location;
@@ -2496,7 +2496,7 @@ int main()
                         std::cin >> HorToEquIChoose;
                         std::cout << '\n';
 
-                        if(HorToEquIChoose.compare("Y") || HorToEquIChoose.compare("y") || HorToEquIChoose.compare("Yes") || HorToEquIChoose.compare("yes") || HorToEquIChoose.compare("YEs") || HorToEquIChoose.compare("yEs") || HorToEquIChoose.compare("yeS") || HorToEquIChoose.compare("YeS") || HorToEquIChoose.compare("yES"))
+                        if(HorToEquIChoose.compare("Y") == 0 || HorToEquIChoose.compare("y") == 0 || HorToEquIChoose.compare("Yes") == 0 || HorToEquIChoose.compare("yes") == 0 || HorToEquIChoose.compare("YEs") == 0 || HorToEquIChoose.compare("yEs") == 0 || HorToEquIChoose.compare("yeS") == 0 || HorToEquIChoose.compare("YeS") == 0 || HorToEquIChoose.compare("yES") == 0)
                         {
                             std::cout << "\n>> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
                             double LocalSiderealTimeHours;
@@ -2517,7 +2517,7 @@ int main()
                             break;
                         }
 
-                        else if(HorToEquIChoose.compare("N") == 0 || HorToEquIChoose.compare("n") == 0 || HorToEquIChoose.compare("No") || HorToEquIChoose.compare("no") || HorToEquIChoose.compare("nO"))
+                        else if(HorToEquIChoose.compare("N") == 0 || HorToEquIChoose.compare("n") == 0 || HorToEquIChoose.compare("No") == 0 || HorToEquIChoose.compare("no") == 0 || HorToEquIChoose.compare("nO") == 0)
                         {
                             LocalSiderealTime = NULL;
                             break;
@@ -2627,9 +2627,9 @@ int main()
                         
                         else if(HorToEquIILocationChoose.compare("2") == 0)
                         {
+                            std::cout << ">> Predefined Parameters\n";
                             while(1)
                             {
-                                std::cout << ">> Predefined Parameters\n";
                                 std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
                                 std::string Location;
@@ -2824,9 +2824,9 @@ int main()
 
                         else if(EquIToHorLocationChoose.compare("2") == 0)
                         {
+                            std::cout << ">> Predefined Parameters\n";
                             while(1)
                             {
-                                std::cout << ">> Predefined Parameters\n";
                                 std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
                                 std::string Location;
@@ -2899,7 +2899,7 @@ int main()
                             std::cin >> RAorDecEquIToHorChoose;
                             std::cout << '\n';
 
-                            if(RAorDecEquIToHorChoose.compare("D") || RAorDecEquIToHorChoose.compare("d"))
+                            if(RAorDecEquIToHorChoose.compare("D") == 0 || RAorDecEquIToHorChoose.compare("d") == 0)
                             {
                                 RightAscension = NULL;
 
@@ -2922,7 +2922,7 @@ int main()
                                 break;
                             }
 
-                            else if(RAorDecEquIToHorChoose.compare("B") || RAorDecEquIToHorChoose.compare("b"))
+                            else if(RAorDecEquIToHorChoose.compare("B") == 0 || RAorDecEquIToHorChoose.compare("b") == 0)
                             {
                                 std::cout << "\n>> HINT: You can write RA and Declination as a Decimal Fraction.\n>> For this you need to write Hours as a float-type value, then\n>> You can Press Enter for both Minutes and Seconds.\n";
 
@@ -2963,7 +2963,7 @@ int main()
                             }
                         }
 
-                        else if(EquIToHorStellarChoose.compare("2"))
+                        else if(EquIToHorStellarChoose.compare("2") == 0)
                         {
                             while(1)
                             {
@@ -3006,7 +3006,7 @@ int main()
                                             std::cin >> RAorDecEquIToHorChoose;
                                             std::cout << '\n';
 
-                                            if(RAorDecEquIToHorChoose.compare("D") or RAorDecEquIToHorChoose.compare("d"))
+                                            if(RAorDecEquIToHorChoose.compare("D") == 0 || RAorDecEquIToHorChoose.compare("d") == 0)
                                             {
                                             
                                                 RightAscension = NULL;
@@ -3014,7 +3014,7 @@ int main()
                                                 break;
                                             }
 
-                                            else if(RAorDecEquIToHorChoose.compare("B") or RAorDecEquIToHorChoose.compare("b"))
+                                            else if(RAorDecEquIToHorChoose.compare("B") == 0 || RAorDecEquIToHorChoose.compare("b") == 0)
                                             {
                                                 RightAscension = StellarDict[StellarObject][0];
                                                 Declination = StellarDict[StellarObject][1];
@@ -3055,7 +3055,7 @@ int main()
                             std::cin >> EquIToHorChoose1;
                             std::cout << '\n';
 
-                            if(EquIToHorChoose1.compare("Y") || EquIToHorChoose1.compare("y") || EquIToHorChoose1.compare("Yes") || EquIToHorChoose1.compare("yes") || EquIToHorChoose1.compare("YEs") || EquIToHorChoose1.compare("yEs") || EquIToHorChoose1.compare("yeS") || EquIToHorChoose1.compare("YeS") || EquIToHorChoose1.compare("yES"))
+                            if(EquIToHorChoose1.compare("Y") == 0 || EquIToHorChoose1.compare("y") == 0 || EquIToHorChoose1.compare("Yes") == 0 || EquIToHorChoose1.compare("yes") == 0 || EquIToHorChoose1.compare("YEs") == 0 || EquIToHorChoose1.compare("yEs") == 0 || EquIToHorChoose1.compare("yeS") == 0 || EquIToHorChoose1.compare("YeS") == 0 || EquIToHorChoose1.compare("yES") == 0)
                             {
                                 std::cout << "\n\n>> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
 
@@ -3078,7 +3078,7 @@ int main()
                                 break;
                             }
 
-                            else if(EquIToHorChoose1.compare("N") || EquIToHorChoose1.compare("n") || EquIToHorChoose1.compare("No") || EquIToHorChoose1.compare("no") || EquIToHorChoose1.compare("nO"))
+                            else if(EquIToHorChoose1.compare("N") == 0 || EquIToHorChoose1.compare("n") == 0 || EquIToHorChoose1.compare("No") == 0 || EquIToHorChoose1.compare("no") == 0 || EquIToHorChoose1.compare("nO") == 0)
                             {
                                 LocalSiderealTime = NULL;
 
@@ -3089,7 +3089,7 @@ int main()
                                 std::cin >> EquIToHorChoose2;
                                 std::cout << '\n';
 
-                                if(EquIToHorChoose2.compare("Y") || EquIToHorChoose2.compare("y") || EquIToHorChoose2.compare("Yes") || EquIToHorChoose2.compare("yes") || EquIToHorChoose2.compare("YEs") || EquIToHorChoose2.compare("yEs") || EquIToHorChoose2.compare("yeS") || EquIToHorChoose2.compare("YeS") || EquIToHorChoose2.compare("yES"))
+                                if(EquIToHorChoose2.compare("Y") == 0 || EquIToHorChoose2.compare("y") == 0 || EquIToHorChoose2.compare("Yes") == 0 || EquIToHorChoose2.compare("yes") == 0 || EquIToHorChoose2.compare("YEs") == 0 || EquIToHorChoose2.compare("yEs") == 0 || EquIToHorChoose2.compare("yeS") == 0 || EquIToHorChoose2.compare("YeS") == 0 || EquIToHorChoose2.compare("yES") == 0)
                                 {
                                     std::cout << "\n>> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
                                     
@@ -3112,7 +3112,7 @@ int main()
                                     break;
                                 }
 
-                                else if(EquIToHorChoose2.compare("N") || EquIToHorChoose2.compare("n") || EquIToHorChoose2.compare("No") || EquIToHorChoose2.compare("no") || EquIToHorChoose2.compare("nO"))
+                                else if(EquIToHorChoose2.compare("N") == 0 || EquIToHorChoose2.compare("n") == 0 || EquIToHorChoose2.compare("No") == 0 || EquIToHorChoose2.compare("no") == 0 || EquIToHorChoose2.compare("nO") == 0)
                                 {
                                     LocalHourAngle = NULL;
                                     std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.";
@@ -3151,7 +3151,7 @@ int main()
                             std::cin >> EquIToHorChooseD;
                             std::cout << '\n';
 
-                            if(EquIToHorChooseD.compare("Y") || EquIToHorChooseD.compare("y") || EquIToHorChooseD.compare("Yes") || EquIToHorChooseD.compare("yes") || EquIToHorChooseD.compare("YEs") || EquIToHorChooseD.compare("yEs") || EquIToHorChooseD.compare("yeS") || EquIToHorChooseD.compare("YeS") || EquIToHorChooseD.compare("yES"))
+                            if(EquIToHorChooseD.compare("Y") == 0 || EquIToHorChooseD.compare("y") == 0 || EquIToHorChooseD.compare("Yes") == 0 || EquIToHorChooseD.compare("yes") == 0 || EquIToHorChooseD.compare("YEs") == 0 || EquIToHorChooseD.compare("yEs") == 0 || EquIToHorChooseD.compare("yeS") == 0 || EquIToHorChooseD.compare("YeS") == 0 || EquIToHorChooseD.compare("yES") == 0)
                             {
                                 std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
 
@@ -3172,7 +3172,7 @@ int main()
                                 break;
                             }
 
-                            else if(EquIToHorChooseD.compare("N") || EquIToHorChooseD.compare("n") || EquIToHorChooseD.compare("No") || EquIToHorChooseD.compare("no") || EquIToHorChooseD.compare("nO"))
+                            else if(EquIToHorChooseD.compare("N") == 0 || EquIToHorChooseD.compare("n") == 0 || EquIToHorChooseD.compare("No") == 0 || EquIToHorChooseD.compare("no") == 0 || EquIToHorChooseD.compare("nO") == 0)
                             {
                                 LocalHourAngle = NULL;
                                 std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.";
@@ -3298,7 +3298,7 @@ int main()
 
                     while(1)
                     {
-                        if(EquIToEquIIStellarChoose.compare("1"))
+                        if(EquIToEquIIStellarChoose.compare("1") == 0)
                         {
                             std::cout << ">> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, and type 0\n>> For both Minutes and Seconds.";
                             double RightAscensionHours;
@@ -3325,7 +3325,7 @@ int main()
                                 std::cin >> EquIToEquIIChoose;
                                 std::cout << '\n';
                                 
-                                if(EquIToEquIIChoose.compare("Y") || EquIToEquIIChoose.compare("y") || EquIToEquIIChoose.compare("Yes") || EquIToEquIIChoose.compare("yes") || EquIToEquIIChoose.compare("YEs") || EquIToEquIIChoose.compare("yEs") || EquIToEquIIChoose.compare("yeS") || EquIToEquIIChoose.compare("YeS") || EquIToEquIIChoose.compare("yES"))
+                                if(EquIToEquIIChoose.compare("Y") == 0 || EquIToEquIIChoose.compare("y") == 0 || EquIToEquIIChoose.compare("Yes") == 0 || EquIToEquIIChoose.compare("yes") == 0 || EquIToEquIIChoose.compare("YEs") == 0 || EquIToEquIIChoose.compare("yEs") == 0 || EquIToEquIIChoose.compare("yeS") == 0 || EquIToEquIIChoose.compare("YeS") == 0 || EquIToEquIIChoose.compare("yES") == 0)
                                 {
                                     std::cout << "\n>> HINT: You can write Declination as a Decimal Fraction.\n>> For this you need to write Hours as a float-type value, then\n>> You can Press Enter for both Minutes and Seconds.\n";
 
@@ -3346,7 +3346,7 @@ int main()
                                     break;
                                 }
                                 
-                                else if(EquIToEquIIChoose.compare("N") || EquIToEquIIChoose.compare("n") || EquIToEquIIChoose.compare("No") || EquIToEquIIChoose.compare("no") || EquIToEquIIChoose.compare("nO"))
+                                else if(EquIToEquIIChoose.compare("N") == 0 || EquIToEquIIChoose.compare("n") == 0 || EquIToEquIIChoose.compare("No") == 0 || EquIToEquIIChoose.compare("no") == 0 || EquIToEquIIChoose.compare("nO") == 0)
                                 {
                                     Declination = NULL;
                                 }
@@ -3358,7 +3358,7 @@ int main()
                             }
                         }
 
-                        else if(EquIToEquIIStellarChoose.compare("2"))
+                        else if(EquIToEquIIStellarChoose.compare("2") == 0)
                         {
                             while(1)
                             {
@@ -3404,13 +3404,13 @@ int main()
                                                 std::cin >> EquIToEquIIChoose;
                                                 std::cout << '\n';
 
-                                                if(EquIToEquIIChoose.compare("Y") || EquIToEquIIChoose.compare("y") || EquIToEquIIChoose.compare("Yes") || EquIToEquIIChoose.compare("yes") || EquIToEquIIChoose.compare("YEs") || EquIToEquIIChoose.compare("yEs") || EquIToEquIIChoose.compare("yeS") || EquIToEquIIChoose.compare("YeS") || EquIToEquIIChoose.compare("yES"))
+                                                if(EquIToEquIIChoose.compare("Y") == 0 || EquIToEquIIChoose.compare("y") == 0 || EquIToEquIIChoose.compare("Yes") == 0 || EquIToEquIIChoose.compare("yes") == 0 || EquIToEquIIChoose.compare("YEs") == 0 || EquIToEquIIChoose.compare("yEs") == 0 || EquIToEquIIChoose.compare("yeS") == 0 || EquIToEquIIChoose.compare("YeS") == 0 || EquIToEquIIChoose.compare("yES") == 0)
                                                 {
                                                     Declination = StellarDict[StellarObject][1];
                                                     break;
                                                 }
 
-                                                else if(EquIToEquIIChoose.compare("N") || EquIToEquIIChoose.compare("n") || EquIToEquIIChoose.compare("No") || EquIToEquIIChoose.compare("no") || EquIToEquIIChoose.compare("nO"))
+                                                else if(EquIToEquIIChoose.compare("N") == 0 || EquIToEquIIChoose.compare("n") == 0 || EquIToEquIIChoose.compare("No") == 0 || EquIToEquIIChoose.compare("no") == 0 || EquIToEquIIChoose.compare("nO") == 0)
                                                 {
                                                     Declination = NULL;
                                                 }
@@ -3500,7 +3500,7 @@ int main()
                 // /\__/ / 
                 // \____(_)
                 // 5. Equatorial II to Equatorial I Coordinate System
-                else if(CoordMode.compare("5"))
+                else if(CoordMode.compare("5") == 0)
                 {
                     std::cout << ">> Conversion from Equatorial II to Equatorial I Coordinate System\n";
                     std::cout << ">> Give Parameters!\n\n";
@@ -3537,7 +3537,7 @@ int main()
                         std::cin >> EquIIToEquIChoose;
                         std::cout << '\n';
                         
-                        if(EquIIToEquIChoose.compare("Y") || EquIIToEquIChoose.compare("y") || EquIIToEquIChoose.compare("Yes") || EquIIToEquIChoose.compare("yes") || EquIIToEquIChoose.compare("YEs") || EquIIToEquIChoose.compare("yEs") || EquIIToEquIChoose.compare("yeS") || EquIIToEquIChoose.compare("YeS") || EquIIToEquIChoose.compare("yES"))
+                        if(EquIIToEquIChoose.compare("Y") == 0 || EquIIToEquIChoose.compare("y") == 0 || EquIIToEquIChoose.compare("Yes") == 0 || EquIIToEquIChoose.compare("yes") == 0 || EquIIToEquIChoose.compare("YEs") == 0 || EquIIToEquIChoose.compare("yEs") == 0 || EquIIToEquIChoose.compare("yeS") == 0 || EquIIToEquIChoose.compare("YeS") == 0 || EquIIToEquIChoose.compare("yES") == 0)
                         {
                             std::cout << "\n>> HINT: You can write Declination as a Decimal Fraction.\n>> For this you need to write Hours as a float-type value, then\n>> You can Press Enter for both Minutes and Seconds.\n";
 
@@ -3558,7 +3558,7 @@ int main()
                             break;
                         }
 
-                        else if(EquIIToEquIChoose.compare("N") || EquIIToEquIChoose.compare("n") || EquIIToEquIChoose.compare("No") || EquIIToEquIChoose.compare("no") || EquIIToEquIChoose.compare("nO"))
+                        else if(EquIIToEquIChoose.compare("N") == 0 || EquIIToEquIChoose.compare("n") == 0 || EquIIToEquIChoose.compare("No") == 0 || EquIIToEquIChoose.compare("no") == 0 || EquIIToEquIChoose.compare("nO") == 0)
                         {
                             Declination = NULL;
                         }
@@ -3682,145 +3682,288 @@ int main()
                 // 6. Equatorial II to Horizontal Coordinate System
                 else if(CoordMode.compare("6") == 0)
                 {
-                    std::cout << ">> Conversion from Equatorial II to Horizontal Coordinate System")
-                    std::cout << ">> Give Parameters!")
+                    std::cout << ">> Conversion from Equatorial II to Horizontal Coordinate System\n";
+                    std::cout << ">> Give Parameters!";
 
-                    while(1):
-                        std::cout << ">>> LOCATION")
-                        std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> Or would like to choose a predefined Location's Coordinates?")
-                        std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for Predefined Locations' Coordinates!")
+                    double Latitude;
+                    double Altitude;
+                    double Azimuth;
+                    double RightAscension;
+                    double Declination;
+                    double LocalHourAngle;
+                    double LocalSiderealTime;
 
-                        EquIIToHorLocationChoose = input(">> (1) User Defined, (2) Predefined: ")
+                    while(1)
+                    {
+                        std::cout << "\n>>> LOCATION\n";
+                        std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> Or would like to choose a predefined Location's Coordinates?\n";
+                        std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for Predefined Locations' Coordinates!\n";
 
-                        if(EquIIToHorLocationChoose == '1'):
-                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                            LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
-                            LatitudeMinutes = float(input("> Latitude (φ) Minutes: ") or "0")
-                            LatitudeSeconds = float(input("> Latitude (φ) Seconds: ") or "0")
-                            Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
-                            break
+                        std::string EquIIToHorLocationChoose;
+                        std::cout << ">> (1) User Defined, (2) Predefined: ";
+                        std::cin >> EquIIToHorLocationChoose;
+                        std::cout << '\n';
 
-                        else if(EquIIToHorLocationChoose == '2'):
-                            while(1):
-                                Location = input("> Location's name (type \'H\' for Help): ")
-
-                                if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
-                                    std::cout << "\n>> Predefined Locations you can choose from:")
-                                    for keys in LocationDict.items():
-                                        std::cout << keys)
-                                    std::cout << '\n')
-
-                                else:
-                                    try:
-                                        Latitude = LocationDictFunc(Location)[0]
-
-                                    except KeyError:
-                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!")
-                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
-
-                                    else:
-                                        break
-
-                            break
-
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
-
-
-                    while(1):
-                        std::cout << "\n>>> STELLAR OBJECT")
-                        std::cout << ">> Would you like to give the stellar object's Coordinates by yourself,\n>> Or would like to choose a Predefined Object's Coordinates?")
-                        std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for a Predefined Stellar Object's Coordinates!")
-
-                        EquIIToHorStellarChoose = input(">> (1) User Defined, (2) Predefined: ")
-
-                        if(EquIIToHorStellarChoose == '1'):
+                        if(EquIIToHorLocationChoose.compare("1") == 0)
+                        {
+                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                            double LatitudeHours;
+                            double LatitudeMinutes;
+                            double LatitudeSeconds;
                             
-                            std::cout << ">> Which essential Parameter Is given?")
-                            EquIIToEquIDecChoose = input(">> Right Ascension (write \'A\'), or Local Hour Angle in Hours (write \'T\')?: ")
-                            if(EquIIToEquIDecChoose == 'A' or EquIIToEquIDecChoose == 'a'):
-                                LocalHourAngle = NULL
-                                std::cout << ">> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                                RightAscensionHours = float(input("> Right Ascension (α) Hours: ") or "0")
-                                RightAscensionMinutes = float(input("> Right Ascension (α) Minutes: ") or "0")
-                                RightAscensionSeconds = float(input("> Right Ascension (α) Seconds: ") or "0")
-                                RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600
-                                break
+                            std::cout << "\n> Latitude (φ) Hours: ";
+                            std::cin >> LatitudeHours;
+                            std::cout << '\n';
+                            std::cout << "> Latitude (φ) Minutes: ";
+                            std::cin >> LatitudeMinutes;
+                            std::cout << '\n';
+                            std::cout << "> Latitude (φ) Seconds: ";
+                            std::cin >> LatitudeSeconds;
+                            std::cout << '\n';
+                            Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
+                            break;
+                        }
 
-                            else if(EquIIToEquIDecChoose == 'T' or EquIIToEquIDecChoose == 't'):
-                                std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                                LocalHourAngleHours = float(input("> Local Hour Angle (t) Hours: ") or "0")
-                                LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
-                                LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
-                                LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
-                                RightAscension = NULL
-                                break
+                        else if(EquIIToHorLocationChoose.compare("2") == 0)
+                        {
+                            std::cout << ">> Predefined Parameters\n";
+                            while(1)
+                            {
+                                std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
-                            else:
-                                std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'A\' or \'T\'!")
-                        
-                        else if(EquIIToHorStellarChoose == '2'):
-                            while(1):
-                                StellarObject = input("> Stellar object's name (type \'H\' for Help): ")
+                                std::string Location;
+                                std::cout << "\n> Location's name (type \'H\' for Help): ";
+                                std::cin >> Location;
+                                std::cout << '\n';
 
-                                if(StellarObject == "Help" or StellarObject == "help" or StellarObject == "H" or StellarObject == "h"):
-                                    std::cout << "\n>> Predefined Objects you can choose from:")
-                                    for keys in StellarDict.items():
-                                        std::cout << keys)
-                                    std::cout << '\n')
+                                if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
+                                {
+                                    std::cout << ">> Predefined Locations you can choose from:\n";
 
-                                else:
-                                    try:
-                                        TestVariable = StellarDict[StellarObject][0]
-                                        del TestVariable
+                                    for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                                    {
+                                        std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << '\n';
+                                    }
 
-                                    except KeyError:
-                                        std::cout << ">>>> ERROR: The Stellar Object, named \"" + StellarObject + "\" is not in the Database!")
-                                        std::cout << ">>>> Type \"Help\" to list Available Stellar Objects in Database!")
+                                    std::cout << '\n';
+                                }
 
-                                    else:
-                                        std::cout << ">> Which essential Parameter Is given?")
-                                        EquIIToEquIDecChoose = input(">> Right Ascension (write \'A\'), or Local Hour Angle in Hours (write \'T\')?: ")
-                                        if(EquIIToEquIDecChoose == 'A' or EquIIToEquIDecChoose == 'a'):
-                                            LocalHourAngle = NULL
-                                            RightAscension = StellarDict[StellarObject][0]
-                                            break
+                                else
+                                {
+                                    try
+                                    {
+                                        Latitude = LocationDict[Location][0];
+                                    
+                                        if(LocationDict.find(Location) != LocationDict.end())
+                                        {
+                                            throw Location;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    catch(std::string Location)
+                                    {
+                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!\n";
+                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n";
+                                    }
+                                }
+                            }
+                            break;
+                        }
 
-                                        else if(EquIIToEquIDecChoose == 'T' or EquIIToEquIDecChoose == 't'):
-                                            std::cout << ">> You should input LHA (t) manually!")
-                                            std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                                            LocalHourAngleHours = float(input("> Local Hour Angle (t) Hours: ") or "0")
-                                            LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
-                                            LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
-                                            LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
-                                            RightAscension = NULL
-                                            break
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                        }
+                    }
 
-                                        else:
-                                            std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'A\' or \'T\'!")
+                    while(1)
+                    {
+                        std::cout << "\n>>> STELLAR OBJECT\n";
+                        std::cout << ">> Would you like to give the stellar object's Coordinates by yourself,\n>> Or would like to choose a Predefined Object's Coordinates?\n";
+                        std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for a Predefined Stellar Object's Coordinates!\n";
 
-                            break
+                        std::string EquIIToHorStellarChoose;
+                        std::cout << ">> (1) User Defined, (2) Predefined: ";
+                        std::cin >> EquIIToHorStellarChoose;
+                        std::cout << '\n';
 
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                        if(EquIIToHorStellarChoose.compare("1") == 0)
+                        {
+                            std::cout << ">> User Defined Parameters";
+                            std::cout << ">> Which essential Parameter Is given?";
 
-                    std::cout << ">> You should input LMST (S) manually!")
-                    std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LocalSiderealTimeHours = float(input("> Local Mean Sidereal Time (S) Hours: ") or "0")
-                    LocalSiderealTimeMinutes = float(input("> Local Mean Sidereal Time (S) Minutes: ") or "0")
-                    LocalSiderealTimeSeconds = float(input("> Local Mean Sidereal Time (S) Seconds: ") or "0")
-                    LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600
+                            std::string EquIIToEquIDecChoose;
+                            std::cout << ">> Right Ascension (write \'A\'), or Local Hour Angle in Hours (write \'T\')?: ";
+                            std::cin >> EquIIToEquIDecChoose;
+                            std::cout << '\n';
 
-                    Altitude, Azimuth = EquIIToHor(Latitude, RightAscension, Declination, Altitude, Azimuth, LocalSiderealTime, LocalHourAngle)
+                            if(EquIIToEquIDecChoose.compare("A") == 0 || EquIIToEquIDecChoose.compare("a") == 0)
+                            {
+                                std::cout << ">> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                                double RightAscensionHours;
+                                double RightAscensionMinutes;
+                                double RightAscensionSeconds;
+
+                                std::cout << "\n> Right Ascension (α) Hours: ";
+                                std::cin >> RightAscensionHours;
+                                std::cout << '\n';
+                                std::cout << "> Right Ascension (α) Minutes: ";
+                                std::cin >> RightAscensionMinutes;
+                                std::cout << '\n';
+                                std::cout << "> Right Ascension (α) Seconds: ";
+                                std::cin >> RightAscensionSeconds;
+                                std::cout << '\n';
+                                RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600;
+
+                                LocalHourAngle = NULL;
+                                break;
+                            }
+
+                            else if(EquIIToEquIDecChoose.compare("T") == 0 || EquIIToEquIDecChoose.compare("t") == 0)
+                            {
+                                RightAscension = NULL;
+
+                                std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                                double LocalHourAngleHours;
+                                double LocalHourAngleMinutes;
+                                double LocalHourAngleSeconds;
+
+                                std::cout << "\n> Local Hour Angle (t) Hours: ";
+                                std::cin >> LocalHourAngleHours;
+                                std::cout << '\n';
+                                std::cout << "> Local Hour Angle (t) Minutes: ";
+                                std::cin >> LocalHourAngleMinutes;
+                                std::cout << '\n';
+                                std::cout << "> Local Hour Angle (t) Seconds: ";
+                                std::cin >> LocalHourAngleSeconds;
+                                std::cout << '\n';
+                                LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600;
+                                break;
+                            }
+
+                            else
+                            {
+                                std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'A\' or \'T\'!";
+                            }
+                        }
+
+                        else if(EquIIToHorStellarChoose.compare("2") == 0)
+                        {
+                            while(1)
+                            {
+                                std::cout << ">> Predefined Parameters";
+                                std::map<std::string, std::vector<double>> StellarDict = StellarDictFunc();
+
+                                std::string StellarObject;
+                                std::cout << "> Stellar object's name (type \'H\' for Help): ";
+                                std::cin >> StellarObject;
+                                std::cout << '\n';
+
+                                if(StellarObject.compare("Help") == 0 || StellarObject.compare("help") == 0 || StellarObject.compare("H") == 0 || StellarObject.compare("h") == 0)
+                                {
+                                    std::cout << ">> Predefined Objects you can choose from: \n";
+
+                                    for(auto Objects = StellarDict.cbegin(); Objects != StellarDict.cend(); ++Objects)
+                                    {
+                                        std::cout << Objects->first << ": " << Objects->second[0] << "h ; " << Objects->second[1] << "°" << "\n";
+                                    }
+
+                                    std::cout << '\n';
+                                }
+
+                                else
+                                {
+                                    try
+                                    {
+                                        double TestVariable = StellarDict[StellarObject][0];
+                                    
+                                        if(StellarDict.find(StellarObject) != StellarDict.end())
+                                        {
+                                            throw StellarObject;
+                                        }
+                                        else
+                                        {
+                                            RightAscension = StellarDict[StellarObject][0];
+
+                                            while(1)
+                                            {
+                                                std::cout << ">> Is Declination given?\n";
+
+                                                std::string EquIToEquIIChoose;
+                                                std::cout << ">> Write \'Y\' or \'N\' (Yes or No): ";
+                                                std::cin >> EquIToEquIIChoose;
+                                                std::cout << '\n';
+
+                                                if(EquIToEquIIChoose.compare("Y") == 0 || EquIToEquIIChoose.compare("y") == 0 || EquIToEquIIChoose.compare("Yes") == 0 || EquIToEquIIChoose.compare("yes") == 0 || EquIToEquIIChoose.compare("YEs") == 0 || EquIToEquIIChoose.compare("yEs") == 0 || EquIToEquIIChoose.compare("yeS") == 0 || EquIToEquIIChoose.compare("YeS") == 0 || EquIToEquIIChoose.compare("yES") == 0)
+                                                {
+                                                    Declination = StellarDict[StellarObject][1];
+                                                    break;
+                                                }
+
+                                                else if(EquIToEquIIChoose.compare("N") == 0 || EquIToEquIIChoose.compare("n") == 0 || EquIToEquIIChoose.compare("No") == 0 || EquIToEquIIChoose.compare("no") == 0 || EquIToEquIIChoose.compare("nO") == 0)
+                                                {
+                                                    Declination = NULL;
+                                                }
+
+                                                else
+                                                {
+                                                    std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch(std::string StellarObject)
+                                    {
+                                        std::cout << ">>>> ERROR: The Stellar Object, named \"" + StellarObject + "\" is not in the Database!\n";
+                                        std::cout << ">>>> Type \"Help\" to list Available Stellar Objects in Database!\n";
+                                    }
+                                }
+                            }
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                        }
+                    }
+
+                    std::cout << ">> You should input LMST (S) manually!";
+                    std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    double LocalSiderealTimeHours;
+                    double LocalSiderealTimeMinutes;
+                    double LocalSiderealTimeSeconds;
+
+                    std::cout << "\n> Local Mean Sidereal Time (S) Hours: ";
+                    std::cin >> LocalSiderealTimeHours;
+                    std::cout << '\n';
+                    std::cout << "> Local Mean Sidereal Time (S) Minutes: ";
+                    std::cin >> LocalSiderealTimeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Local Mean Sidereal Time (S) Seconds: ";
+                    std::cin >> LocalSiderealTimeSeconds;
+                    std::cout << '\n';
+                    LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600;
+
+                    std::vector<double> EquIIToHoroutputVec = EquIIToHor(Latitude, RightAscension, Declination, Altitude, Azimuth, LocalSiderealTime, LocalHourAngle);
+                    Altitude = EquIIToHoroutputVec[0];
+                    Azimuth = EquIIToHoroutputVec[1];
 
                     // Print Results
-                    std::cout << "> Calculated Parameters in Horizontal Coord. Sys.:")
+                    std::cout << "\n> Calculated Parameters in Horizontal Coord. Sys.:\n";
 
-                    azimmsg = "- Azimuth (A):  {0}°"
-                    altitmsg = "- Altitude (m): {0}°"
-                    std::cout << azimmsg.format(Azimuth))
-                    std::cout << altitmsg.format(Altitude))
-                    std::cout << '\n';
+                    std::stringstream altitmsg;
+                    altitmsg << "- Altitude (m): "<< Altitude << "°";
+                    std::string altitmsgstr = altitmsg.str();
+                    std::cout << altitmsgstr << '\n';
+
+                    std::stringstream azimmsg;
+                    azimmsg << "- Azimuth (A): "<< Azimuth << "°";
+                    std::string azimmsgstr = azimmsg.str();
+                    std::cout << azimmsgstr << '\n';
 
                 }
 
@@ -3844,99 +3987,224 @@ int main()
         //                      __/ |                                        
         //                     |___/                                         
         // GEOGRAPHICAL DISTANCE CALCULATION
-        else if(mode == '2'):
-            while(1):
-                std::cout << ">> Geographical Distance Calculator\n")
-                std::cout << ">> Please choose a mode you'd like to use!")
-                std::cout << "(1) Positional Coordinates from User Input")
-                std::cout << "(2) Positional Coordinates of Predefined Locations")
-                std::cout << "(Q) Quit to Main Menu\n")
+        else if(mode.compare("2") == 0)
+        {
+            while(1)
+            {
+                std::cout << ">> Geographical Distance Calculator\n";
+                std::cout << ">> Please choose a mode you'd like to use!\n";
+                std::cout << "(1) Positional Coordinates from User Input\n";
+                std::cout << "(2) Positional Coordinates of Predefined Locations\n";
+                std::cout << "(Q) Quit to Main Menu\n\n";
 
-                DistMode = input("> Choose a mode and press enter...: ")
-                std::cout << '\n')
+                double Latitude1;
+                double Latitude2;
+                double Longitude1;
+                double Longitude2;
+                double Distance;
 
-                if(DistMode == '1'):
-                    std::cout << ">> Calculate Distance from given Coordinates\n")
-                    std::cout << ">> Give Parameters!")
-                    Latitude1 = float(input("> Latitude //1 (φ1): "))
-                    Longitude1 = float(input("> Longitude //1 (λ1): "))
-                    Latitude2 = float(input("> Latitude //2 (φ2): "))
-                    Longitude2 = float(input("> Longitude //2 (λ2): "))
+                std::string Location1;
+                std::string Location2;
 
+                std::string DistMode;
+                std::cout << "> Choose a mode and press enter...: ";
+                std::cin >> DistMode;
+                std::cout << '\n';
 
-                else if(DistMode == '2'):
-                    std::cout << ">> Calculate Distance of Choosen Predefined Locations\n")
-                    std::cout << ">> Write the Names of Two Choosen Cities to the Input!")
-                    while(1):
-                        Location1 = input("> Location //1 (type \'H\' for Help): ")
-
-                        if(Location1 == "Help" or Location1 == "help" or Location1 == "H" or Location1 == "h"):
-                            std::cout << "\n>> Predefined Locations you can choose from:")
-                            for keys in LocationDict.items():
-                                std::cout << keys)
-                            std::cout << '\n')
-
-                        else:
-                            try:
-                                Latitude1 = LocationDictFunc(Location)[0]
-                                Longitude1 = LocationDictFunc(Location)[1]
-
-                            except KeyError:
-                                std::cout << ">>>> ERROR: The Location, named \"" + Location1 + "\" is not in the Database!")
-                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
-
-                            else:
-                                break
-
-                    while(1):
-                        Location2 = input("> Location //2 (type \'H\' for Help): ")
-
-                        if(Location2 == "Help" or Location2 == "help" or Location2 == "H" or Location2 == "h"):
-                            std::cout << "\n>> Predefined Locations you can choose from:")
-                            for keys in LocationDict.items():
-                                std::cout << keys)
-                            std::cout << '\n')
-
-                        else:
-                            try:
-                                Latitude2 = LocationDictFunc(Location)[0]
-                                Longitude2 = LocationDictFunc(Location)[1]
-
-                            except KeyError:
-                                std::cout << ">>>> ERROR: The Location, named \"" + Location2 + "\" is not in the Database!")
-                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
-                                
-                            else:
-                                break
-
-                    Distance = GeogDistCalc(Latitude1, Latitude2, Longitude1, Longitude2)
-                    // Convert Distance to Km
-                    Distance = float(Distance / 1000)
-
-                else if(DistMode == 'Q' or DistMode == 'q'):
-                    break
-
-                else:
-                    std::cout << ">>>> ERROR: Invalid option! Try Again!")
-
-                if(DistMode == 1 || DistMode == 2)
+                if(DistMode.compare("1") == 0)
                 {
-                    Distance = GeogDistCalc(Latitude1, Latitude2, Longitude1, Longitude2)
-                    // Convert Distance to Km
-                    Distance = float(Distance / 1000)
-                    
-                    if(DistMode == 1)
-                    {
-                        distmsg = "\n>>> The Geographical Distance Between\n>>> {0}°,{1}°\n>>> and\n>>> {2}°,{3}°\n>>> is\n>>> {4:.3f} km\n"
-                        std::cout << distmsg.format(Latitude1,Longitude1,Latitude2,Longitude2, Distance))
-                    }
+                    std::cout << ">> Calculate Distance from given Coordinates\n";
+                    std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
 
-                    else if(DistMode == 2)
+                    double LatitudeHours1;
+                    double LatitudeMinutes1;
+                    double LatitudeSeconds1;
+                    double LatitudeHours2;
+                    double LatitudeMinutes2;
+                    double LatitudeSeconds2;
+
+                    double LongitudeHours1;
+                    double LongitudeMinutes1;
+                    double LongitudeSeconds1;
+                    double LongitudeHours2;
+                    double LongitudeMinutes2;
+                    double LongitudeSeconds2;
+                    
+                    std::cout << ">> Give the FIRST City's Parameters!\n";
+                    std::cout << "\n> Latitude #1 (φ1) Hours: ";
+                    std::cin >> LatitudeHours1;
+                    std::cout << '\n';
+                    std::cout << "> Latitude #1 (φ1) Minutes: ";
+                    std::cin >> LatitudeMinutes1;
+                    std::cout << '\n';
+                    std::cout << "> Latitude #1 (φ1) Seconds: ";
+                    std::cin >> LatitudeSeconds1;
+                    std::cout << '\n';
+                    Latitude1 = LatitudeHours1 + LatitudeMinutes1/60 + LatitudeSeconds1/3600;
+
+                    std::cout << "\n> Longitude #1 (φ1) Hours: ";
+                    std::cin >> LongitudeHours1;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Minutes: ";
+                    std::cin >> LongitudeMinutes1;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Seconds: ";
+                    std::cin >> LongitudeSeconds1;
+                    std::cout << '\n';
+                    Longitude1 = LongitudeHours1 + LongitudeMinutes1/60 + LongitudeSeconds1/3600;
+
+                    std::cout << ">> Give the SECOND City's Parameters!\n";
+                    std::cout << "\n> Latitude #2 (φ2) Hours: ";
+                    std::cin >> LatitudeHours2;
+                    std::cout << '\n';
+                    std::cout << "> Latitude #2 (φ2) Minutes: ";
+                    std::cin >> LatitudeMinutes2;
+                    std::cout << '\n';
+                    std::cout << "> Latitude #2 (φ2) Seconds: ";
+                    std::cin >> LatitudeSeconds2;
+                    std::cout << '\n';
+                    Latitude2 = LatitudeHours2 + LatitudeMinutes2/60 + LatitudeSeconds2/3600;
+
+                    std::cout << "\n> Longitude #2 (φ2) Hours: ";
+                    std::cin >> LongitudeHours2;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #2 (φ2) Minutes: ";
+                    std::cin >> LongitudeMinutes2;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #2 (φ2) Seconds: ";
+                    std::cin >> LongitudeSeconds1;
+                    std::cout << '\n';
+                    Longitude2 = LongitudeHours2 + LongitudeMinutes2/60 + LongitudeSeconds2/3600;
+                }
+
+                else if(DistMode.compare("2") == 0)
+                {
+                    std::cout << ">> Calculate Distance of Choosen Predefined Locations\n";
+                    std::cout << ">> Write the Names of Two Choosen Cities to the Input!\n";
+                    while(1)
                     {
-                        distmsg = "\n>>> The Geographical Distance Between\n>>> {0} and {1} is\n>>> {2:.3f} km\n"
-                        std::cout << distmsg.format(Location1, Location2, Distance))
+                        std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
+
+                        std::cout << "\n> Location's name (type \'H\' for Help): ";
+                        std::cin >> Location1;
+                        std::cout << '\n';
+
+                        if(Location1.compare("Help") == 0 || Location1.compare("help") == 0 || Location1.compare("H") == 0 || Location1.compare("h") == 0)
+                        {
+                            std::cout << ">> Predefined Locations you can choose from:\n";
+
+                            for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                            {
+                                std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << '\n';
+                            }
+
+                            std::cout << '\n';
+                        }
+
+                        else
+                        {
+                            try
+                            {
+                                Latitude1 = LocationDict[Location1][0];
+                                Longitude1 = LocationDict[Location1][1];
+                            
+                                if(LocationDict.find(Location1) != LocationDict.end())
+                                {
+                                    throw Location1;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            catch(std::string Location1)
+                            {
+                                std::cout << ">>>> ERROR: The Location, named \"" + Location1 + "\" is not in the Database!\n";
+                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n";
+                            }
+                        }
+                    }
+                    while(1)
+                    {
+                        std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
+
+                        std::cout << "\n> Location's name (type \'H\' for Help): ";
+                        std::cin >> Location2;
+                        std::cout << '\n';
+
+                        if(Location2.compare("Help") == 0 || Location2.compare("help") == 0 || Location2.compare("H") == 0 || Location2.compare("h") == 0)
+                        {
+                            std::cout << ">> Predefined Locations you can choose from:\n";
+
+                            for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                            {
+                                std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << '\n';
+                            }
+
+                            std::cout << '\n';
+                        }
+
+                        else
+                        {
+                            try
+                            {
+                                Latitude2 = LocationDict[Location2][0];
+                                Longitude2 = LocationDict[Location2][1];
+                            
+                                if(LocationDict.find(Location2) != LocationDict.end())
+                                {
+                                    throw Location2;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            catch(std::string Location2)
+                            {
+                                std::cout << ">>>> ERROR: The Location, named \"" + Location2 + "\" is not in the Database!\n";
+                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n";
+                            }
+                        }
                     }
                 }
+
+                else if(DistMode.compare("Q") == 0 || DistMode.compare("q") == 0)
+                {
+                    break;
+                }
+
+                else
+                {
+                    std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                }
+
+                if(DistMode.compare("1") == 0 || DistMode.compare("2") == 0)
+                {
+                    Distance = GeogDistCalc(Latitude1, Latitude2, Longitude1, Longitude2);
+                    // Convert Distance to Km
+                    Distance = double(Distance / 1000);
+                    
+                    if(DistMode.compare("1") == 0)
+                    {
+                        std::stringstream distmsg;
+                        distmsg << "\n>>> The Geographical Distance Between\n>>> " << Latitude1 << "N ; " << Longitude1 << "E\n>>> and\n>>> " << Latitude2 << "N ; " << Longitude2 << "E\n>>> is\n>>>" << Distance << "km";
+                        std::string distmsgstr = distmsg.str();
+                        std::cout << distmsgstr << '\n';
+                    }
+
+                    else if(DistMode.compare("2") == 0)
+                    {
+                        std::stringstream distmsg;
+                        distmsg << "\n>>> The Geographical Distance Between\n>>> " << Location1 << "and" << Location2 << "is\n>>>" << Distance << "km";
+                        std::string distmsgstr = distmsg.str();
+                        std::cout << distmsgstr << '\n';
+
+                    }
+                }
+            }
+        }
+
 
         //   _      __  __  _____ _______    _____      _      
         //  | |    |  \/  |/ ____|__   __|  / ____|    | |     
@@ -3945,177 +4213,402 @@ int main()
         //  | |____| |  | |____) |  | |    | |___| (_| | | (__ 
         //  |______|_|  |_|_____/   |_|     \_____\__,_|_|\___|
         // LOCAL MEAN SIDEREAL TIME CALCULATION
-        else if(mode == '3'):
-            while(1):
-                std::cout << ">> Local Mean Sidereal Time Calculator\n")
-                std::cout << ">> Please choose a mode you'd like to use!")
-                std::cout << "(1) Parameters from User Input")
-                std::cout << "(2) Parameters of Predefined Locations")
-                std::cout << "(Q) Quit to Main Menu\n")
+        else if(mode.compare("3") == 0)
+        {
+            while(1)
+            {
+                std::cout << ">> Local Mean Sidereal Time Calculator\n";
+                std::cout << ">> Please choose a mode you'd like to use!\n";
+                std::cout << "(1) Parameters from User Input\n";
+                std::cout << "(2) Parameters of Predefined Locations\n";
+                std::cout << "(Q) Quit to Main Menu\n\n";
 
-                DistMode = input("> Choose a mode and press enter...: ")
-                std::cout << '\n')
+                // Declare Variables
+                double Latitude;
+                double Longitude;
+                double DateYear;
+                double DateMonth;
+                double DateDay;
+                double LocalHours;
+                double LocalMinutes;
+                double LocalSeconds;
+                std::string Location;
 
-                if(DistMode == '1'):
-                    std::cout << ">> Calculate LMST from given Parameters\n")
-                    std::cout << ">> Give Parameters!")
+                std::string LMSTMode;
+                std::cout << "> Choose a mode and press enter...: ";
+                std::cin >> LMSTMode;
+                std::cout << '\n';
+
+                if(LMSTMode.compare("1") == 0)
+                {
+                    std::cout << ">> Calculate LMST from given Parameters\n";
+                    std::cout << ">> Give Parameters!\n";
                     
                     // Input Positional Parameters
-                    std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
-                    LatitudeMinutes = float(input("> Latitude (φ) Minutes: ") or "0")
-                    LatitudeSeconds = float(input("> Latitude (φ) Seconds: ") or "0")
-                    Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
+                    std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    double LatitudeHours;
+                    double LatitudeMinutes;
+                    double LatitudeSeconds;
+                    
+                    std::cout << "\n> Latitude (φ) Hours: ";
+                    std::cin >> LatitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Latitude (φ) Minutes: ";
+                    std::cin >> LatitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Latitude (φ) Seconds: ";
+                    std::cin >> LatitudeSeconds;
+                    std::cout << '\n';
+                    Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
 
-                    std::cout << ">> HINT: You can write Longitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LongitudeHours = float(input("> Longitude (λ) Hours: ") or "0")
-                    LongitudeMinutes = float(input("> Longitude (λ) Minutes: ") or "0")
-                    LongitudeSeconds = float(input("> Longitude (λ) Seconds: ") or "0")
-                    Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
+                    std::cout << ">> HINT: You can write Longitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    double LongitudeHours;
+                    double LongitudeMinutes;
+                    double LongitudeSeconds;
+                    
+                    std::cout << "\n> Longitude #1 (φ1) Hours: ";
+                    std::cin >> LongitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Minutes: ";
+                    std::cin >> LongitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Seconds: ";
+                    std::cin >> LongitudeSeconds;
+                    std::cout << '\n';
+                    Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600;
 
                     // Input Time Parameters
-                    while(1):
-                        DateYear = int(input("> Year: "))
-                        if(DateYear != 0):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n")
+                    while(1)
+                    {
+                        std::cout << "> Year: ";
+                        std::cin >> DateYear;
 
-                    while(1):
-                        DateMonth = int(input("> Month: "))
-                        if(DateMonth > 0 and DateMonth < 13):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n")
+                        if(DateYear != 0)
+                        {
+                            std::cout << '\n';
+                            break;
+                        }
 
-                    while(1):
-                        DateDay = int(input("> Day: "))
-                        if(DateYear%4 == 0 and (DateYear%100 != 0 or DateYear%400 == 0)):
-                            if(MonthLengthListLeapYear[DateMonth - 1] >= DateDay and DateDay > 0):
-                                break
-                            else:
-                                daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                std::cout << daysmsg.format(MonthLengthListLeapYear[DateMonth - 1]))
-                        else:
-                            if(MonthLengthList[DateMonth - 1] >= DateDay and DateDay > 0):
-                                break
-                            else:
-                                daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                std::cout << daysmsg.format(MonthLengthList[DateMonth - 1]))
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n";
+                        }
+                    }
 
-                    while(1):
-                        LocalHours = float(input("> Local Hours: ") or "0")
-                        if(LocalHours >= 0 and LocalHours < 24):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Hours should be inside [0,24[ interval!\n")
+                    while(1)
+                    {
+                        std::cout << "> Month: ";
+                        std::cin >> DateMonth;
 
-                    while(1):
-                        LocalMinutes = int(input("> Local Minutes: ") or "0")
-                        if(LocalMinutes >= 0 and LocalMinutes <= 59):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Minutes should be inside [0,59] interval, and should be Integer!\n")
+                        if(DateMonth > 0 && DateMonth < 13)
+                        {
+                            std::cout << '\n';
+                            break;
+                        }
 
-                    while(1):
-                        LocalSeconds = float(input("> Local Seconds: ") or "0")
-                        if(LocalSeconds >= 0 and LocalSeconds < 60):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Seconds should be inside [0,60[ interval!\n")
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n";
+                        }
+                    }
 
-                    LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds, UnitedHours, UnitedMinutes, UnitedSeconds, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, DateYear, DateMonth, DateDay)
+                    while(1)
+                    {
+                        std::cout << "> Day: ";
+                        std::cin >> DateDay;
 
-                    sidmsg = "\n>>> The Local Mean Sidereal Time\n>>> at {0}:{1}:{2} UT, at location\n>>> {3}°,{4}° with\n>>> {5}:{6}:{7} GMST at 00:00:00 UT\n>>> is {8}:{9}:{10}\n\n"
-                    std::cout << sidmsg.format(UnitedHours, UnitedMinutes, UnitedSeconds, Latitude, Longitude, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds, LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds))
+                        if(int(DateYear)%4 == 0 && (int(DateYear)%100 != 0 || int(DateYear)%400 == 0))
+                        {
+                            if(MonthLengthListLeapYear[int(DateMonth) - 1] >= DateDay && DateDay > 0)
+                            {
+                                std::cout << '\n';
+                                break;
+                            }
+                            else
+                            {
+                                std::stringstream daysmsg;
+                                daysmsg << ">>>> ERROR: Days should be inside [1," << MonthLengthListLeapYear[int(DateMonth) - 1] << "] interval, and should be Integer!";
+                                std::string daysmsgstr = daysmsg.str();
+                                std::cout << daysmsgstr << '\n';
+                            }
+                        }
 
-                else if(DistMode == '2'):
-                    std::cout << ">> Calculate LMST from the Coordinates of a Predefined Location\n")
-                    std::cout << ">> Write the Name of a Choosen Location to the Input!")
+                        else
+                        {
+                            if(MonthLengthList[int(DateMonth) - 1] >= DateDay and DateDay > 0)
+                            {
+                                std::cout << '\n';
+                                break;
+                            }
+
+                            else
+                            {
+                                std::stringstream daysmsg;
+                                daysmsg << ">>>> ERROR: Days should be inside [1," << MonthLengthList[int(DateMonth) - 1] << "] interval, and should be Integer!";
+                                std::string daysmsgstr = daysmsg.str();
+                                std::cout << daysmsgstr << '\n';
+                            }
+                        }
+                    }
+
+                    while(1)
+                    {
+                        std::cout << "> Local Hours: ";
+                        std::cin >> LocalHours;
+                        if(LocalHours >= 0 && LocalHours < 24)
+                        {
+                            std::cout << '\n';
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Hours should be inside [0,24[ interval!\n";
+                        }
+                    }
+
+                    while(1)
+                    {
+
+                        std::cout << "> Local Minutes: ";
+                        std::cin >> LocalMinutes;
+                        if(LocalMinutes >= 0 && LocalMinutes <= 59)
+                        {
+                            std::cout << '\n';
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Minutes should be inside [0,59] interval, and should be Integer!\n";
+                        }
+                    }
+
+                    while(1)
+                    {
+                        std::cout << "> Local Seconds: ";
+                        std::cin >> LocalSeconds;
+                        if(LocalSeconds >= 0 and LocalSeconds < 60)
+                        {
+                            std::cout << '\n';
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Seconds should be inside [0,60[ interval!\n";
+                        }
+                    }
+
+                    std::vector<double> LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, DateYear, DateMonth, DateDay);
+                    double LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
+                    double LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
+                    double LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
+                    double UnitedHours = LocalSiderealTimeCalcoutputVec[3];
+                    double UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
+                    double UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
+                    double GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
+                    double GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
+                    double GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
+
+                    std::stringstream sidmsg;
+                    sidmsg << ">>> The Local Mean Sidereal Time at " << UnitedHours << ":" << UnitedMinutes << ":" << UnitedSeconds << " UT\n>>> At " << Latitude << "N ; " << Longitude << "E\n>>> With" << GreenwichSiderealHours << ":" << GreenwichSiderealMinutes << ":" << GreenwichSiderealSeconds << " GMST at 00:00:00 UT\n>>> is " << LocalSiderealHours << ":" << LocalSiderealMinutes << ":" << LocalSiderealSeconds;
+                    std::string sidmsgstr = sidmsg.str();
+                    std::cout << sidmsgstr << '\n';
+
+                }
+
+                else if(LMSTMode.compare("2") == 0)
+                {
+                    std::cout << ">> Calculate LMST from the Coordinates of a Predefined Location\n";
+                    std::cout << ">> Write the Name of a Choosen Location to the Input!\n";
 
                     // Input Choosen Location's Name
-                    while(1):
-                        Location = input("> Location's name (type \'H\' for Help): ")
+                    while(1)
+                    {
+                        std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
-                        if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
-                            std::cout << "\n>> Predefined Locations you can choose from:")
-                            for keys in LocationDict.items():
-                                std::cout << keys)
-                            std::cout << '\n')
+                        std::cout << "\n> Location's name (type \'H\' for Help): ";
+                        std::cin >> Location;
+                        std::cout << '\n';
 
-                        else:
-                            try:
-                                Longitude = LocationDictFunc(Location)[1]
+                        if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
+                        {
+                            std::cout << ">> Predefined Locations you can choose from:\n";
 
-                            except KeyError:
-                                std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!")
-                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
+                            for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                            {
+                                std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << '\n';
+                            }
 
-                            else:
-                                break
+                            std::cout << '\n';
+                        }
+
+                        else
+                        {
+                            try
+                            {
+                                Latitude = LocationDict[Location][0];
+                            
+                                if(LocationDict.find(Location) != LocationDict.end())
+                                {
+                                    throw Location;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            catch(std::string Location)
+                            {
+                                std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!\n";
+                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n";
+                            }
+                        }
+                    }
 
                     // Input Time Parameters
-                    while(1):
-                        DateYear = int(input("> Year: "))
-                        if(DateYear != 0):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n")
+                    while(1)
+                    {
+                        std::cout << "> Year: ";
+                        std::cin >> DateYear;
+                        if(DateYear != 0)
+                        {
+                            break;
+                        }
 
-                    while(1):
-                        DateMonth = int(input("> Month: "))
-                        if(DateMonth > 0 and DateMonth < 13):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n")
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n";
+                        }
+                    }
 
-                    // Leap Year	Handling
-                    while(1):
-                        DateDay = int(input("> Day: "))
-                        if(DateYear%4 == 0 and (DateYear%100 != 0 or DateYear%400 == 0)):
-                            if(MonthLengthListLeapYear[DateMonth - 1] >= DateDay and DateDay > 0):
-                                break
-                            else:
-                                daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                std::cout << daysmsg.format(MonthLengthListLeapYear[DateMonth - 1]))
-                        else:
-                            if(MonthLengthList[DateMonth - 1] >= DateDay and DateDay > 0):
-                                break
-                            else:
-                                daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                std::cout << daysmsg.format(MonthLengthList[DateMonth - 1]))
+                    while(1)
+                    {
+                        std::cout << "> Month: ";
+                        std::cin >> DateMonth;
+                        if(DateMonth > 0 && DateMonth < 13)
+                        {
+                            break;
+                        }
 
-                    while(1):
-                        LocalHours = float(input("> Local Hours: ") or "0")
-                        if(LocalHours >= 0 and LocalHours < 24):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Hours should be inside [0,24[ interval!\n")
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n";
+                        }
+                    }
 
-                    while(1):
-                        LocalMinutes = int(input("> Local Minutes: ") or "0")
-                        if(LocalMinutes >= 0 and LocalMinutes <= 59):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Minutes should be inside [0,59] interval, and should be Integer!\n")
+                    // Leap Year Handling
+                    while(1)
+                    {
+                        std::cout << "> Day: ";
+                        std::cin >> DateDay;
+                        if(int(DateYear)%4 == 0 && (int(DateYear)%100 != 0 || int(DateYear)%400 == 0))
+                        {
+                            if(MonthLengthListLeapYear[int(DateMonth) - 1] >= DateDay and DateDay > 0)
+                            {
+                                break;
+                            }
 
-                    while(1):
-                        LocalSeconds = float(input("> Local Seconds: ") or "0")
-                        if(LocalSeconds >= 0 and LocalSeconds < 60):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Seconds should be inside [0,60[ interval!\n")
+                            else
+                            {
+                                std::stringstream daysmsg;
+                                daysmsg << ">>>> ERROR: Days should be inside [1," << MonthLengthListLeapYear[int(DateMonth) - 1] << "] interval, and should be Integer!\n";
+                                std::string daysmsgstr = daysmsg.str();
+                                std::cout << daysmsgstr << '\n';
+                            }
+                        }
 
-                    LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds, UnitedHours, UnitedMinutes, UnitedSeconds, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, DateYear, DateMonth, DateDay)
+                        else
+                        {
+                            if(MonthLengthList[int(DateMonth) - 1] >= DateDay && DateDay > 0)
+                            {
+                                break;
+                            }
 
-                    sidmsg = "\n>>> The Local Mean Sidereal Time at {0}:{1}:{2} UT\n>>> in {3} with\n>>> {4}:{5}:{6} GMST at 00:00:00 UT\n>>> is {7}:{8}:{9}\n\n"
-                    std::cout << sidmsg.format(UnitedHours, UnitedMinutes, UnitedSeconds, Location, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds, LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds))
+                            else
+                            {
+                                std::stringstream daysmsg;
+                                daysmsg << ">>>> ERROR: Days should be inside [1," << MonthLengthList[int(DateMonth) - 1] << "] interval, and should be Integer!\n";
+                                std::string daysmsgstr = daysmsg.str();
+                                std::cout << daysmsgstr << '\n';
+                            }
+                        }
+                    }
 
-                else if(DistMode == 'Q' or DistMode == 'q'):
-                    break
+                    while(1)
+                    {
+                        std::cout << "> Local Hours: ";
+                        std::cin >> LocalHours;
+                        if(LocalHours >= 0 && LocalHours < 24)
+                        {
+                            break;
+                        }
 
-                else:
-                    std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Hours should be inside [0,24[ interval!\n";
+                        }
+                    }
+
+                    while(1)
+                    {
+                        std::cout << "> Local Minutes: ";
+                        std::cin >> LocalMinutes;
+                        if(LocalMinutes >= 0 && LocalMinutes <= 59)
+                        {
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Minutes should be inside [0,59] interval, and should be Integer!\n";
+                        }
+                    }
+
+                    while(1)
+                    {
+                        std::cout << "> Local Seconds: ";
+                        std::cin >> LocalSeconds;
+                        if(LocalSeconds >= 0 && LocalSeconds < 60)
+                        {
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Seconds should be inside [0,60[ interval!\n";
+                        }
+                    }
+
+                    std::vector<double> LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, DateYear, DateMonth, DateDay);
+                    double LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
+                    double LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
+                    double LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
+                    double UnitedHours = LocalSiderealTimeCalcoutputVec[3];
+                    double UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
+                    double UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
+                    double GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
+                    double GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
+                    double GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
+
+                    std::stringstream sidmsg;
+                    sidmsg << ">>> The Local Mean Sidereal Time at " << UnitedHours << ":" << UnitedMinutes << ":" << UnitedSeconds << " UT\n>>> in " << Location << " with\n>>> " << GreenwichSiderealHours << ":" << GreenwichSiderealMinutes << ":" << GreenwichSiderealSeconds << " GMST at 00:00:00 UT\n>>> is " << LocalSiderealHours << ":" << LocalSiderealMinutes << ":" << LocalSiderealSeconds;
+                    std::string sidmsgstr = sidmsg.str();
+                    std::cout << sidmsgstr << '\n';
+                }
+
+                else if(LMSTMode.compare("Q") == 0 || LMSTMode.compare("q") == 0)
+                {
+                    break;
+                }
+
+                else
+                {
+                    std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                }
+            }
+        }
 
 
         //   _______       _ _ _       _     _      _____      _      
@@ -4127,152 +4620,335 @@ int main()
         //                        __/ |                               
         //                       |___/                                
         // DATETIME CALCULATION FOR TWILIGHTS
-        else if(mode == '4'):
-            while(1):
-                std::cout << ">> Calculate Datetimes of Twilights at Specific Location")
-                std::cout << ">> Please choose a mode you'd like to use!")
-                std::cout << "(1) Parameters from User Input")
-                std::cout << "(2) Parameters of Predefined Locations")
-                std::cout << "(Q) Quit to Main Menu\n")
+        else if(mode.compare("4") == 0)
+        {
+            while(1)
+            {
+                std::cout << ">> Calculate Datetimes of Twilights at Specific Location\n";
+                std::cout << ">> Please choose a mode you'd like to use!\n";
+                std::cout << "(1) Parameters from User Input\n";
+                std::cout << "(2) Parameters of Predefined Locations\n";
+                std::cout << "(Q) Quit to Main Menu\n\n";
 
-                TwiMode = input("> Choose a mode and press enter...: ")
-                std::cout << '\n')
+                std::string TwiMode;
+                std::cout << "> Choose a mode and press enter...: ";
+                std::cin >> TwiMode;
+                std::cout << '\n';
 
                 // Constant for Calculations
-                Planet = OrbitDict["Earth"
-]
-                if(TwiMode == '1'):
-                    std::cout << ">> Calculate Twilights from given Parameters\n")
-                    std::cout << ">> Give Parameters!")
+                std::string Planet = "Earth";
+                std::string Location;
+
+                // Declare Variables
+                double Latitude;
+                double Longitude;
+
+                double LocalDateYear;
+                double LocalDateMonth;
+                double LocalDateDay;
+
+                if(TwiMode.compare("1") == 0)
+                {
+                    std::cout << ">> Calculate Twilights from given Parameters\n";
+                    std::cout << ">> Give Parameters!\n";
 
                     // Input Positional Parameters
-                    std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
-                    LatitudeMinutes = float(input("> Latitude (φ) Minutes: ") or "0")
-                    LatitudeSeconds = float(input("> Latitude (φ) Seconds: ") or "0")
-                    Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
+                    std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    double LatitudeHours;
+                    double LatitudeMinutes;
+                    double LatitudeSeconds;
+                    
+                    std::cout << "\n> Latitude (φ) Hours: ";
+                    std::cin >> LatitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Latitude (φ) Minutes: ";
+                    std::cin >> LatitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Latitude (φ) Seconds: ";
+                    std::cin >> LatitudeSeconds;
+                    std::cout << '\n';
+                    Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
 
-                    std::cout << ">> HINT: You can write Longitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LongitudeHours = float(input("> Longitude (λ) Hours: ") or "0")
-                    LongitudeMinutes = float(input("> Longitude (λ) Minutes: ") or "0")
-                    LongitudeSeconds = float(input("> Longitude (λ) Seconds: ") or "0")
-                    Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
+                    std::cout << ">> HINT: You can write Longitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    double LongitudeHours;
+                    double LongitudeMinutes;
+                    double LongitudeSeconds;
+                    
+                    std::cout << "\n> Longitude #1 (φ1) Hours: ";
+                    std::cin >> LongitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Minutes: ";
+                    std::cin >> LongitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Seconds: ";
+                    std::cin >> LongitudeSeconds;
+                    std::cout << '\n';
+                    Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600;
+                }
 
-                else if(TwiMode == '2'):
-                    while(1):
-                        std::cout << ">> Calculate Datetimes of Twilights from the Coordinates of a Predefined Location")
-                        std::cout << ">> Write the Name of a Choosen Location to the Input!")
+                else if(TwiMode.compare("2") == 0)
+                {                        
+                    while(1)
+                    {
+                        std::cout << ">> Calculate Datetimes of Twilights from the Coordinates of a Predefined Location\n";
+                        std::cout << ">> Write the Name of a Choosen Location to the Input!\n";
 
-                        // Input Choosen Location's Name
-                        Location = input("> Location's name (type \'H\' for Help): ")
-                        
-                        if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
-                            std::cout << "\n>> Predefined Locations you can choose from:")
-                            for keys in LocationDict.items():
-                                std::cout << keys)
-                            std::cout << '\n')
-                        
-                        else:
-                            try:
-                                Latitude = LocationDictFunc(Location)[0]
-                                Longitude = LocationDictFunc(Location)[1]
+                        std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
-                            except KeyError:
-                                std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!")
-                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
-                                
-                            else:
-                                break
+                        std::cout << "\n> Location's name (type \'H\' for Help): ";
+                        std::cin >> Location;
+                        std::cout << '\n';
 
-                else if(TwiMode == 'Q' or TwiMode == 'q'):
-                    break
+                        if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
+                        {
+                            std::cout << ">> Predefined Locations you can choose from:\n";
 
-                else:
-                    std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                            for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                            {
+                                std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << '\n';
+                            }
 
-                if(TwiMode == '1' or TwiMode == '2'):
+                            std::cout << '\n';
+                        }
+
+                        else
+                        {
+                            try
+                            {
+                                Latitude = LocationDict[Location][0];
+                                Longitude = LocationDict[Location][1];
+                            
+                                if(LocationDict.find(Location) != LocationDict.end())
+                                {
+                                    throw Location;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            catch(std::string Location2)
+                            {
+                                std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!\n";
+                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n";
+                            }
+                        }
+                    }
+                }
+
+                else if(TwiMode.compare("Q") == 0 || TwiMode.compare("q") == 0)
+                {
+                    break;
+                }
+
+                else
+                {
+                    std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                }
+
+                if(TwiMode.compare("1") == 0 || TwiMode.compare("2") == 0)
+                {
                     // Input Time Parameters
-                    while(1):
-                        LocalDateYear = int(input("> Year: "))
-                        if(LocalDateYear != 0):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n")
+                    while(1)
+                    {
+                        std::cout << "> Year: ";
+                        std::cin >> LocalDateYear;
+                        if(LocalDateYear != 0)
+                        {
+                            std::cout << '\n';
+                            break;
+                        }
 
-                    while(1):
-                        LocalDateMonth = int(input("> Month: "))
-                        if(LocalDateMonth > 0 and LocalDateMonth < 13):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n")
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n";
+                        }
+                    }
 
-                    // Leap Year	Handling
-                    while(1):
-                        LocalDateDay = int(input("> Day: "))
-                        if(LocalDateYear%4 == 0 and (LocalDateYear%100 != 0 or LocalDateYear%400 == 0)):
-                            if(MonthLengthListLeapYear[LocalDateMonth - 1] >= LocalDateDay and LocalDateDay > 0):
-                                break
-                            else:
-                                daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                std::cout << daysmsg.format(MonthLengthListLeapYear[LocalDateMonth - 1]))
-                        else:
-                            if(MonthLengthList[LocalDateMonth - 1] >= LocalDateDay and LocalDateDay > 0):
-                                break
-                            else:
-                                daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                std::cout << daysmsg.format(MonthLengthList[LocalDateMonth - 1]))
+                    while(1)
+                    {
+                        std::cout << "> Month: ";
+                        std::cin >> LocalDateMonth;
+                        if(LocalDateMonth > 0 and LocalDateMonth < 13)
+                        {
+                            std::cout << '\n';
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n";
+                        }
+                    }
+
+                    // Leap Year Handling
+                    while(1)
+                    {
+                        std::cout << "> Day: ";
+                        std::cin >> LocalDateDay;
+                        if(int(LocalDateYear)%4 == 0 && (int(LocalDateYear)%100 != 0 or int(LocalDateYear)%400 == 0))
+                        {
+                            if(MonthLengthListLeapYear[int(LocalDateMonth) - 1] >= LocalDateDay && LocalDateDay > 0)
+                            {
+                                break;
+                            }
+
+                            else
+                            {
+                                std::stringstream daysmsg;
+                                daysmsg << ">>>> ERROR: Days should be inside [1," << MonthLengthListLeapYear[int(LocalDateMonth) - 1] << "] interval, and should be Integer!\n";
+                                std::string daysmsgstr = daysmsg.str();
+                                std::cout << daysmsgstr << '\n';
+                            }
+                        }
+
+                        else
+                        {
+                            if(MonthLengthList[int(LocalDateMonth) - 1] >= LocalDateDay && LocalDateDay > 0)
+                            {
+                                std::cout << '\n';
+                                break;
+                            }
+
+                            else
+                            {
+                                std::stringstream daysmsg;
+                                daysmsg << ">>>> ERROR: Days should be inside [1," << MonthLengthList[int(LocalDateMonth) - 1] << "] interval, and should be Integer!\n";
+                                std::string daysmsgstr = daysmsg.str();
+                                std::cout << daysmsgstr << '\n';
+                            }
+                        }
+                    }
 
 
-                    (LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon,
-                    LocalHoursMidnight, LocalMinutesMidnight, LocalSecondsMidnight, LocalDateYearMidnight, LocalDateMonthMidnight, LocalDateDayMidnight,
-                    LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseDaylight, LocalDateMonthRiseDaylight, LocalDateDayRiseDaylight,
-                    LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalDateYearSetDaylight, LocalDateMonthSetDaylight, LocalDateDaySetDaylight,
-                    LocalHoursRiseCivil, LocalMinutesRiseCivil, LocalSecondsRiseCivil, LocalDateYearRiseCivil, LocalDateMonthRiseCivil, LocalDateDayRiseCivil,
-                    LocalHoursSetCivil, LocalMinutesSetCivil, LocalSecondsSetCivil, LocalDateYearSetCivil, LocalDateMonthSetCivil, LocalDateDaySetCivil,
-                    LocalHoursRiseNaval, LocalMinutesRiseNaval, LocalSecondsRiseNaval, LocalDateYearRiseNaval, LocalDateMonthRiseNaval, LocalDateDayRiseNaval,
-                    LocalHoursSetNaval, LocalMinutesSetNaval, LocalSecondsSetNaval, LocalDateYearSetNaval, LocalDateMonthSetNaval, LocalDateDaySetNaval,
-                    LocalHoursRiseAstro, LocalMinutesRiseAstro, LocalSecondsRiseAstro, LocalDateYearSetAstro, LocalDateMonthSetAstro, LocalDateDaySetAstro,
-                    LocalHoursSetAstro, LocalMinutesSetAstro, LocalSecondsSetAstro, LocalDateYearRiseAstro, LocalDateMonthRiseAstro, LocalDateDayRiseAstro) = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay)
+                   std::vector<double> TwilightCalcvec = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay);
 
-                    if(TwiMode == '1'):
-                        suncoordmsg = ">>> Calculated Datetimes of Twilights at Coordinates \n>>> {0}, {1}:"
-                        std::cout << suncoordmsg.format(Latitude, Longitude))
+                    double LocalHoursNoon = TwilightCalcvec[0];
+                    double LocalMinutesNoon = TwilightCalcvec[1];
+                    double LocalSecondsNoon = TwilightCalcvec[2];
+                    double LocalDateYearNoon = TwilightCalcvec[3];
+                    double LocalDateMonthNoon = TwilightCalcvec[4];
+                    double LocalDateDayNoon = TwilightCalcvec[5];
+                    double LocalHoursMidnight = TwilightCalcvec[6];
+                    double LocalMinutesMidnight = TwilightCalcvec[7];
+                    double LocalSecondsMidnight = TwilightCalcvec[8];
+                    double LocalDateYearMidnight = TwilightCalcvec[9];
+                    double LocalDateMonthMidnight = TwilightCalcvec[10];
+                    double LocalDateDayMidnight = TwilightCalcvec[11];
 
-                    else if(TwiMode == '2'):
-                        std::cout << "\n>>> Calculated Datetimes of Twilights at " + Location + ":")
+                    double LocalHoursRiseDaylight = TwilightCalcvec[12];
+                    double LocalMinutesRiseDaylight = TwilightCalcvec[13];
+                    double LocalSecondsRiseDaylight = TwilightCalcvec[14];
+                    double LocalDateYearRiseDaylight = TwilightCalcvec[15];
+                    double LocalDateMonthRiseDaylight = TwilightCalcvec[16];
+                    double LocalDateDayRiseDaylight = TwilightCalcvec[17];
+                    double LocalHoursSetDaylight = TwilightCalcvec[18];
+                    double LocalMinutesSetDaylight = TwilightCalcvec[19];
+                    double LocalSecondsSetDaylight = TwilightCalcvec[20];
+                    double LocalDateYearSetDaylight = TwilightCalcvec[21];
+                    double LocalDateMonthSetDaylight = TwilightCalcvec[22];
+                    double LocalDateDaySetDaylight = TwilightCalcvec[23];
 
-                    msgdaylightrise = "\n>> Rising Daylight's time: {0}:{1}:{2} on {3}.{4}.{5}"
-                    msgdaylightset = ">> Setting Daylight's time: {0}:{1}:{2} on {3}.{4}.{5}\n"
+                    double LocalHoursRiseCivil = TwilightCalcvec[24];
+                    double LocalMinutesRiseCivil = TwilightCalcvec[25];
+                    double LocalSecondsRiseCivil = TwilightCalcvec[26];
+                    double LocalDateYearRiseCivil = TwilightCalcvec[27];
+                    double LocalDateMonthRiseCivil = TwilightCalcvec[28];
+                    double LocalDateDayRiseCivil = TwilightCalcvec[29];
+                    double LocalHoursSetCivil = TwilightCalcvec[30];
+                    double LocalMinutesSetCivil = TwilightCalcvec[31];
+                    double LocalSecondsSetCivil = TwilightCalcvec[32];
+                    double LocalDateYearSetCivil = TwilightCalcvec[33];
+                    double LocalDateMonthSetCivil = TwilightCalcvec[34];
+                    double LocalDateDaySetCivil = TwilightCalcvec[35];
 
-                    msgcivilrise = "\n>> Rising Civil Twilight's time is between\n>> {0}:{1}:{2} and {3}:{4}:{5} on {6}.{7}.{8}"
-                    msgcivilset = ">> Setting Civil Twilight's time is between\n>> {0}:{1}:{2} and {3}:{4}:{5} on {6}.{7}.{8}\n"
+                    double LocalHoursRiseNaval = TwilightCalcvec[36];
+                    double LocalMinutesRiseNaval = TwilightCalcvec[37];
+                    double LocalSecondsRiseNaval = TwilightCalcvec[38];
+                    double LocalDateYearRiseNaval = TwilightCalcvec[39];
+                    double LocalDateMonthRiseNaval = TwilightCalcvec[40];
+                    double LocalDateDayRiseNaval = TwilightCalcvec[41];
+                    double LocalHoursSetNaval = TwilightCalcvec[42];
+                    double LocalMinutesSetNaval = TwilightCalcvec[43];
+                    double LocalSecondsSetNaval = TwilightCalcvec[44];
+                    double LocalDateYearSetNaval = TwilightCalcvec[45];
+                    double LocalDateMonthSetNaval = TwilightCalcvec[46];
+                    double LocalDateDaySetNaval = TwilightCalcvec[47];
 
-                    msgnavalrise = "\n>> Rising Nautical Twilight's time is between\n>> {0}:{1}:{2} and {3}:{4}:{5} on {6}.{7}.{8}"
-                    msgnavalset = ">> Setting Nautical Twilight's time is between\n>> {0}:{1}:{2} and {3}:{4}:{5} on {6}.{7}.{8}\n"
+                    double LocalHoursRiseAstro = TwilightCalcvec[48];
+                    double LocalMinutesRiseAstro = TwilightCalcvec[49];
+                    double LocalSecondsRiseAstro = TwilightCalcvec[50];
+                    double LocalDateYearSetAstro = TwilightCalcvec[51];
+                    double LocalDateMonthSetAstro = TwilightCalcvec[52];
+                    double LocalDateDaySetAstro = TwilightCalcvec[53];
+                    double LocalHoursSetAstro = TwilightCalcvec[54];
+                    double LocalMinutesSetAstro = TwilightCalcvec[55];
+                    double LocalSecondsSetAstro = TwilightCalcvec[56];
+                    double LocalDateYearRiseAstro = TwilightCalcvec[57];
+                    double LocalDateMonthRiseAstro = TwilightCalcvec[58];
+                    double LocalDateDayRiseAstro = TwilightCalcvec[59];
 
-                    msgastrorise = "\n>> Rising Astronomical Twilight's time is between\n>> {0}:{1}:{2} and {3}:{4}:{5} on {6}.{7}.{8}"
-                    msgastroset = ">> Setting Astronomical Twilight's time is between\n>> {0}:{1}:{2} and {3}:{4}:{5} on {6}.{7}.{8}\n"
+                    if(TwiMode.compare("1") == 0)
+                    {
+                        std::stringstream suncoordmsg;
+                        suncoordmsg << ">>> Calculated Datetimes of Twilights at Coordinates \n>>> " << Latitude << "N ; " << Longitude << "E :";
+                        std::string suncoordmsgstr = suncoordmsg.str();
+                        std::cout << suncoordmsgstr << '\n';
+                    }
 
-                    msgnoon = "\n>> Noon occurs at {0}:{1}:{2} on {3}.{4}.{5}"
-                    msgmidnight = ">> Midnight occurs at {0}:{1}:{2} on {3}.{4}.{5}\n"
+                    else if(TwiMode.compare("2") == 0)
+                    {
+                        std::cout << "\n>>> Calculated Datetimes of Twilights at " << Location << ":";
+                    }
 
                     // +4 and -6 are Corrections for more accurate times
+                    std::stringstream msgdaylightrise;
+                    std::stringstream msgdaylightset;
+                    msgdaylightrise << "\n>> Rising Daylight's time: " << LocalHoursRiseDaylight << ":" << LocalMinutesRiseDaylight << ":" << LocalSecondsRiseDaylight << " on " << LocalDateYearRiseDaylight << "." << LocalDateMonthRiseDaylight << "." << LocalDateDayRiseDaylight;
+                    msgdaylightset << ">> Setting Daylight's time: " << LocalHoursSetDaylight << ":" << LocalMinutesSetDaylight << ":" << LocalSecondsSetDaylight << " on " << LocalDateYearSetDaylight << "." << LocalDateMonthSetDaylight << "." << LocalDateDaySetDaylight;
+                    std::string msgdaylightrisestr = msgdaylightrise.str();
+                    std::string msgdaylightsetstr = msgdaylightset.str();
+                    std::cout << msgdaylightrisestr << '\n';
+                    std::cout << msgdaylightsetstr << '\n';
 
-                    std::cout << msgdaylightrise.format(LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseDaylight, LocalDateMonthRiseDaylight, LocalDateDayRiseDaylight))
-                    std::cout << msgdaylightset.format(LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalDateYearSetDaylight, LocalDateMonthSetDaylight, LocalDateDaySetDaylight))
-                
-                    std::cout << msgcivilrise.format(LocalHoursRiseCivil, LocalMinutesRiseCivil + 4, LocalSecondsRiseCivil, LocalHoursRiseDaylight, LocalMinutesRiseDaylight, LocalSecondsRiseDaylight, LocalDateYearRiseCivil, LocalDateMonthRiseCivil, LocalDateDayRiseCivil))
-                    std::cout << msgcivilset.format(LocalHoursSetDaylight, LocalMinutesSetDaylight, LocalSecondsSetDaylight, LocalHoursSetCivil, LocalMinutesSetCivil - 6, LocalSecondsSetCivil, LocalDateYearSetCivil, LocalDateMonthSetCivil, LocalDateDaySetCivil))
+                    std::stringstream msgcivilrise;
+                    std::stringstream msgcivilset;
+                    msgcivilrise << "\n>> Rising Civil Twilight's time is between\n>> " << LocalHoursRiseCivil << ":" << LocalMinutesRiseCivil + 4 << ":" << LocalSecondsRiseCivil << " and " << LocalHoursRiseDaylight << ":" << LocalMinutesRiseDaylight << ":" << LocalSecondsRiseDaylight << " on " << LocalDateYearRiseCivil << "." << LocalDateMonthRiseCivil << "." << LocalDateDayRiseCivil;
+                    msgcivilset << ">> Setting Civil Twilight's time is between\n>> " << LocalHoursSetDaylight << ":" << LocalMinutesSetDaylight << ":" << LocalSecondsSetDaylight << " and " << LocalHoursSetCivil << ":" << LocalMinutesSetCivil - 6 << ":" << LocalSecondsSetCivil << " on " << LocalDateYearSetCivil << "." << LocalDateMonthSetCivil << "." << LocalDateDaySetCivil;
+                    std::string msgcivilrisestr = msgcivilrise.str();
+                    std::string msgcivilsetstr = msgcivilset.str();
+                    std::cout << msgcivilrisestr << '\n';
+                    std::cout << msgcivilsetstr << '\n';
 
-                    std::cout << msgnavalrise.format(LocalHoursRiseNaval, LocalMinutesRiseNaval + 4, LocalSecondsRiseNaval, LocalHoursRiseCivil, LocalMinutesRiseCivil + 4, LocalSecondsRiseCivil, LocalDateYearRiseNaval, LocalDateMonthRiseNaval, LocalDateDayRiseNaval))
-                    std::cout << msgnavalset.format(LocalHoursSetCivil, LocalMinutesSetCivil - 6, LocalSecondsSetCivil, LocalHoursSetNaval, LocalMinutesSetNaval - 6, LocalSecondsSetNaval, LocalDateYearSetNaval, LocalDateMonthSetNaval, LocalDateDaySetNaval))
+                    std::stringstream msgnavalrise;
+                    std::stringstream msgnavalset;
+                    msgnavalrise << "\n>> Rising Nautical Twilight's time is between\n>> " << LocalHoursRiseNaval << ":" << LocalMinutesRiseNaval + 4 << ":" << LocalSecondsRiseNaval << " and " << LocalHoursRiseCivil << ":" << LocalMinutesRiseCivil + 4 << ":" << LocalSecondsRiseCivil << " on " << LocalDateYearRiseNaval << "." << LocalDateMonthRiseNaval << "." << LocalDateDayRiseNaval;
+                    msgnavalset << ">> Setting Nautical Twilight's time is between\n>> " << LocalHoursSetCivil << ":" << LocalMinutesSetCivil - 6 << ":" << LocalSecondsSetCivil << " and " << LocalHoursSetNaval << ":" << LocalMinutesSetNaval - 6 << ":" << LocalSecondsSetNaval << " on " << LocalDateYearSetNaval << "." << LocalDateMonthSetNaval << "." << LocalDateDaySetNaval;
+                    std::string msgnavalrisestr = msgnavalrise.str();
+                    std::string msgnavalsetstr = msgnavalset.str();
+                    std::cout << msgnavalrisestr << '\n';
+                    std::cout << msgnavalsetstr << '\n';
 
-                    std::cout << msgastrorise.format(LocalHoursRiseAstro, LocalMinutesRiseAstro + 4, LocalSecondsRiseAstro, LocalHoursRiseNaval, LocalMinutesRiseNaval + 4, LocalSecondsRiseNaval, LocalDateYearSetAstro, LocalDateMonthSetAstro, LocalDateDaySetAstro))
-                    std::cout << msgastroset.format(LocalHoursSetNaval, LocalMinutesSetNaval - 6, LocalSecondsSetNaval, LocalHoursSetAstro, LocalMinutesSetAstro - 6, LocalSecondsSetAstro, LocalDateYearRiseAstro, LocalDateMonthRiseAstro, LocalDateDayRiseAstro))
+                    std::stringstream msgastrorise;
+                    std::stringstream msgastroset;
+                    msgastrorise << "\n>> Rising Astronomical Twilight's time is between\n>> " << LocalHoursRiseAstro << ":" << LocalMinutesRiseAstro + 4 << ":" << LocalSecondsRiseAstro << " and " << LocalHoursRiseNaval << ":" << LocalMinutesRiseNaval + 4 << ":" << LocalSecondsRiseNaval << " on " << LocalDateYearSetAstro << "." << LocalDateMonthSetAstro << "." << LocalDateDaySetAstro;
+                    msgastroset << ">> Setting Astronomical Twilight's time is between\n>> " << LocalHoursSetNaval << ":" << LocalMinutesSetNaval - 6 << ":" << LocalSecondsSetNaval << " and " << LocalHoursSetAstro << ":" << LocalMinutesSetAstro - 6 << ":" << LocalSecondsSetAstro << " on " << LocalDateYearRiseAstro << "." << LocalDateMonthRiseAstro << "." << LocalDateDayRiseAstro;
+                    std::string msgastrorisestr = msgastrorise.str();
+                    std::string msgastrosetstr = msgastroset.str();
+                    std::cout << msgastrorisestr << '\n';
+                    std::cout << msgastrosetstr << '\n';
 
-                    std::cout << msgnoon.format(LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon))
-                    std::cout << msgmidnight.format(LocalHoursMidnight, LocalMinutesMidnight, LocalSecondsMidnight, LocalDateYearMidnight, LocalDateMonthMidnight, LocalDateDayMidnight))
-
+                    std::stringstream msgnoon;
+                    std::stringstream msgmidnight;
+                    msgnoon << "\n>> Noon occurs at " << LocalHoursNoon << ":" << LocalMinutesNoon << ":" << LocalSecondsNoon << " on " << LocalDateYearNoon << "." << LocalDateMonthNoon << "." << LocalDateDayNoon;
+                    msgmidnight << ">> Midnight occurs at " << LocalHoursMidnight << ":" << LocalMinutesMidnight << ":" << LocalSecondsMidnight << " on " << LocalDateYearMidnight << "." << LocalDateMonthMidnight << "." << LocalDateDayMidnight;
+                    std::string msgnoonstr = msgnoon.str();
+                    std::string msgmidnightstr = msgmidnight.str();
+                    std::cout << msgnoonstr << '\n';
+                    std::cout << msgmidnightstr << '\n';
+                }
+            }
+        }
 
 
         //    ___      _               _____    _                   _           
@@ -4284,53 +4960,99 @@ int main()
         //                                                     __/ |            
         //                                                    |___/             
         // Calculate Astronomical Triangles Parameters
-        else if(mode == '5'):
-            while(1):
-                std::cout << ">> Calculate Astronomical Triangles Parameters from given Ones")
-                std::cout << ">> Please choose a mode you'd like to use!")
-                std::cout << "(1) Parameters from User Input")
-                std::cout << "(Q) Quit to Main Menu")
+        else if(mode.compare("5") == 0)
+        {
+            while(1)
+            {
+                std::cout << ">> Calculate Astronomical Triangles Parameters from given Ones\n";
+                std::cout << ">> Please choose a mode you'd like to use!\n";
+                std::cout << "(1) Parameters from User Input\n";
+                std::cout << "(Q) Quit to Main Menu\n\n";
 
-                TrigMode = input("> Choose a mode and press enter...: ")
+                std::string TrigMode;
+                std::cout << "> Choose a mode and press enter...: ";
+                std::cin >> TrigMode;
+                std::cout << '\n';
 
-                std::cout << '\n')
+                // Declare variables
+                double aValue;
+                double bValue;
+                double cValue;
+                double alphaValue;
+                double betaValue;
+                double gammaValue;
 
-                if(TrigMode == '1'):
-                    std::cout << "\n>> Please Give Parameters' Values!")
-                    std::cout << ">>> HINT: You should give Parameters in angular units. You can press enter for\n>> A blank input too. Doing like this will mark the actual parameter\n>> As a missing one.")
-                    aValue = float(input("> Value for side \'A\': ") or "0")
-                    bValue = float(input("> Value for side \'B\': ") or "0")
-                    cValue = float(input("> Value for side \'C\': ") or "0")
-                    alphaValue = float(input("> Value for angle \'α\': ") or "0")
-                    betaValue = float(input("> Value for angle \'β\': ") or "0")
-                    gammaValue = float(input("> Value for angle \'γ\': ") or "0")
-
-                else if(TrigMode == '2'):
-                    pass
-                
-                else if(TrigMode == 'Q' or TrigMode == 'q'):
-                    break
-
-                else:
-                    std::cout << ">>>> ERROR: Invalid option! Try Again!")
-
-                
-                if(TrigMode == '1'):
+                if(TrigMode.compare("1") == 0)
+                {
+                    std::cout << "\n>> Please Give Parameters' Values!\n";
+                    std::cout << ">>> HINT: You should give Parameters in angular units. You can press enter for\n>> A blank input too. Doing like this will mark the actual parameter\n>> As a missing one.\n";
                     
-                    aValue, bValue, cValue, alphaValue, betaValue, gammaValue = AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue)
+                    std::cout << "> Value for side \'A\': ";
+                    std::cin >> aValue;
+                    std::cout << '\n';
 
-                    if(aValue == 0 or bValue == 0 or cValue == 0 or alphaValue == 0 or betaValue == 0 or gammaValue == 0):
-                        std::cout << "Given Data are\'nt enough to calculate the Triangle's Parameters!")
+                    std::cout << "> Value for side \'B\': ";
+                    std::cin >> bValue;
+                    std::cout << '\n';
 
+                    std::cout << "> Value for side \'C\': ";
+                    std::cin >> cValue;
+                    std::cout << '\n';
 
-                    std::cout << ">> Calculated Parameters of the Triangle:")
-                    std::cout << "Side \'A\': ", aValue)
-                    std::cout << "Side \'B\': ", bValue)
-                    std::cout << "Side \'C\': ", cValue)
-                    std::cout << "Angle \'α\': ", alphaValue)
-                    std::cout << "Angle \'β\': ", betaValue)
-                    std::cout << "Angle \'γ\': ", gammaValue)
-                    std::cout << "\n")
+                    std::cout << "> Value for angle \'α\': ";
+                    std::cin >> alphaValue;
+                    std::cout << '\n';
+
+                    std::cout << "> Value for angle \'β\': ";
+                    std::cin >> betaValue;
+                    std::cout << '\n';
+
+                    std::cout << "> Value for angle \'γ\': ";
+                    std::cin >> gammaValue;
+                    std::cout << '\n';
+                }
+
+                else if(TrigMode.compare("2") == 0)
+                {}
+                
+                else if(TrigMode.compare("Q") == 0 || TrigMode.compare("q") == 0)
+                {
+                    break;
+                }
+
+                else
+                {
+                    std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                }
+
+                
+                if(TrigMode.compare("1") == 0)
+                {
+                    
+                    std::vector<double> AstroTrianglesoutputVec = AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue);
+                    aValue = AstroTrianglesoutputVec[0];
+                    bValue = AstroTrianglesoutputVec[1];
+                    cValue = AstroTrianglesoutputVec[2];
+                    alphaValue = AstroTrianglesoutputVec[3];
+                    betaValue = AstroTrianglesoutputVec[4];
+                    gammaValue = AstroTrianglesoutputVec[5];
+
+                    if(aValue == 0 || bValue == 0 || cValue == 0 || alphaValue == 0 || betaValue == 0 || gammaValue == 0)
+                    {
+                        std::cout << "Given Data are\'nt enough to calculate the Triangle's Parameters!";
+                    }
+
+                    std::cout << ">> Calculated Parameters of the Triangle:\n";
+                    std::cout << "Side \'A\': " << aValue << '\n';
+                    std::cout << "Side \'B\': " << bValue << '\n';
+                    std::cout << "Side \'C\': " << cValue << '\n';
+                    std::cout << "Angle \'α\': " << alphaValue << '\n';
+                    std::cout << "Angle \'β\': " << betaValue << '\n';
+                    std::cout << "Angle \'γ\': " << gammaValue << '\n';
+                    std::cout << "\n";
+                }
+            }
+        }
 
 
         //   _____                 _ _       _ 
@@ -4340,7 +5062,8 @@ int main()
         //  /\__/ / |_| | | | | (_| | | (_| | |
         //  \____/ \__,_|_| |_|\__,_|_|\__,_|_|
         // Plot Sundial for Choosen Locations
-        else if(mode == '6'):
+        else if(mode == '6')
+        {
             while(1):
                 std::cout << ">> Plot Sun's Path on a Sundial at Choosen Location on Earth")
                 std::cout << ">> Please choose a mode you'd like to use!")
@@ -4353,9 +5076,8 @@ int main()
                 std::cout << '\n')
 
                 // Constants for calculation
-                Planet = OrbitDict["Earth"
-]
-                if(SundialMode == '1'):
+                Planet = "Earth"
+                if(SundialMode.compare("1") == 0):
                     std::cout << ">> Plot a Sundial on a User-defined Location\n")
                     std::cout << ">> Give Parameters!")
 
@@ -4373,7 +5095,7 @@ int main()
                     Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
 
 
-                else if(SundialMode == '2'):
+                else if(SundialMode.compare("2") == 0):
                     std::cout << ">> Plot a Sundial on a Predefined Location's Coordinates")
                     std::cout << ">> Write the Name of a Choosen Location to the Input!")
 
@@ -4399,14 +5121,14 @@ int main()
                             else:
                                 break
 
-                else if(SundialMode == 'Q' or SundialMode == 'q'):
+                else if(SundialMode.compare("Q") == 0 || SundialMode.compare("q") == 0):
                     break
 
                 else:
                     std::cout << ">>>> ERROR: Invalid option! Try Again!")
 
 
-                if(SundialMode == '1' or SundialMode == '2'):
+                if(SundialMode.compare("1") == 0 || SundialMode.compare("2") == 0):
                     std::cout << ">> For which Year would You like to Draw the Sundial?")
                     while(1):
                         SunDialYear = float(input("> Choosen Year: "))
@@ -4419,7 +5141,7 @@ int main()
                     while(1):
                         std::cout << ">> Would you like to plot the Sun's path for a Choosen Date in This Year too?")
                         SunDialChoose = input(">> Write Y for Yes or N for No: ")
-                        if(SunDialChoose.compare("Y") || SunDialChoose.compare("y") || SunDialChoose.compare("Yes") || SunDialChoose.compare("yes") || SunDialChoose.compare("YEs") || SunDialChoose.compare("yEs") || SunDialChoose.compare("yeS") || SunDialChoose.compare("YeS") || SunDialChoose.compare("yES")):
+                        if(SunDialChoose.compare("Y") == 0 || SunDialChoose.compare("y") == 0 || SunDialChoose.compare("Yes") == 0 || SunDialChoose.compare("yes") == 0 || SunDialChoose.compare("YEs") == 0 || SunDialChoose.compare("yEs") == 0 || SunDialChoose.compare("yeS") == 0 || SunDialChoose.compare("YeS") == 0 || SunDialChoose.compare("yES") == 0):
                             // Input Time Parameters
                             while(1):
                                 LocalDateMonth = int(input("> Month: "))
@@ -4431,7 +5153,7 @@ int main()
                             // Leap Year	Handling
                             while(1):
                                 LocalDateDay = int(input("> Day: "))
-                                if(LocalDateYear%4 == 0 and (LocalDateYear%100 != 0 or LocalDateYear%400 == 0)):
+                                if(LocalDateYear%4 == 0 && (LocalDateYear%100 != 0 or LocalDateYear%400 == 0)):
                                     if(MonthLengthListLeapYear[LocalDateMonth - 1] >= LocalDateDay and LocalDateDay > 0):
                                         break
                                     else:
@@ -4446,7 +5168,7 @@ int main()
 
                             break
 
-                        else if(SunDialChoose.compare("N") || SunDialChoose.compare("n") || SunDialChoose.compare("No") || SunDialChoose.compare("no") || SunDialChoose.compare("nO")):
+                        else if(SunDialChoose.compare("N") == 0 || SunDialChoose.compare("n") == 0 || SunDialChoose.compare("No") == 0 || SunDialChoose.compare("no") == 0 || SunDialChoose.compare("nO") == 0):
                             break
 
                         else:
@@ -4455,7 +5177,7 @@ int main()
                     MeasureNumber = 1000
                     FineTuned = 1000
 
-                    if(SunDialChoose.compare("Y") || SunDialChoose.compare("y") || SunDialChoose.compare("Yes") || SunDialChoose.compare("yes") || SunDialChoose.compare("YEs") || SunDialChoose.compare("yEs") || SunDialChoose.compare("yeS") || SunDialChoose.compare("YeS") || SunDialChoose.compare("yES")):
+                    if(SunDialChoose.compare("Y") == 0 || SunDialChoose.compare("y") == 0 || SunDialChoose.compare("Yes") == 0 || SunDialChoose.compare("yes") == 0 || SunDialChoose.compare("YEs") == 0 || SunDialChoose.compare("yEs") == 0 || SunDialChoose.compare("yeS") == 0 || SunDialChoose.compare("YeS") == 0 || SunDialChoose.compare("yES") == 0):
 
                         std::cout << "Choosen Date:")
                         ////// CHOOSEN DATE //////
@@ -4792,7 +5514,7 @@ int main()
                     std::cout << "September Equinox:")
                     ////// SEPTEMBER EQIUNOX //////
                     LocalDateMonthSeptember = 9
-                    if(SunDialYear%4 == 0 or (SunDialYear - 1)%4 == 0):
+                    if(SunDialYear%4 == 0 || (SunDialYear - 1)%4 == 0):
                         LocalDateDaySeptember = 22
 
                     else:
@@ -4886,7 +5608,8 @@ int main()
                     plt.grid()
                     plt.show()
 
-                    '''plt.plot(AzimuthsSummer, AltitudesSummer, '.', label="Summer Solstice")
+                    /*
+                    plt.plot(AzimuthsSummer, AltitudesSummer, '.', label="Summer Solstice")
                     plt.plot(AzimuthsWinter, AltitudesWinter, '.', label="Winter Solstice")
                     plt.plot(AzimuthsMarch, AltitudesMarch, '.', label="March Equinox")
                     plt.plot(AzimuthsSeptember, AltitudesSeptember, '.', label="Sept. Equinox")
@@ -4898,7 +5621,8 @@ int main()
                     plt.plot(AzimuthsMarch, ShadowsMarch, '.', label="March Equinox")
                     plt.plot(AzimuthsSeptember, ShadowsSeptember, '.', label="Sept. Equinox")
                     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=2, mode="expand", borderaxespad=0.)
-                    plt.show()'''
+                    plt.show()
+                    */
 
                     // Shadow's length on the ground
                     plt.title("Sun's path on Sundial")
@@ -4914,7 +5638,7 @@ int main()
                     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=2, mode="expand", borderaxespad=0.)
                     plt.grid()
                     plt.show()
-
+        }
 
 
         //    ___              _                                
@@ -4924,7 +5648,8 @@ int main()
         //  | | | | | | | (_| | |  __/ | | | | | | | | | | (_| |
         //  \_| |_/_| |_|\__,_|_|\___|_| |_| |_|_| |_| |_|\__,_|
         // Draw Sun Analemma at Choosen Location on Earth
-        else if(mode == '7'):
+        else if(mode == '7')
+        {
             while(1):
                 std::cout << ">> Plot the Sun Analemma at Choosen Location on Earth")
                 std::cout << ">> Please choose a mode you'd like to use!")
@@ -4939,7 +5664,7 @@ int main()
                 // Constants for calculation
                 Planet = OrbitDict["Earth"
 ]
-                if(AnalemmaMode == '1'):
+                if(AnalemmaMode.compare("1") == 0):
                     std::cout << ">> Plot Analemma on a User-defined Location\n")
                     std::cout << ">> Give Parameters!")
 
@@ -4957,7 +5682,7 @@ int main()
                     Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
 
 
-                else if(AnalemmaMode == '2'):
+                else if(AnalemmaMode.compare("2") == 0):
                     std::cout << ">> Plot Analemma on a Predefined Location's Coordinates")
                     std::cout << ">> Write the Name of a Choosen Location to the Input!")
 
@@ -4983,14 +5708,14 @@ int main()
                             else:
                                 break
 
-                else if(AnalemmaMode == 'Q' or AnalemmaMode == 'q'):
+                else if(AnalemmaMode.compare("Q") == 0 || AnalemmaMode.compare("q") == 0):
                     break
 
                 else:
                     std::cout << ">>>> ERROR: Invalid option! Try Again!")
 
 
-                if(AnalemmaMode == '1' or AnalemmaMode == '2'):
+                if(AnalemmaMode.compare("1") == 0 || AnalemmaMode.compare("2") == 0):
                     while(1):
                         std::cout << ">> For which Year would You like to Draw the Analemma?")
                         AnalemmaYear = float(input("> Choosen Year: "))
@@ -5011,10 +5736,10 @@ int main()
                             AltitudesAnalemma.append(AltitudeActual)
 
                     // Shadow's length on the ground
-                    if(AnalemmaMode == '1'):
+                    if(AnalemmaMode.compare("1") == 0):
                         plt.title("Sun Analemma at Cordinates " + str(Latitude) + "; " + str(Longitude))
 
-                    else if(AnalemmaMode == '2'):
+                    else if(AnalemmaMode.compare("2") == 0):
                         plt.title("Sun Analemma at " + Location)
 
                     plt.plot(LocalHourAngleAnalemma, AltitudesAnalemma, '.')
@@ -5024,7 +5749,7 @@ int main()
                     plt.xlim((12.0,12.1))
                     plt.grid()
                     plt.show()
-
+        }
 
 
         //   _   _                                         _    
@@ -5034,33 +5759,46 @@ int main()
         //  | | | | (_) | | | | | |  __/\ V  V / (_) | |  |   < 
         //  \_| |_/\___/|_| |_| |_|\___| \_/\_/ \___/|_|  |_|\_\
         // HOMEWORK MODE
-        else if(mode == 'Home' or mode == 'home' or mode == 'H' or mode == 'h' or sys.argv[0] == "H" or sys.argv[0] == "h"):
+        else if(mode == 'Home' or mode == 'home' or mode == 'H' or mode == 'h' or sys.argv[0] == "H" or sys.argv[0] == "h")
+        {
 
-            std::cout << "//////  Csillesz II end-semester homework results, solved by the program  //////")
-            std::cout << "_________________________________________________________________________")
+            std::cout << "//////  Csillesz II end-semester homework results, solved by the program  //////\n";
+            std::cout << "_________________________________________________________________________\n\n";
 
-            std::cout << "1.1/1.\n")
+            std::cout << "1.1/1.\n\n";
 
-            Location = "Szombathely"
-            Longitude = LocationDictFunc(Location)[1]
-            LocalDateYear = 2017
-            LocalDateMonth = 12
-            LocalDateDay = 27
-            LocalHours = 14
-            LocalMinutes = 0
-            LocalSeconds = 0
-            LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds, UnitedHours, UnitedMinutes, UnitedSeconds, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay)
+            std::string Location = "Szombathely";
+            double Longitude = LocationDictFunc(Location)[1];
+            double LocalDateYear = 2017;
+            double LocalDateMonth = 12;
+            double LocalDateDay = 27;
+            double LocalHours = 14;
+            double LocalMinutes = 0;
+            double LocalSeconds = 0;
 
-            std::cout << ">>> Calculate LMST at " + Location + ", at " + str(LocalHours) + ":" + str(LocalMinutes) + ":" + str(LocalSeconds) + " LT, " + str(LocalDateYear) + "." + str(LocalDateMonth) + "." + str(LocalDateDay))
-            std::cout << ">>> Used formulas:")
-            std::cout << ">>> 1. S_0 (Greenwich Mean Sidereal Time) at 00:00 UT was calculated")
-            std::cout << ">>> 2. S (Local Mean Sidereal Time) = S_0 + Longitude/15 + dS * UnitedTime\n")
+            std::vector<double> LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay);
+            double LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
+            double LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
+            double LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
+            double UnitedHours = LocalSiderealTimeCalcoutputVec[3];
+            double UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
+            double UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
+            double GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
+            double GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
+            double GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
 
-            sidmsg = ">>> The Local Mean Sidereal Time at {0}:{1}:{2} UT\n>>> in {3} with\n>>> {4}:{5}:{6} GMST at 00:00:00 UT\n>>> is {7}:{8}:{9}\n"
-            std::cout << sidmsg.format(UnitedHours, UnitedMinutes, UnitedSeconds, Location, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds, LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds))
-            std::cout << "_________________________________________________________________________")
+            std::cout << ">>> Calculate LMST at " << Location << ", at " << LocalHours << ":" << LocalMinutes << ":" << LocalSeconds << " LT, " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay;
+            std::cout << ">>> Used formulas:\n";
+            std::cout << ">>> 1. S_0 (Greenwich Mean Sidereal Time) at 00:00 UT was calculated\n";
+            std::cout << ">>> 2. S (Local Mean Sidereal Time) = S_0 + Longitude/15 + dS * UnitedTime\n\n";
 
-            std::cout << "1.1/2.\n")
+            std::stringstream sidmsg;
+            sidmsg << ">>> The Local Mean Sidereal Time at " << UnitedHours << ":" << UnitedMinutes << ":" << UnitedSeconds << " UT\n>>> in " << Location << " with\n>>> " << GreenwichSiderealHours << ":" << GreenwichSiderealMinutes << ":" << GreenwichSiderealSeconds << " GMST at 00:00:00 UT\n>>> is " << LocalSiderealHours << ":" << LocalSiderealMinutes << ":" << LocalSiderealSeconds;
+            std::string sidmsgstr = sidmsg.str();
+            std::cout << sidmsgstr << '\n';
+            std::cout << "_________________________________________________________________________\n\n";
+
+            std::cout << "1.1/2.\n\n";
 
             Location = "Szeged"
             Latitude = LocationDictFunc(Location)[0]
@@ -5088,8 +5826,8 @@ int main()
 
             std::cout << "1.1/3.\n")
 
-            Planet = OrbitDict["Earth"
-]            Location = "Piszkesteto"
+            Planet = "Earth"
+            Location = "Piszkesteto"
             Latitude = LocationDictFunc(Location)[0]
             Longitude = LocationDictFunc(Location)[1]
             LocalDateYear = 2018
@@ -5291,9 +6029,9 @@ int main()
             std::cout << ">>> These 2 equations outputs 2-2 values for Local Hour Angle. 1-1 from both\n>>> These outputs will be equal, and that's the correct value for LHA.")
             std::cout << ">>> 5. Right Ascension was also calculated: RA = S - t; t = 15 * H\n")
 
-            std::cout << ">>> Initial Coordinates:")
-            std::cout << ">>> Azimuth: ", Azimuth)
-            std::cout << ">>> Altitude: ", Altitude)
+            std::cout << ">>> Initial Coordinates:\n";
+            std::cout << ">>> Azimuth: " << Azimuth;
+            std::cout << ">>> Altitude: " << Altitude;
 
             equIImsg = "\n>>> Calculated Parameters of the Star in Equatorial II Coord. Sys. from {0}:"
             std::cout << equIImsg.format(Location))
@@ -5307,26 +6045,30 @@ int main()
             std::cout << RAmsg.format(RightAscensionHours, RightAscensionMinutes, RightAscensionSeconds))
             std::cout << sidermsg.format(LocalSiderealTimeHours, LocalSiderealTimeMinutes, LocalSiderealTimeSeconds))
 
-            std::cout << "_________________________________________________________________________")
+            std::cout << "_________________________________________________________________________\n\n")
 
-            std::cout << "1.3\n")
+            std::cout << "1.3\n\n";
 
-            std::cout << ">>> For the Sundial, do the following:")
-            std::cout << ">>> 1. Choose mode \'6\'")
-            std::cout << ">>> 2. Choose eg. Predefined Locations with option \'2\'")
-            std::cout << ">>> 3. Write eg. \'Budapest\'")
-            std::cout << ">>> 4. Year = 2018")
-            std::cout << ">>> 5. Select \'N\' for \'Choosen Date\'")
-            std::cout << ">>> The graph shows the Sun's path on the sky at daylight, which will be\n>>> Projected on the ground, eg. on a Sundial.")
-            std::cout << ">>> It also shows, that shadows are longer in Winter, and\n>>> Shorter in Summer. In March and September, the shadows'\n>>> Length are in-between these two.\n\n")
-
+            std::cout << ">>> For the Sundial, do the following:\n";
+            std::cout << ">>> 1. Choose mode \'6\'\n";
+            std::cout << ">>> 2. Choose eg. Predefined Locations with option \'2\'";
+            std::cout << ">>> 3. Write eg. \'Budapest\'\n";
+            std::cout << ">>> 4. Year = 2018\n";
+            std::cout << ">>> 5. Select \'N\' for \'Choosen Date\'\n";
+            std::cout << ">>> The graph shows the Sun's path on the sky at daylight, which will be\n>>> Projected on the ground, eg. on a Sundial.\n";
+            std::cout << ">>> It also shows, that shadows are longer in Winter, and\n>>> Shorter in Summer. In March and September, the shadows'\n>>> Length are in-between these two.\n\n";
+        }
 
         // MAIN MENU MODE
         // QUIT PROGRAM
-        else if(mode == 'Q' or mode == 'q'):
-            std::cout << "////////    Developed by Balazs Pal, ELTE    ////////")
+        else if(mode.compare("Q") == 0 || mode.compare("q") == 0)
+        {
+            std::cout << "////////    Developed by Balazs Pal, ELTE    ////////";
             exit()
+        }
 
-        else:
-            std::cout << ">>>> ERROR: Invalid option! Try Again!")
+        else
+        {
+            std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+        }
 }
