@@ -2325,9 +2325,9 @@ int main()
 
         // Choose mode by user input
         std::string mode;
-        std::cout << "> Choose a mode and press enter...: ";
+        std::cout << "\n> Choose a mode and press enter...: ";
         std::cin >> mode;
-        std::cout << '\n\n';
+        std::cout << '\n\n\n';
 
         //    _____                    _    _____              _____                 
         //   / ____|                  | |  / ____|            / ____|                
@@ -2353,10 +2353,9 @@ int main()
                 std::cout << "(Q) Quit to Main Menu\n";
 
                 std::string CoordMode;
-                std::cout << "> Choose a number and press enter...: ";
+                std::cout << "\n> Choose a number and press enter...: ";
                 std::cin >> CoordMode;
-
-                std::cout << '\n';
+                std::cout << '\n\n';
 
                 //  __  
                 // /  | 
@@ -2374,9 +2373,9 @@ int main()
                     std::cout << ">> Write \'1\' for User defined Coordinates, and write \'2\' for Predefined Locations' Coordinates!\n";
 
                     std::string HorToEquILocationChoose;
-                    std::cout << ">> (1) User Defined, (2) Predefined: ";
+                    std::cout << "\n>> (1) User Defined, (2) Predefined: ";
                     std::cin >> HorToEquILocationChoose;
-                    std::cout << '\n';
+                    std::cout << '\n\n';
 
                     double Latitude;
                     double LocalSiderealTime;
@@ -2385,7 +2384,8 @@ int main()
                     {
                         if(HorToEquILocationChoose.compare("1") == 0)
                         {
-                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
+                            std::cout << ">> User Defined Parameters\n";
+                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
                             
                             double LatitudeHours;
                             double LatitudeMinutes;
@@ -2408,20 +2408,21 @@ int main()
                         {
                             while(1)
                             {
+                                std::cout << ">> Predefined Parameters\n";
                                 std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
                                 std::string Location;
-                                std::cout << "> Location's name (type \'H\' for Help): ";
+                                std::cout << "\n> Location's name (type \'H\' for Help): ";
                                 std::cin >> Location;
                                 std::cout << '\n';
 
                                 if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
                                 {
-                                    std::cout << "\n>> Predefined Locations you can choose from:";
+                                    std::cout << "\n>> Predefined Locations you can choose from:\n";
 
                                     for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
                                     {
-                                        std::cout << Locations->first << " " << Locations->second[0] << " " << Locations->second[1] << "\n";
+                                        std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << "\n";
                                     }
 
                                     std::cout << '\n';
@@ -2444,8 +2445,8 @@ int main()
                                     }
                                     catch(std::string Location)
                                     {
-                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!";
-                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!";
+                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!\n";
+                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n";
                                     }
                                 }
                             }
@@ -2454,7 +2455,7 @@ int main()
 
                         else
                         {
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
                         }
                     }
 
@@ -2487,17 +2488,17 @@ int main()
                     std::cout << '\n';
                     double Azimuth = AzimuthHours + AzimuthMinutes/60 + AzimuthSeconds/3600;
 
-                    std::cout << "Is Local Mean Sidereal Time given?";
+                    std::cout << "\n>> Is Local Mean Sidereal Time given?\n";
                     while(1)
                     {
                         std::string HorToEquIChoose;
-                        std::cout << "Write \'Y\' or \'N\' (Yes or No)";
+                        std::cout << ">> Write \'Y\' or \'N\' (Yes or No): ";
                         std::cin >> HorToEquIChoose;
                         std::cout << '\n';
 
-                        if(HorToEquIChoose == "Y" or HorToEquIChoose == "y" or HorToEquIChoose == "Yes" or HorToEquIChoose == "yes" or HorToEquIChoose == "YEs" or HorToEquIChoose == "yEs" or HorToEquIChoose == "yeS" or HorToEquIChoose == "YeS" or HorToEquIChoose == "yES")
+                        if(HorToEquIChoose.compare("Y") || HorToEquIChoose.compare("y") || HorToEquIChoose.compare("Yes") || HorToEquIChoose.compare("yes") || HorToEquIChoose.compare("YEs") || HorToEquIChoose.compare("yEs") || HorToEquIChoose.compare("yeS") || HorToEquIChoose.compare("YeS") || HorToEquIChoose.compare("yES"))
                         {
-                            std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
+                            std::cout << "\n>> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
                             double LocalSiderealTimeHours;
                             double LocalSiderealTimeMinutes;
                             double LocalSiderealTimeSeconds;
@@ -2510,7 +2511,7 @@ int main()
                             std::cout << '\n';
                             std::cout << "> Local Mean Sidereal Time (S) Seconds: ";
                             std::cin >> LocalSiderealTimeSeconds;
-                            std::cout << '\n';
+                            std::cout << '\n\n';
                             LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600;
 
                             break;
@@ -2524,7 +2525,7 @@ int main()
 
                         else
                         {
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
                         }
                     }
 
@@ -2537,31 +2538,32 @@ int main()
                     double Declination = HorToEquIoutputVec[1];
                     double LocalHourAngle = HorToEquIoutputVec[2];
 
+                    // Print Results
+                    std::cout << "\n> Calculated parameters in Equatorial I Coord. Sys.:\n";
+                    
+                    // Declination
                     int DeclinationHours = int(Declination);
                     int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
                     int DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60);
 
+                    std::stringstream declinmsg;
+                    declinmsg << "- Declination (δ): "<< DeclinationHours << "°" << DeclinationMinutes << "\'" << DeclinationSeconds << "\"";
+                    std::string declinmsgstr = declinmsg.str();
+                    std::cout << declinmsgstr << '\n';
+
+                    // Local Hour Angle
                     int LocalHourAngleHours = int(LocalHourAngle);
                     int LocalHourAngleMinutes = int((LocalHourAngle - LocalHourAngleHours) * 60);
                     int LocalHourAngleSeconds = int((((LocalHourAngle - LocalHourAngleHours) * 60) - LocalHourAngleMinutes) * 60);
 
-                    // Print Results
-                    std::cout << "\n> Calculated parameters in Equatorial I Coord. Sys.:";
-                    
-                    std::stringstream declinmsg;
                     std::stringstream hourangmsg;
-                    declinmsg << "- Declination (δ): "<< DeclinationHours << "°" << DeclinationMinutes << "\'" << DeclinationSeconds << "\"";
-                    hourangmsg << "- Local Hour Angle (t): " << DeclinationHours<< "h" << DeclinationMinutes << "m" << DeclinationSeconds << "s";
-                    
-                    std::string declinmsgstr = declinmsg.str();
-                    std::string hourangmsgstr = hourangmsg.str();
-
-                    std::cout << declinmsgstr << '\n';
+                    hourangmsg << "- Local Hour Angle (t): " << LocalHourAngleHours<< "h" << LocalHourAngleMinutes << "m" << LocalHourAngleSeconds << "s";
+                    std::string hourangmsgstr = hourangmsg.str();                    
                     std::cout << hourangmsgstr << '\n';
                     
                     if(LocalSiderealTime != NULL)
                     {
-                        
+                        // Right Ascension
                         int RightAscensionHours = int(RightAscension);
                         int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
                         int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
@@ -2592,9 +2594,9 @@ int main()
                     std::cout << ">> Write \'1\' for User defined Coordinates, and write \'2\' for Predefined Locations' Coordinates!\n";
 
                     std::string HorToEquIILocationChoose;
-                    std::cout << ">> (1) User Defined, (2) Predefined: ";
+                    std::cout << "\n>> (1) User Defined, (2) Predefined: ";
                     std::cin >> HorToEquIILocationChoose;
-                    std::cout << "\n";
+                    std::cout << "\n\n";
 
                     double Latitude;
                     double LocalSiderealTime;
@@ -2603,7 +2605,8 @@ int main()
                     {
                         if(HorToEquIILocationChoose.compare("1") == 0)
                         {
-                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                            std::cout << ">> User Defined Parameters\n";
+                            std::cout << "\n>> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
                             
                             double LatitudeHours;
                             double LatitudeMinutes;
@@ -2617,7 +2620,7 @@ int main()
                             std::cout << '\n';
                             std::cout << "> Latitude (φ) Seconds: ";
                             std::cin >> LatitudeSeconds;
-                            std::cout << '\n';
+                            std::cout << '\n\n';
                             Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
                             break;
                         }
@@ -2626,20 +2629,21 @@ int main()
                         {
                             while(1)
                             {
+                                std::cout << ">> Predefined Parameters\n";
                                 std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
                                 std::string Location;
-                                std::cout << "> Location's name (type \'H\' for Help): ";
+                                std::cout << "\n> Location's name (type \'H\' for Help): ";
                                 std::cin >> Location;
                                 std::cout << '\n';
 
                                 if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
                                 {
-                                    std::cout << "\n>> Predefined Locations you can choose from:";
+                                    std::cout << "\n>> Predefined Locations you can choose from:\n";
 
                                     for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
                                     {
-                                        std::cout << Locations->first << " " << Locations->second[0] << " " << Locations->second[1] << "\n";
+                                        std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << "\n";
                                     }
 
                                     std::cout << '\n';
@@ -2662,8 +2666,8 @@ int main()
                                     }
                                     catch(std::string Location)
                                     {
-                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!";
-                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!";
+                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!\n";
+                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n\n";
                                     }
                                 }
                             }
@@ -2672,7 +2676,7 @@ int main()
 
                         else
                         {
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
                         }
                     }
 
@@ -2683,7 +2687,9 @@ int main()
                     double AzimuthMinutes;
                     double AzimuthSeconds;
 
-                    std::cout << "> Altitude (m) Hours: ";
+                    std::cout << "\n\n>> HINT: You can write Altitude and Azimuth as a Decimal Fraction. For this you\n>> Need to write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+
+                    std::cout << "\n> Altitude (m) Hours: ";
                     std::cin >> AltitudeHours;
                     std::cout << '\n';
                     std::cout << "> Altitude (m) Minutes: ";
@@ -2694,7 +2700,7 @@ int main()
                     std::cout << '\n';
                     double Altitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600;
 
-                    std::cout <<  "> Azimuth (A) Hours: ";
+                    std::cout <<  "\n> Azimuth (A) Hours: ";
                     std::cin >> AzimuthHours;
                     std::cout << '\n';
                     std::cout <<  "> Azimuth (A) Minutes: ";
@@ -2705,12 +2711,12 @@ int main()
                     std::cout << '\n';
                     double Azimuth = AzimuthHours + AzimuthMinutes/60 + AzimuthSeconds/3600;
                     
-                    std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
+                    std::cout << "\n\n>> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
                     double LocalSiderealTimeHours;
                     double LocalSiderealTimeMinutes;
                     double LocalSiderealTimeSeconds;
 
-                    std::cout << "> Local Mean Sidereal Time (S) Hours: ";
+                    std::cout << "\n> Local Mean Sidereal Time (S) Hours: ";
                     std::cin >> LocalSiderealTimeHours;
                     std::cout << '\n';
                     std::cout << "> Local Mean Sidereal Time (S) Minutes: ";
@@ -2726,31 +2732,34 @@ int main()
                     double Declination = HorToEquIIoutputVec[1];
                     double LocalSiderealTime = HorToEquIIoutputVec[2];
 
-                    int DeclinationHours = int(Declination);
-                    int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
-                    int DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60);
-
-                    int RightAscensionHours = int(RightAscension);
-                    int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
-                    int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
-
-                    int LocalSiderealTimeHours = int(LocalSiderealTime);
-                    int LocalSiderealTimeMinutes = int((LocalSiderealTime - LocalSiderealTimeHours) * 60);
-                    int LocalSiderealTimeSeconds = int((((LocalSiderealTime - LocalSiderealTimeHours) * 60) - LocalSiderealTimeMinutes) * 60);
-
 
                     // Print Results
                     std::cout << "\n> Calculated Parameters in Equatorial II Coord. Sys.:";
+
+                    // Declination
+                    int DeclinationHours = int(Declination);
+                    int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
+                    int DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60);
 
                     std::stringstream declinmsg;
                     declinmsg << "- Declination (δ): " << DeclinationHours << "°" << DeclinationMinutes << "\'" << DeclinationSeconds << "\"";
                     std::string declinmsgstr = declinmsg.str();
                     std::cout << declinmsgstr << '\n';
 
+                    // Right Ascension
+                    int RightAscensionHours = int(RightAscension);
+                    int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
+                    int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
+
                     std::stringstream RAmsg;
                     RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
                     std::string RAmsgstr = RAmsg.str();
                     std::cout << RAmsgstr << '\n';
+
+                    // Local Mean Sidereal Time
+                    int LocalSiderealTimeHours = int(LocalSiderealTime);
+                    int LocalSiderealTimeMinutes = int((LocalSiderealTime - LocalSiderealTimeHours) * 60);
+                    int LocalSiderealTimeSeconds = int((((LocalSiderealTime - LocalSiderealTimeHours) * 60) - LocalSiderealTimeMinutes) * 60);
 
                     std::stringstream sidermsg;
                     sidermsg << "- Local Mean Sidereal Time (S): " << LocalSiderealTimeHours << "h" << LocalSiderealTimeMinutes << "m" << LocalSiderealTimeSeconds << "s";
@@ -2769,198 +2778,432 @@ int main()
                 // 3. Equatorial I to Horizontal Coordinate System
                 else if(CoordMode.compare("3") == 0)
                 {
-                    std::cout << ">> Conversion from Equatorial I to Horizontal Coordinate System";
+                    std::cout << ">> Conversion from Equatorial I to Horizontal Coordinate System\n";
                     std::cout << ">> Give Parameters!\n";
+
+                    double Latitude;
+                    double Declination;
+                    double RightAscension;
+                    double Azimuth;
+                    double Altitude;
+                    double LocalHourAngle;
+                    double LocalSiderealTime;
                     
-                    while(1):
-                        std::cout << ">>> LOCATION")
-                        std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> Or would like to choose a predefined Location's Coordinates?")
-                        std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for Predefined Locations' Coordinates!")
+                    while(1)
+                    {
+                        std::cout << "\n>>> LOCATION\n";
+                        std::cout << ">> Would you like to give Geographical Coordinates by yourself,\n>> Or would like to choose a predefined Location's Coordinates?\n";
+                        std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for Predefined Locations' Coordinates!\n";
 
-                        EquIToHorLocationChoose = input(">> (1) User Defined, (2) Predefined: ")
+                        std::string EquIToHorLocationChoose;
+                        std::cout << ">> (1) User Defined, (2) Predefined: ";
+                        std::cin >> EquIToHorLocationChoose;
+                        std::cout << '\n\n';
 
-                        if(EquIToHorLocationChoose == '1'):
-                            std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                            LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
-                            LatitudeMinutes = float(input("> Latitude (φ) Minutes: ") or "0")
-                            LatitudeSeconds = float(input("> Latitude (φ) Seconds: ") or "0")
-                            Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
-                            break
+                        if(EquIToHorLocationChoose.compare("1") == 0)
+                        {
+                            std::cout << ">> User Defined Parameters\n";
+                            std::cout << "\n\n>> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                            
+                            double LatitudeHours;
+                            double LatitudeMinutes;
+                            double LatitudeSeconds;
+                            
+                            std::cout << "\n> Latitude (φ) Hours: ";
+                            std::cin >> LatitudeHours;
+                            std::cout << '\n';
+                            std::cout << "> Latitude (φ) Minutes: ";
+                            std::cin >> LatitudeMinutes;
+                            std::cout << '\n';
+                            std::cout << "> Latitude (φ) Seconds: ";
+                            std::cin >> LatitudeSeconds;
+                            std::cout << '\n';
+                            Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
+                            break;
+                        }
+
+                        else if(EquIToHorLocationChoose.compare("2") == 0)
+                        {
+                            while(1)
+                            {
+                                std::cout << ">> Predefined Parameters\n";
+                                std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
+
+                                std::string Location;
+                                std::cout << "\n> Location's name (type \'H\' for Help): ";
+                                std::cin >> Location;
+                                std::cout << '\n';
+
+                                if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
+                                {
+                                    std::cout << ">> Predefined Locations you can choose from:\n";
+
+                                    for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                                    {
+                                        std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << '\n';
+                                    }
+
+                                    std::cout << '\n';
+                                }
+
+                                else
+                                {
+                                    try
+                                    {
+                                        Latitude = LocationDict[Location][0];
+                                    
+                                        if(LocationDict.find(Location) != LocationDict.end())
+                                        {
+                                            throw Location;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    catch(std::string Location)
+                                    {
+                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!\n";
+                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n";
+                                    }
+                                }
+                            }
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                        }
+                    }
+
+                    while(1)
+                    {
+                        std::cout << "\n>>> STELLAR OBJECT\n";
+                        std::cout << ">> Would you like to give the stellar object's Coordinates by yourself,\n>> Or would like to choose a Predefined Object's Coordinates?\n";
+                        std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for a Predefined Stellar Object's Coordinates!\n";
+
+                        std::string EquIToHorStellarChoose;
+                        std::cout << ">> (1) User Defined, (2) Predefined: ";
+                        std::cin >> EquIToHorStellarChoose;
+                        std::cout << '\n\n';
                         
-                        else if(EquIToHorLocationChoose == '2'):
-                            while(1):
-                                Location = input("> Location's name (type \'H\' for Help): ")
+                        if(EquIToHorStellarChoose.compare("1") == 0)
+                        {
+                            std::cout << ">> User Defined Parameters\n";
+                            std::cout << ">> Which Parameter Is given?\n";
+                            std::cout << ">> Declination is essential for calculation Horizontal Coordinates!\n>> Right Ascension only, isn't enough for calculating these parameters!\n";
+                            
+                            std::string RAorDecEquIToHorChoose;
+                            std::cout << ">> Only Declination (write \'D\'), Or both of\n>> Right Ascension and Declination (write \'B\')?: ";
+                            std::cin >> RAorDecEquIToHorChoose;
+                            std::cout << '\n';
 
-                                if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
-                                    std::cout << "\n>> Predefined Locations you can choose from:")
-                                    for keys in LocationDict.items():
-                                        std::cout << keys)
-                                    std::cout << '\n')
+                            if(RAorDecEquIToHorChoose.compare("D") || RAorDecEquIToHorChoose.compare("d"))
+                            {
+                                RightAscension = NULL;
+
+                                std::cout << "\n\n>> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+
+                                double DeclinationHours;
+                                double DeclinationMinutes;
+                                double DeclinationSeconds;
                                 
-                                else:
-                                    try:
-                                        Latitude = LocationDictFunc(Location)[0]
+                                std::cout << "\n> Declination (δ) Hours: ";
+                                std::cin >> DeclinationHours;
+                                std::cout << '\n';
+                                std::cout << "> Declination (δ) Minutes: ";
+                                std::cin >> DeclinationMinutes;
+                                std::cout << '\n';
+                                std::cout << "> Declination (δ) Seconds: ";
+                                std::cin >> DeclinationSeconds;
+                                std::cout << '\n';
+                                Declination = DeclinationHours + DeclinationMinutes/60 + DeclinationSeconds/3600;
+                                break;
+                            }
 
-                                    except KeyError:
-                                        std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!")
-                                        std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
-                                        
-                                    else:
-                                        break
+                            else if(RAorDecEquIToHorChoose.compare("B") || RAorDecEquIToHorChoose.compare("b"))
+                            {
+                                std::cout << "\n>> HINT: You can write RA and Declination as a Decimal Fraction.\n>> For this you need to write Hours as a float-type value, then\n>> You can Press Enter for both Minutes and Seconds.\n";
 
-                            break
-                                
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
-                    
-                    while(1):
-                        std::cout << "\n>>> STELLAR OBJECT")
-                        std::cout << ">> Would you like to give the stellar object's Coordinates by yourself,\n>> Or would like to choose a Predefined Object's Coordinates?")
-                        std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for a Predefined Stellar Object's Coordinates!")
+                                double DeclinationHours;
+                                double DeclinationMinutes;
+                                double DeclinationSeconds;
+                                double RightAscensionHours;
+                                double RightAscensionMinutes;
+                                double RightAscensionSeconds;
 
-                        EquIToHorStellarChoose = input(">> (1) User Defined, (2) Predefined: ")
-                        
-                        if(EquIToHorStellarChoose == '1'):
-                            std::cout << "\n>> Which Parameter Is given?")
-                            std::cout << ">> Declination is essential for calculation Horizontal Coordinates!\n>> Right Ascension only, isn't enough for calculating these parameters!")
-                            RAorDecEquIToHorChoose = input(">> Only Declination (write \'D\'), Or both of\n>> Right Ascension and Declination (write \'B\')?: ")
+                                std::cout << "\n> Right Ascension (α) Hours: ";
+                                std::cin >> RightAscensionHours;
+                                std::cout << '\n';
+                                std::cout << "> Right Ascension (α) Minutes: ";
+                                std::cin >> RightAscensionMinutes;
+                                std::cout << '\n';
+                                std::cout << "> Right Ascension (α) Seconds: ";
+                                std::cin >> RightAscensionSeconds;
+                                std::cout << '\n';
+                                RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600;
 
-                            if(RAorDecEquIToHorChoose == 'D' or RAorDecEquIToHorChoose == 'd'):
-                                RightAscension = NULL
+                                std::cout << "\n> Declination (δ) Hours: ";
+                                std::cin >> DeclinationHours;
+                                std::cout << '\n';
+                                std::cout << "> Declination (δ) Minutes: ";
+                                std::cin >> DeclinationMinutes;
+                                std::cout << '\n';
+                                std::cout << "> Declination (δ) Seconds: ";
+                                std::cin >> DeclinationSeconds;
+                                std::cout << '\n';
+                                Declination = DeclinationHours + DeclinationMinutes/60 + DeclinationSeconds/3600;
+                                break;
+                            }
 
-                                std::cout << "\n>> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                                DeclinationHours = float(input("\n> Declination (δ) Hours: ") or "0")
-                                DeclinationMinutes = float(input("> Declination (δ) Minutes: ") or "0")
-                                DeclinationSeconds = float(input("> Declination (δ) Seconds: ") or "0")
-                                Declination = DeclinationHours + DeclinationMinutes/60 + DeclinationSeconds/3600
-                                break
+                            else
+                            {
+                                std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'D\' or \'B\'!\n";
+                            }
+                        }
 
-                            else if(RAorDecEquIToHorChoose == 'B' or RAorDecEquIToHorChoose == 'b'):
-                                std::cout << "\n>> HINT: You can write RA and Declination as a Decimal Fraction.\n>> For this you need to write Hours as a float-type value, then\n>> You can Press Enter for both Minutes and Seconds.")
-                                RightAscensionHours = float(input("\n> Right Ascension (α) Hours: ") or "0")
-                                RightAscensionMinutes = float(input("> Right Ascension (α) Minutes: ") or "0")
-                                RightAscensionSeconds = float(input("> Right Ascension (α) Seconds: ") or "0")
-                                RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600
+                        else if(EquIToHorStellarChoose.compare("2"))
+                        {
+                            while(1)
+                            {
+                                std::map<std::string, std::vector<double>> StellarDict = StellarDictFunc();
 
-                                DeclinationHours = float(input("\n> Declination (δ) Hours: ") or "0")
-                                DeclinationMinutes = float(input("> Declination (δ) Minutes: ") or "0")
-                                DeclinationSeconds = float(input("> Declination (δ) Seconds: ") or "0")
-                                Declination = DeclinationHours + DeclinationMinutes/60 + DeclinationSeconds/3600
-                                break
+                                std::string StellarObject;
+                                std::cout << "> Stellar object's name (type \'H\' for Help): ";
+                                std::cin >> StellarObject;
+                                std::cout << '\n';
 
-                            else:
-                                std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'D\' or \'B\'!")
+                                if(StellarObject.compare("Help") == 0 || StellarObject.compare("help") == 0 || StellarObject.compare("H") == 0 || StellarObject.compare("h") == 0)
+                                {
+                                    std::cout << ">> Predefined Objects you can choose from: \n";
 
-                        else if(EquIToHorStellarChoose == '2'):
-                            while(1):
-                                StellarObject = input("> Stellar object's name (type \'H\' for Help): ")
+                                    for(auto Objects = StellarDict.cbegin(); Objects != StellarDict.cend(); ++Objects)
+                                    {
+                                        std::cout << Objects->first << ": " << Objects->second[0] << "h ; " << Objects->second[1] << "°" << "\n";
+                                    }
 
-                                if(StellarObject == "Help" or StellarObject == "help" or StellarObject == "H" or StellarObject == "h"):
-                                    std::cout << "\n>> Predefined Objects you can choose from:")
-                                    for keys in StellarDict.items():
-                                        std::cout << keys)
-                                    std::cout << '\n')
-                                
-                                else:
-                                    try:
-                                        TestVariable = StellarDict[StellarObject][0]
-                                        del TestVariable
+                                    std::cout << '\n';
+                                }
 
-                                    except KeyError:
-                                        std::cout << ">>>> ERROR: The Stellar Object, named \"" + StellarObject + "\" is not in the Database!")
-                                        std::cout << ">>>> Type \"Help\" to list Available Stellar Objects in Database!")
+                                else
+                                {
+                                    try
+                                    {
+                                        double TestVariable = StellarDict[StellarObject][0];
+                                    
+                                        if(StellarDict.find(StellarObject) != StellarDict.end())
+                                        {
+                                            throw StellarObject;
+                                        }
+                                        else
+                                        {
+                                            std::cout << ">> Which Parameter Is given?\n";
+                                            std::cout << ">> Declination is essential for calculation Horizontal Coordinates!\n>> Right Ascension only, isn't enough for calculating these parameters!\n";
+                                            
+                                            std::string RAorDecEquIToHorChoose;
+                                            std::cout << ">> Only Declination (write \'D\'), Or both of\n>> Right Ascension and Declination (write \'B\')?: ";
+                                            std::cin >> RAorDecEquIToHorChoose;
+                                            std::cout << '\n';
 
-                                    else:
-                                        std::cout << ">> Which Parameter Is given?")
-                                        std::cout << ">> Declination is essential for calculation Horizontal Coordinates!\n>> Right Ascension only, isn't enough for calculating these parameters!")
-                                        RAorDecEquIToHorChoose = input(">> Only Declination (write \'D\'), Or both of\n>> Right Ascension and Declination (write \'B\')?: ")
+                                            if(RAorDecEquIToHorChoose.compare("D") or RAorDecEquIToHorChoose.compare("d"))
+                                            {
+                                            
+                                                RightAscension = NULL;
+                                                Declination = StellarDict[StellarObject][1];
+                                                break;
+                                            }
 
-                                        if(RAorDecEquIToHorChoose == 'D' or RAorDecEquIToHorChoose == 'd'):
-                                            RightAscension = NULL
-                                            Declination = StellarDict[StellarObject][1]
-                                            break
+                                            else if(RAorDecEquIToHorChoose.compare("B") or RAorDecEquIToHorChoose.compare("b"))
+                                            {
+                                                RightAscension = StellarDict[StellarObject][0];
+                                                Declination = StellarDict[StellarObject][1];
+                                                break;
+                                            }
 
-                                        else if(RAorDecEquIToHorChoose == 'B' or RAorDecEquIToHorChoose == 'b'):
-                                            RightAscension = StellarDict[StellarObject][0]
-                                            Declination = StellarDict[StellarObject][1]
-                                            break
+                                            else
+                                            {
+                                                std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'D\' or \'B\'!\n";
+                                            }
+                                        }
+                                    }
+                                    catch(std::string StellarObject)
+                                    {
+                                        std::cout << ">>>> ERROR: The Stellar Object, named \"" + StellarObject + "\" is not in the Database!\n";
+                                        std::cout << ">>>> Type \"Help\" to list Available Stellar Objects in Database!\n";
+                                    }
+                                }
+                            }
 
-                                        else:
-                                            std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'D\' or \'B\'!")
-                            break
+                            break;
+                        }
 
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                        }
+                    }
 
-                    if(RightAscension != NULL and Declination != NULL):
-                        while(1):
-                            std::cout << "\n>> Is Local Mean Sidereal Time (S) given?")
-                            EquIToHorChoose1 = input(">> Write \'Y\' or \'N\' (Yes or No): ")
+                    if(RightAscension != NULL and Declination != NULL)
+                    {
+                        while(1)
+                        {
+                            std::cout << "\n>> Is Local Mean Sidereal Time (S) given?\n";
 
-                            if(EquIToHorChoose1 == "Y" or EquIToHorChoose1 == "y" or EquIToHorChoose1 == "Yes" or EquIToHorChoose1 == "yes" or EquIToHorChoose1 == "YEs" or EquIToHorChoose1 == "yEs" or EquIToHorChoose1 == "yeS" or EquIToHorChoose1 == "YeS" or EquIToHorChoose1 == "yES"):
-                                std::cout << "\n>> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                                LocalSiderealTimeHours = float(input("\n> Local Mean Sidereal Time (S) Hours: ") or "0")
-                                LocalSiderealTimeMinutes = float(input("> Local Mean Sidereal Time (S) Minutes: ") or "0")
-                                LocalSiderealTimeSeconds = float(input("> Local Mean Sidereal Time (S) Seconds: ") or "0")
-                                LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600
+                            std::string EquIToHorChoose1;
+                            std::cout << ">> Write \'Y\' or \'N\' (Yes or No): ";
+                            std::cin >> EquIToHorChoose1;
+                            std::cout << '\n';
 
-                                Altitude = NULL
-                                break
+                            if(EquIToHorChoose1.compare("Y") || EquIToHorChoose1.compare("y") || EquIToHorChoose1.compare("Yes") || EquIToHorChoose1.compare("yes") || EquIToHorChoose1.compare("YEs") || EquIToHorChoose1.compare("yEs") || EquIToHorChoose1.compare("yeS") || EquIToHorChoose1.compare("YeS") || EquIToHorChoose1.compare("yES"))
+                            {
+                                std::cout << "\n\n>> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
 
-                            else if(EquIToHorChoose1 == 'N' or EquIToHorChoose1 == 'n' or EquIToHorChoose1 == 'No' or EquIToHorChoose1 == 'no' or EquIToHorChoose1 == 'nO'):
-                                LocalSiderealTime = NULL
+                                double LocalSiderealTimeHours;
+                                double LocalSiderealTimeMinutes;
+                                double LocalSiderealTimeSeconds;
 
-                                std::cout << "\n>> Is Local Hour Angle given?")
-                                EquIToHorChoose2 = input(">> Write \'Y\' or \'N\' (Yes or No): ")
+                                std::cout << "\n> Local Mean Sidereal Time (S) Hours: ";
+                                std::cin >> LocalSiderealTimeHours;
+                                std::cout << '\n';
+                                std::cout << "> Local Mean Sidereal Time (S) Minutes: ";
+                                std::cin >> LocalSiderealTimeMinutes;
+                                std::cout << '\n';
+                                std::cout << "> Local Mean Sidereal Time (S) Seconds: ";
+                                std::cin >> LocalSiderealTimeSeconds;
+                                std::cout << '\n';
+                                LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600;
 
-                                if(EquIToHorChoose2 == "Y" or EquIToHorChoose2 == "y" or EquIToHorChoose2 == "Yes" or EquIToHorChoose2 == "yes" or EquIToHorChoose2 == "YEs" or EquIToHorChoose2 == "yEs" or EquIToHorChoose2 == "yeS" or EquIToHorChoose2 == "YeS" or EquIToHorChoose2 == "yES"):
-                                    std::cout << "\n>> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                                    LocalHourAngleHours = float(input("\n> Local Hour Angle (t) Hours: ") or "0")
-                                    LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
-                                    LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
-                                    LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
+                                Altitude = NULL;
+                                break;
+                            }
 
-                                    Altitude = NULL
-                                    break
+                            else if(EquIToHorChoose1.compare("N") || EquIToHorChoose1.compare("n") || EquIToHorChoose1.compare("No") || EquIToHorChoose1.compare("no") || EquIToHorChoose1.compare("nO"))
+                            {
+                                LocalSiderealTime = NULL;
 
-                                else if(EquIToHorChoose2 == 'N' or EquIToHorChoose2 == 'n' or EquIToHorChoose2 == 'No' or EquIToHorChoose2 == 'no' or EquIToHorChoose2 == 'nO'):
-                                    LocalHourAngle = NULL
-                                    std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.")
+                                std::cout << "\n>> Is Local Hour Angle given?";
 
-                                    Azimuth == NULL
-                                    AltitudeHours = float(input("> Altitude (m) Hours: ") or "0")
-                                    AltitudeMinutes = float(input("> Altitude (m) Minutes: ") or "0")
-                                    AltitudeSeconds = float(input("> Altitude (m) Seconds: ") or "0")
-                                    ALtitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600
-                                    break
+                                std::string EquIToHorChoose2;
+                                std::cout << ">> Write \'Y\' or \'N\' (Yes or No): ";
+                                std::cin >> EquIToHorChoose2;
+                                std::cout << '\n';
 
-                    else if(Declination != NULL and RightAscension == NULL):
-                        while(1):
-                            std::cout << "\n>> Is Local Hour Angle (t) given?")
-                            EquIToHorChooseD = input(">> Write \'Y\' or \'N\' (Yes or No): ")
+                                if(EquIToHorChoose2.compare("Y") || EquIToHorChoose2.compare("y") || EquIToHorChoose2.compare("Yes") || EquIToHorChoose2.compare("yes") || EquIToHorChoose2.compare("YEs") || EquIToHorChoose2.compare("yEs") || EquIToHorChoose2.compare("yeS") || EquIToHorChoose2.compare("YeS") || EquIToHorChoose2.compare("yES"))
+                                {
+                                    std::cout << "\n>> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
+                                    
+                                    double LocalHourAngleHours;
+                                    double LocalHourAngleMinutes;
+                                    double LocalHourAngleSeconds;
 
-                            if(EquIToHorChooseD == "Y" or EquIToHorChooseD == "y" or EquIToHorChooseD == "Yes" or EquIToHorChooseD == "yes" or EquIToHorChooseD == "YEs" or EquIToHorChooseD == "yEs" or EquIToHorChooseD == "yeS" or EquIToHorChooseD == "YeS" or EquIToHorChooseD == "yES"):
-                                std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                                LocalHourAngleHours = float(input("> Local Hour Angle (t) Hours: ") or "0")
-                                LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
-                                LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
-                                LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
-                                break
+                                    std::cout << "\n> Local Hour Angle (t) Hours: ";
+                                    std::cin >> LocalHourAngleHours;
+                                    std::cout << '\n';
+                                    std::cout << "> Local Hour Angle (t) Minutes: ";
+                                    std::cin >> LocalHourAngleMinutes;
+                                    std::cout << '\n';
+                                    std::cout << "> Local Hour Angle (t) Seconds: ";
+                                    std::cin >> LocalHourAngleSeconds;
+                                    std::cout << '\n';
+                                    LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600;
 
-                            else if(EquIToHorChooseD == 'N' or EquIToHorChooseD == 'n' or EquIToHorChooseD == 'No' or EquIToHorChooseD == 'no' or EquIToHorChooseD == 'nO'):
-                                LocalHourAngle = NULL
-                                std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.")
-                                std::cout << ">> HINT: You can write Altitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                                Azimuth == NULL
+                                    Altitude = NULL;
+                                    break;
+                                }
 
-                                AltitudeHours = float(input("> Altitude (m) Hours: ") or "0")
-                                AltitudeMinutes = float(input("> Altitude (m) Minutes: ") or "0")
-                                AltitudeSeconds = float(input("> Altitude (m) Seconds: ") or "0")
-                                ALtitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600
-                                break
+                                else if(EquIToHorChoose2.compare("N") || EquIToHorChoose2.compare("n") || EquIToHorChoose2.compare("No") || EquIToHorChoose2.compare("no") || EquIToHorChoose2.compare("nO"))
+                                {
+                                    LocalHourAngle = NULL;
+                                    std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.";
 
-                            else:
-                                std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                                    double AltitudeHours;
+                                    double AltitudeMinutes;
+                                    double AltitudeSeconds;
+
+                                    std::cout << "\n> Altitude (m) Hours: ";
+                                    std::cin >> AltitudeHours;
+                                    std::cout << '\n';
+                                    std::cout << "> Altitude (m) Minutes: ";
+                                    std::cin >> AltitudeMinutes;
+                                    std::cout << '\n';
+                                    std::cout << "> Altitude (m) Seconds: ";
+                                    std::cin >> AltitudeSeconds;
+                                    std::cout << '\n';
+                                    Altitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600;
+
+                                    Azimuth == NULL;
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    else if(Declination != NULL and RightAscension == NULL)
+                    {
+                        while(1)
+                        {
+                            std::cout << "\n>> Is Local Hour Angle (t) given?";
+
+                            std::string EquIToHorChooseD;
+                            std::cout << ">> Write \'Y\' or \'N\' (Yes or No): ";
+                            std::cin >> EquIToHorChooseD;
+                            std::cout << '\n';
+
+                            if(EquIToHorChooseD.compare("Y") || EquIToHorChooseD.compare("y") || EquIToHorChooseD.compare("Yes") || EquIToHorChooseD.compare("yes") || EquIToHorChooseD.compare("YEs") || EquIToHorChooseD.compare("yEs") || EquIToHorChooseD.compare("yeS") || EquIToHorChooseD.compare("YeS") || EquIToHorChooseD.compare("yES"))
+                            {
+                                std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
+
+                                double LocalHourAngleHours;
+                                double LocalHourAngleMinutes;
+                                double LocalHourAngleSeconds;
+
+                                std::cout << "\n> Local Hour Angle (t) Hours: ";
+                                std::cin >> LocalHourAngleHours;
+                                std::cout << '\n';
+                                std::cout << "> Local Hour Angle (t) Minutes: ";
+                                std::cin >> LocalHourAngleMinutes;
+                                std::cout << '\n';
+                                std::cout << "> Local Hour Angle (t) Seconds: ";
+                                std::cin >> LocalHourAngleSeconds;
+                                std::cout << '\n';
+                                LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600;
+                                break;
+                            }
+
+                            else if(EquIToHorChooseD.compare("N") || EquIToHorChooseD.compare("n") || EquIToHorChooseD.compare("No") || EquIToHorChooseD.compare("no") || EquIToHorChooseD.compare("nO"))
+                            {
+                                LocalHourAngle = NULL;
+                                std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.";
+                                std::cout << ">> HINT: You can write Altitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
+
+                                double AltitudeHours;
+                                double AltitudeMinutes;
+                                double AltitudeSeconds;
+
+                                std::cout << "\n> Altitude (m) Hours: ";
+                                std::cin >> AltitudeHours;
+                                std::cout << '\n';
+                                std::cout << "> Altitude (m) Minutes: ";
+                                std::cin >> AltitudeMinutes;
+                                std::cout << '\n';
+                                std::cout << "> Altitude (m) Seconds: ";
+                                std::cin >> AltitudeSeconds;
+                                std::cout << '\n';
+                                Altitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600;
+
+                                Azimuth == NULL;
+
+                                break;
+                            }
+
+                            else
+                            {
+                                std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                            }
+                        }
+                    }
 
                     // Starting parameters could be:
                     // 1. Latitude, RightAscension, Declination, LocalSiderealTime   // φ,α,δ,S:  S,α -> t; t -> H; H,δ,φ -> m; H,δ,m -> A    // Output: A,m
@@ -2981,32 +3224,51 @@ int main()
                     // Used formulas:
                     // t = S - α
                     // sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H)
-                    if(LocalSiderealTime != NULL or LocalHourAngle != NULL):
-
-                        Altitude, Azimuth = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle)
+                    if(LocalSiderealTime != NULL or LocalHourAngle != NULL)
+                    {                        
+                        std::vector<double> EquIToHoroutputVec = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle);
+                        Altitude = EquIToHoroutputVec[0];
+                        Azimuth = EquIToHoroutputVec[1];
 
                         // Print Results
-                        std::cout << "\n> Calculated Parameters in Horizontal Coord. Sys.:")
+                        std::cout << "\n> Calculated Parameters in Horizontal Coord. Sys.:\n";
 
-                        azimmsg = "- Azimuth (A):  {0}°"
-                        altitmsg = "- Altitude (m): {0}°"
-                        std::cout << azimmsg.format(Azimuth))
-                        std::cout << altitmsg.format(Altitude))
-                        std::cout << '\n')
+                        std::stringstream altitmsg;
+                        altitmsg << "- Altitude (m): "<< Altitude << "°";
+                        std::string altitmsgstr = altitmsg.str();
+                        std::cout << altitmsgstr << '\n';
+
+                        std::stringstream azimmsg;
+                        azimmsg << "- Azimuth (A): "<< Azimuth << "°";
+                        std::string azimmsgstr = azimmsg.str();
+                        std::cout << azimmsgstr << '\n';
+                    }
 
                     // Used formulas:
                     // cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)
                     // sin(A) = - sin(H) * cos(δ) / cos(m)
-                    else if(Altitude != NULL):
-                        Altitude, Azimuth1, Azimuth2, H_dil = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle)
+                    else if(Altitude != NULL)
+                    {
+                        double Azimuth1;
+                        double Azimuth2;
+                        double H_dil;
+                        
+                        std::vector<double> EquIToHoroutputVec = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle);
+
+                        Altitude = EquIToHoroutputVec[0];
+                        Azimuth1 = EquIToHoroutputVec[1];
+                        Azimuth2 = EquIToHoroutputVec[2];
+                        H_dil = EquIToHoroutputVec[3];
 
                         // Print Results
-                        std::cout << ">> Available Data are only suited for Calculating Rising/Setting Altitudes!")
-                        std::cout << "\n> Calculated Parameter of Rising/Setting Object in Horizontal Coord. Sys.:")
+                        std::cout << ">> Available Data are only suited for Calculating Rising/Setting Altitudes!\n";
+                        std::cout << "\n> Calculated Parameter of Rising/Setting Object in Horizontal Coord. Sys.:\n";
 
-                        azimmsg = "- Rising and Setting Azimuths (A) are:\n- {0}° and {1}°"
-                        std::cout << azimmsg.format(Azimuth1, Azimuth2))
-                        std::cout << '\n')
+                        std::stringstream azimmsg;
+                        azimmsg << "- Rising and Setting Azimuths (A) are: " << Azimuth1 << "° and " << Azimuth2 << "°";
+                        std::string azimmsgstr = azimmsg.str();
+                        std::cout << azimmsgstr << '\n';
+                    }
                 }
 
                 //    ___   
@@ -3016,110 +3278,220 @@ int main()
                 // \___  |_ 
                 //     |_(_)
                 // 4. Equatorial I to Equatorial II Coordinate System
-                else if(CoordMode == '4'):
-                    std::cout << ">> Conversion from Equatorial I to Equatorial II Coordinate System")
-                    std::cout << ">> Give Parameters!")
+                else if(CoordMode.compare("4") == 0)
+                {
+                    std::cout << ">> Conversion from Equatorial I to Equatorial II Coordinate System\n";
+                    std::cout << ">> Give Parameters!\n";
 
-                    std::cout << ">> Would you like to give the stellar object's Coordinates by yourself,\n>> Or would like to choose a Predefined Object's Coordinates?")
-                    std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for a Predefined Stellar Object's Coordinates!")
+                    std::cout << ">> Would you like to give the stellar object's Coordinates by yourself,\n>> Or would like to choose a Predefined Object's Coordinates?\n";
+                    std::cout << ">> Write \'1\' for User defined Coordinates, and\n>> Write \'2\' for a Predefined Stellar Object's Coordinates!\n";
 
-                    EquIToEquIIStellarChoose = input(">> (1) User Defined, (2) Predefined: ")
+                    std::string EquIToEquIIStellarChoose;
+                    std::cout << "\n>> (1) User Defined, (2) Predefined: ";
+                    std::cin >> EquIToEquIIStellarChoose;
+                    std::cout << '\n';
 
-                    while(1):
-                        if(EquIToEquIIStellarChoose == '1'):
-                            std::cout << ">> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, and type 0\n>> For both Minutes and Seconds.")
-                            RightAscensionHours = float(input("> Right Ascension (α) Hours: ") or "0")
-                            RightAscensionMinutes = float(input("> Right Ascension (α) Minutes: ") or "0")
-                            RightAscensionSeconds = float(input("> Right Ascension (α) Seconds: ") or "0")
-                            RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600
+                    double RightAscension;
+                    double Declination;
+                    double LocalHourAngle;
+                    double LocalSiderealTime;
 
-                            std::cout << ">> Is Declination given?")
-                            while(1):
-                                EquIToEquIIChoose = input(">> Write \'Y\' or \'N\' (Yes or No): ")
+                    while(1)
+                    {
+                        if(EquIToEquIIStellarChoose.compare("1"))
+                        {
+                            std::cout << ">> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, and type 0\n>> For both Minutes and Seconds.";
+                            double RightAscensionHours;
+                            double RightAscensionMinutes;
+                            double RightAscensionSeconds;
+
+                            std::cout << "\n> Right Ascension (α) Hours: ";
+                            std::cin >> RightAscensionHours;
+                            std::cout << '\n';
+                            std::cout << "> Right Ascension (α) Minutes: ";
+                            std::cin >> RightAscensionMinutes;
+                            std::cout << '\n';
+                            std::cout << "> Right Ascension (α) Seconds: ";
+                            std::cin >> RightAscensionSeconds;
+                            std::cout << '\n';
+                            RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600;
+
+                            while(1)
+                            {
+                                std::cout << ">> Is Declination given?\n";
+
+                                std::string EquIToEquIIChoose;
+                                std::cout << ">> Write \'Y\' or \'N\' (Yes or No): ";
+                                std::cin >> EquIToEquIIChoose;
+                                std::cout << '\n';
                                 
-                                if(EquIToEquIIChoose == "Y" or EquIToEquIIChoose == "y" or EquIToEquIIChoose == "Yes" or EquIToEquIIChoose == "yes" or EquIToEquIIChoose == "YEs" or EquIToEquIIChoose == "yEs" or EquIToEquIIChoose == "yeS" or EquIToEquIIChoose == "YeS" or EquIToEquIIChoose == "yES"):
-                                    Declination = float(input("> Declination (δ): "))
-                                    break
-                                
-                                else if(EquIToEquIIChoose == 'N' or EquIToEquIIChoose == 'n' or EquIToEquIIChoose == 'No' or EquIToEquIIChoose == 'no' or EquIToEquIIChoose == 'nO'):
-                                    Declination = NULL
+                                if(EquIToEquIIChoose.compare("Y") || EquIToEquIIChoose.compare("y") || EquIToEquIIChoose.compare("Yes") || EquIToEquIIChoose.compare("yes") || EquIToEquIIChoose.compare("YEs") || EquIToEquIIChoose.compare("yEs") || EquIToEquIIChoose.compare("yeS") || EquIToEquIIChoose.compare("YeS") || EquIToEquIIChoose.compare("yES"))
+                                {
+                                    std::cout << "\n>> HINT: You can write Declination as a Decimal Fraction.\n>> For this you need to write Hours as a float-type value, then\n>> You can Press Enter for both Minutes and Seconds.\n";
 
-                                else:
-                                    std::cout << ">>>> ERROR: Invalid option! Try Again!")
-                        
-                        else if(EquIToEquIIStellarChoose == '2'):
-                            while(1):
-                                StellarObject = input("> Stellar object's name (type \'H\' for Help): ")
+                                    double DeclinationHours;
+                                    double DeclinationMinutes;
+                                    double DeclinationSeconds;
 
-                                if(StellarObject == "Help" or StellarObject == "help" or StellarObject == "H" or StellarObject == "h"):
-                                    std::cout << "\n>> Predefined Objects you can choose from:")
-                                    for keys in StellarDict.items():
-                                        std::cout << keys
+                                    std::cout << "\n> Declination (δ) Hours: ";
+                                    std::cin >> DeclinationHours;
                                     std::cout << '\n';
+                                    std::cout << "> Declination (δ) Minutes: ";
+                                    std::cin >> DeclinationMinutes;
+                                    std::cout << '\n';
+                                    std::cout << "> Declination (δ) Seconds: ";
+                                    std::cin >> DeclinationSeconds;
+                                    std::cout << '\n';
+                                    Declination = DeclinationHours + DeclinationMinutes/60 + DeclinationSeconds/3600;
+                                    break;
+                                }
                                 
-                                else:
-                                    try:
-                                        TestVariable = StellarDict[StellarObject][0]
-                                        del TestVariable
+                                else if(EquIToEquIIChoose.compare("N") || EquIToEquIIChoose.compare("n") || EquIToEquIIChoose.compare("No") || EquIToEquIIChoose.compare("no") || EquIToEquIIChoose.compare("nO"))
+                                {
+                                    Declination = NULL;
+                                }
 
-                                    except KeyError:
-                                        std::cout << ">>>> ERROR: The Stellar Object, named \"" + StellarObject + "\" is not in the Database!")
-                                        std::cout << ">>>> Type \"Help\" to list Available Stellar Objects in Database!")
+                                else
+                                {
+                                    std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                                }
+                            }
+                        }
 
-                                    else:
-                                        RightAscension = StellarDict[StellarObject][0]
+                        else if(EquIToEquIIStellarChoose.compare("2"))
+                        {
+                            while(1)
+                            {
+                                std::map<std::string, std::vector<double>> StellarDict = StellarDictFunc();
 
-                                        std::cout << ">> Is Declination given?")
-                                        while(1):
-                                            EquIToEquIIChoose = input(">> Write \'Y\' or \'N\' (Yes or No): ")
+                                std::string StellarObject;
+                                std::cout << "> Stellar object's name (type \'H\' for Help): ";
+                                std::cin >> StellarObject;
+                                std::cout << '\n';
 
-                                            if(EquIToEquIIChoose == "Y" or EquIToEquIIChoose == "y" or EquIToEquIIChoose == "Yes" or EquIToEquIIChoose == "yes" or EquIToEquIIChoose == "YEs" or EquIToEquIIChoose == "yEs" or EquIToEquIIChoose == "yeS" or EquIToEquIIChoose == "YeS" or EquIToEquIIChoose == "yES"):
-                                                Declination = StellarDict[StellarObject][1]
-                                                break
+                                if(StellarObject.compare("Help") == 0 || StellarObject.compare("help") == 0 || StellarObject.compare("H") == 0 || StellarObject.compare("h") == 0)
+                                {
+                                    std::cout << ">> Predefined Objects you can choose from: \n";
 
-                                            else if(EquIToEquIIChoose == 'N' or EquIToEquIIChoose == 'n' or EquIToEquIIChoose == 'No' or EquIToEquIIChoose == 'no' or EquIToEquIIChoose == 'nO'):
-                                                Declination = NULL
+                                    for(auto Objects = StellarDict.cbegin(); Objects != StellarDict.cend(); ++Objects)
+                                    {
+                                        std::cout << Objects->first << ": " << Objects->second[0] << "h ; " << Objects->second[1] << "°" << "\n";
+                                    }
 
-                                            else:
-                                                std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                                    std::cout << '\n';
+                                }
 
-                            break
+                                else
+                                {
+                                    try
+                                    {
+                                        double TestVariable = StellarDict[StellarObject][0];
+                                    
+                                        if(StellarDict.find(StellarObject) != StellarDict.end())
+                                        {
+                                            throw StellarObject;
+                                        }
+                                        else
+                                        {
+                                            RightAscension = StellarDict[StellarObject][0];
 
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                                            while(1)
+                                            {
+                                                std::cout << ">> Is Declination given?\n";
 
-                    std::cout << ">> You should input LHA (t) manually!")
-                    std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LocalHourAngleHours = float(input("> Local Hour Angle (t) Hours: ") or "0")
-                    LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
-                    LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
-                    LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
+                                                std::string EquIToEquIIChoose;
+                                                std::cout << ">> Write \'Y\' or \'N\' (Yes or No): ";
+                                                std::cin >> EquIToEquIIChoose;
+                                                std::cout << '\n';
 
-                    LocalSiderealTime = EquIToEquII(RightAscension, LocalHourAngle)
+                                                if(EquIToEquIIChoose.compare("Y") || EquIToEquIIChoose.compare("y") || EquIToEquIIChoose.compare("Yes") || EquIToEquIIChoose.compare("yes") || EquIToEquIIChoose.compare("YEs") || EquIToEquIIChoose.compare("yEs") || EquIToEquIIChoose.compare("yeS") || EquIToEquIIChoose.compare("YeS") || EquIToEquIIChoose.compare("yES"))
+                                                {
+                                                    Declination = StellarDict[StellarObject][1];
+                                                    break;
+                                                }
 
-                    LocalSiderealTimeHours = int(LocalSiderealTime)
-                    LocalSiderealTimeMinutes = int((LocalSiderealTime - LocalSiderealTimeHours) * 60)
-                    LocalSiderealTimeSeconds = int((((LocalSiderealTime - LocalSiderealTimeHours) * 60) - LocalSiderealTimeMinutes) * 60)
+                                                else if(EquIToEquIIChoose.compare("N") || EquIToEquIIChoose.compare("n") || EquIToEquIIChoose.compare("No") || EquIToEquIIChoose.compare("no") || EquIToEquIIChoose.compare("nO"))
+                                                {
+                                                    Declination = NULL;
+                                                }
+
+                                                else
+                                                {
+                                                    std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch(std::string StellarObject)
+                                    {
+                                        std::cout << ">>>> ERROR: The Stellar Object, named \"" + StellarObject + "\" is not in the Database!\n";
+                                        std::cout << ">>>> Type \"Help\" to list Available Stellar Objects in Database!\n";
+                                    }
+                                }
+                            }
+                            break;
+                        }
+
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                        }
+                    }
+
+
+                    std::cout << ">> You should input LHA (t) manually!\n";
+                    std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+
+                    double LocalHourAngleHours;
+                    double LocalHourAngleMinutes;
+                    double LocalHourAngleSeconds;
+
+                    std::cout << "\n> Local Hour Angle (t) Hours: ";
+                    std::cin >> LocalHourAngleHours;
+                    std::cout << '\n';
+                    std::cout << "> Local Hour Angle (t) Minutes: ";
+                    std::cin >> LocalHourAngleMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Local Hour Angle (t) Seconds: ";
+                    std::cin >> LocalHourAngleSeconds;
+                    std::cout << '\n';
+                    LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600;
+
+                    LocalSiderealTime = EquIToEquII(RightAscension, LocalHourAngle);
 
                     // Print Results
-                    std::cout << "\n> Calculated Parameters in Equatorial II Coord. Sys.:")
+                    std::cout << "\n> Calculated Parameters in Equatorial II Coord. Sys.:\n";
 
-                    sidermsg = "- Local Mean Sidereal Time (S): {0}:{1}:{2}"
-                    std::cout << sidermsg.format(LocalSiderealTime))
+                    int LocalSiderealTimeHours = int(LocalSiderealTime);
+                    int LocalSiderealTimeMinutes = int((LocalSiderealTime - LocalSiderealTimeHours) * 60);
+                    int LocalSiderealTimeSeconds = int((((LocalSiderealTime - LocalSiderealTimeHours) * 60) - LocalSiderealTimeMinutes) * 60);
+
+                    std::stringstream sidermsg;
+                    sidermsg << "- Local Mean Sidereal Time (S): "  << LocalSiderealTimeHours << "°" << LocalSiderealTimeMinutes << "\'" << LocalSiderealTimeSeconds << "\"";
+                    std::string sidermsgstr = sidermsg.str();
+                    std::cout << sidermsgstr << '\n';
                     
-                    if(Declination != NULL):
+                    if(Declination != NULL)
+                    {
+                        int DeclinationHours = int(Declination);
+                        int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
+                        int DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60);
 
-                        DeclinationHours = int(Declination)
-                        DeclinationMinutes = int((Declination - DeclinationHours) * 60)
-                        DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60)
+                        std::stringstream declinmsg;
+                        declinmsg << "- Declination (δ): "  << DeclinationHours << "°" << DeclinationMinutes << "\'" << DeclinationSeconds << "\"";
+                        std::string declinmsgstr = declinmsg.str();
+                        std::cout << declinmsgstr << '\n';
+                    }
 
-                        declinmsg = "- Declination (δ): {0}° {1}\' {2}\""
-                        std::cout << declinmsg.format(Declination))
+                    else
+                    {
+                        std::cout << "- Declination is Unknown!\n";
+                    }
+                    std::cout << '\n';
 
-                    else:
-                        std::cout << "- Declination is Unknown!")
+                }
 
-                    std::cout << '\n')
 
                 //  _____  
                 // |  ___| 
@@ -3128,81 +3500,178 @@ int main()
                 // /\__/ / 
                 // \____(_)
                 // 5. Equatorial II to Equatorial I Coordinate System
-                else if(CoordMode == '5'):
-                    std::cout << ">> Conversion from Equatorial II to Equatorial I Coordinate System")
-                    std::cout << ">> Give Parameters!")
+                else if(CoordMode.compare("5"))
+                {
+                    std::cout << ">> Conversion from Equatorial II to Equatorial I Coordinate System\n";
+                    std::cout << ">> Give Parameters!\n\n";
 
-                    std::cout << ">> You should input LMST (S) manually!")
-                    std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LocalSiderealTimeHours = float(input("> Local Mean Sidereal Time (S) Hours: ") or "0")
-                    LocalSiderealTimeMinutes = float(input("> Local Mean Sidereal Time (S) Minutes: ") or "0")
-                    LocalSiderealTimeSeconds = float(input("> Local Mean Sidereal Time (S) Seconds: ") or "0")
-                    LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600
+                    double RightAscension;
+                    double Declination;
+                    double LocalHourAngle;
 
-                    std::cout << ">> Is Declination given?")
-                    while(1):
-                        EquIIToEquIChoose = input(">> Write \'Y\' or \'N\' (Yes or No): ")
+                    std::cout << ">> You should input LMST (S) manually!\n";
+                    std::cout << ">> HINT: You can write LMST as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    
+                    double LocalSiderealTime;
+                    double LocalSiderealTimeHours;
+                    double LocalSiderealTimeMinutes;
+                    double LocalSiderealTimeSeconds;
+
+                    std::cout << "\n> Local Mean Sidereal Time (S) Hours: ";
+                    std::cin >> LocalSiderealTimeHours;
+                    std::cout << '\n';
+                    std::cout << "> Local Mean Sidereal Time (S) Minutes: ";
+                    std::cin >> LocalSiderealTimeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Local Mean Sidereal Time (S) Seconds: ";
+                    std::cin >> LocalSiderealTimeSeconds;
+                    std::cout << '\n';
+                    LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600;
+
+                    while(1)
+                    {
+                        std::cout << ">> Is Declination given?\n";
+
+                        std::string EquIIToEquIChoose;
+                        std::cout << ">> Write \'Y\' or \'N\' (Yes or No): ";
+                        std::cin >> EquIIToEquIChoose;
+                        std::cout << '\n';
                         
-                        if(EquIIToEquIChoose == "Y" or EquIIToEquIChoose == "y" or EquIIToEquIChoose == "Yes" or EquIIToEquIChoose == "yes" or EquIIToEquIChoose == "YEs" or EquIIToEquIChoose == "yEs" or EquIIToEquIChoose == "yeS" or EquIIToEquIChoose == "YeS" or EquIIToEquIChoose == "yES"):
-                            Declination = float(input("> Declination (δ): "))
-                            break
-                        
-                        else if(EquIIToEquIChoose == 'N' or EquIIToEquIChoose == 'n' or EquIIToEquIChoose == 'No' or EquIIToEquIChoose == 'no' or EquIIToEquIChoose == 'nO'):
-                            Declination = NULL
+                        if(EquIIToEquIChoose.compare("Y") || EquIIToEquIChoose.compare("y") || EquIIToEquIChoose.compare("Yes") || EquIIToEquIChoose.compare("yes") || EquIIToEquIChoose.compare("YEs") || EquIIToEquIChoose.compare("yEs") || EquIIToEquIChoose.compare("yeS") || EquIIToEquIChoose.compare("YeS") || EquIIToEquIChoose.compare("yES"))
+                        {
+                            std::cout << "\n>> HINT: You can write Declination as a Decimal Fraction.\n>> For this you need to write Hours as a float-type value, then\n>> You can Press Enter for both Minutes and Seconds.\n";
 
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                            double DeclinationHours;
+                            double DeclinationMinutes;
+                            double DeclinationSeconds;
 
-                    while(1):
-                        std::cout << ">> Which essential Parameter Is given?")
-                        EquIIToEquIDecChoose = input(">> Right Ascension (write \'A\'), or Local Hour Angle in Hours (write \'T\')?: ")
-                        if(EquIIToEquIDecChoose == 'A' or EquIIToEquIDecChoose == 'a'):
-                            LocalHourAngle = NULL
-                            RightAscension = float(input("> Right Ascension (α): "))
-                            break
+                            std::cout << "\n> Declination (δ) Hours: ";
+                            std::cin >> DeclinationHours;
+                            std::cout << '\n';
+                            std::cout << "> Declination (δ) Minutes: ";
+                            std::cin >> DeclinationMinutes;
+                            std::cout << '\n';
+                            std::cout << "> Declination (δ) Seconds: ";
+                            std::cin >> DeclinationSeconds;
+                            std::cout << '\n';
+                            Declination = DeclinationHours + DeclinationMinutes/60 + DeclinationSeconds/3600;
+                            break;
+                        }
 
-                        else if(EquIIToEquIDecChoose == 'T' or EquIIToEquIDecChoose == 't'):
-                            std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                            LocalHourAngleHours = float(input("> Local Hour Angle (t) Hours: ") or "0")
-                            LocalHourAngleMinutes = float(input("> Local Hour Angle (t) Minutes: ") or "0")
-                            LocalHourAngleSeconds = float(input("> Local Hour Angle (t) Seconds: ") or "0")
-                            LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600
-                            RightAscension = NULL
-                            break
+                        else if(EquIIToEquIChoose.compare("N") || EquIIToEquIChoose.compare("n") || EquIIToEquIChoose.compare("No") || EquIIToEquIChoose.compare("no") || EquIIToEquIChoose.compare("nO"))
+                        {
+                            Declination = NULL;
+                        }
 
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'A\' or \'T\'!")
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                        }
+                    }
 
-                    LocalHourAngle, RightAscension = EquIIToEquI(LocalSiderealTime, RightAscension, LocalHourAngle)
+                    while(1)
+                    {
+                        std::cout << ">> Which essential Parameter Is given?\n";
 
-                    RightAscensionHours = int(RightAscension)
-                    RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60)
-                    RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60)
+                        std::string EquIIToEquIDecChoose;
+                        std::cout << ">> Right Ascension (write \'A\'), or Local Hour Angle in Hours (write \'T\')?: ";
+                        std::cin >> EquIIToEquIDecChoose;
+                        std::cout << '\n';
+
+                        if(EquIIToEquIDecChoose.compare("A") == 0 || EquIIToEquIDecChoose.compare("a") == 0)
+                        {
+                            std::cout << ">> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, and type 0\n>> For both Minutes and Seconds.\n";
+                            double RightAscensionHours;
+                            double RightAscensionMinutes;
+                            double RightAscensionSeconds;
+
+                            std::cout << "\n> Right Ascension (α) Hours: ";
+                            std::cin >> RightAscensionHours;
+                            std::cout << '\n';
+                            std::cout << "> Right Ascension (α) Minutes: ";
+                            std::cin >> RightAscensionMinutes;
+                            std::cout << '\n';
+                            std::cout << "> Right Ascension (α) Seconds: ";
+                            std::cin >> RightAscensionSeconds;
+                            std::cout << '\n';
+                            RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600;
+
+                            LocalHourAngle = NULL;
+                            break;
+                        }
+
+                        else if(EquIIToEquIDecChoose.compare("T") == 0 || EquIIToEquIDecChoose.compare("t") == 0)
+                        {
+                            RightAscension = NULL;
+
+                            std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                            double LocalHourAngleHours;
+                            double LocalHourAngleMinutes;
+                            double LocalHourAngleSeconds;
+
+                            std::cout << "\n> Local Hour Angle (t) Hours: ";
+                            std::cin >> LocalHourAngleHours;
+                            std::cout << '\n';
+                            std::cout << "> Local Hour Angle (t) Minutes: ";
+                            std::cin >> LocalHourAngleMinutes;
+                            std::cout << '\n';
+                            std::cout << "> Local Hour Angle (t) Seconds: ";
+                            std::cin >> LocalHourAngleSeconds;
+                            std::cout << '\n';
+                            LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600;
+                            
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again! Write \'A\' or \'T\'!\n";
+                        }
+                    }
+
+                    std::vector<double> EquIIToEquIoutputVec = EquIIToEquI(LocalSiderealTime, RightAscension, LocalHourAngle);
+                    RightAscension = EquIIToEquIoutputVec[0];
+                    LocalHourAngle  = EquIIToEquIoutputVec[1];
 
                     // Print Results
-                    std::cout << "\n> Calculated parameters in Equatorial I Coord. Sys.:")
+                    std::cout << "\n> Calculated parameters in Equatorial I Coord. Sys.:\n";
 
-                    RAmsg = "- Right Ascension (α): {0}h {1}m {2}s"
-                    std::cout << RAmsg.format(RightAscension))
+                    int RightAscensionHours = int(RightAscension);
+                    int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
+                    int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
 
-                    if(Declination != NULL):
+                    std::stringstream RAmsg;
+                    RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
+                    std::string RAmsgstr = RAmsg.str();
+                    std::cout << RAmsgstr << '\n';
 
-                        DeclinationHours = int(Declination)
-                        DeclinationMinutes = int((Declination - DeclinationHours) * 60)
-                        DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60)
+                    if(Declination != NULL)
+                    {
+                        int DeclinationHours = int(Declination);
+                        int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
+                        int DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60);
 
-                        declinmsg = "- Declination (δ): {0}° {1}\' {2}\""
-                        std::cout << declinmsg.format(Declination))
+                        std::stringstream declinmsg;
+                        declinmsg << "- Declination (δ): "  << DeclinationHours << "°" << DeclinationMinutes << "\'" << DeclinationSeconds << "\"";
+                        std::string declinmsgstr = declinmsg.str();
+                        std::cout << declinmsgstr << '\n';
+                    }
 
-                    else:
-                        std::cout << "Declination is Unknown!")
+                    else
+                    {
+                        std::cout << "Declination is Unknown!\n";
+                    }
+                    std::cout << '\n';
 
-                    std::cout << '\n')
+                    int LocalHourAngleHours = int(LocalHourAngle);
+                    int LocalHourAngleMinutes = int((LocalHourAngle - LocalHourAngleHours) * 60);
+                    int LocalHourAngleSeconds = int((((LocalHourAngle - LocalHourAngleHours) * 60) - LocalHourAngleMinutes) * 60);
 
-                    hourangmsg = "- Local Hour Angle (t): {0}h {1}m {2}s"
-                    std::cout << hourangmsg.format(LocalHourAngle))
-                    
-                    std::cout << '\n')
+                    std::stringstream hourangmsg;
+                    hourangmsg << "- Local Hour Angle (t): " << LocalHourAngleHours<< "h" << LocalHourAngleMinutes << "m" << LocalHourAngleSeconds << "s";
+                    std::string hourangmsgstr = hourangmsg.str();                    
+                    std::cout << hourangmsgstr << '\n\n';
+                }
 
                 //   ____   
                 //  / ___|  
@@ -3211,7 +3680,8 @@ int main()
                 // | \_/ |_ 
                 // \_____(_)
                 // 6. Equatorial II to Horizontal Coordinate System
-                else if(CoordMode == '6'):
+                else if(CoordMode.compare("6") == 0)
+                {
                     std::cout << ">> Conversion from Equatorial II to Horizontal Coordinate System")
                     std::cout << ">> Give Parameters!")
 
@@ -3350,11 +3820,13 @@ int main()
                     altitmsg = "- Altitude (m): {0}°"
                     std::cout << azimmsg.format(Azimuth))
                     std::cout << altitmsg.format(Altitude))
-                    std::cout << '\n')
+                    std::cout << '\n';
 
-                else if(CoordMode == 'Q' or CoordMode == 'q')
+                }
+
+                else if(CoordMode.compare("Q") == 0 || CoordMode.compare("q") == 0)
                 {
-                    break
+                    break;
                 }
 
                 else
@@ -3947,7 +4419,7 @@ int main()
                     while(1):
                         std::cout << ">> Would you like to plot the Sun's path for a Choosen Date in This Year too?")
                         SunDialChoose = input(">> Write Y for Yes or N for No: ")
-                        if(SunDialChoose == "Y" or SunDialChoose == "y" or SunDialChoose == "Yes" or SunDialChoose == "yes" or SunDialChoose == "YEs" or SunDialChoose == "yEs" or SunDialChoose == "yeS" or SunDialChoose == "YeS" or SunDialChoose == "yES"):
+                        if(SunDialChoose.compare("Y") || SunDialChoose.compare("y") || SunDialChoose.compare("Yes") || SunDialChoose.compare("yes") || SunDialChoose.compare("YEs") || SunDialChoose.compare("yEs") || SunDialChoose.compare("yeS") || SunDialChoose.compare("YeS") || SunDialChoose.compare("yES")):
                             // Input Time Parameters
                             while(1):
                                 LocalDateMonth = int(input("> Month: "))
@@ -3974,7 +4446,7 @@ int main()
 
                             break
 
-                        else if(SunDialChoose == 'N' or SunDialChoose == 'n' or SunDialChoose == 'No' or SunDialChoose == 'no' or SunDialChoose == 'nO'):
+                        else if(SunDialChoose.compare("N") || SunDialChoose.compare("n") || SunDialChoose.compare("No") || SunDialChoose.compare("no") || SunDialChoose.compare("nO")):
                             break
 
                         else:
@@ -3983,7 +4455,7 @@ int main()
                     MeasureNumber = 1000
                     FineTuned = 1000
 
-                    if(SunDialChoose == "Y" or SunDialChoose == "y" or SunDialChoose == "Yes" or SunDialChoose == "yes" or SunDialChoose == "YEs" or SunDialChoose == "yEs" or SunDialChoose == "yeS" or SunDialChoose == "YeS" or SunDialChoose == "yES"):
+                    if(SunDialChoose.compare("Y") || SunDialChoose.compare("y") || SunDialChoose.compare("Yes") || SunDialChoose.compare("yes") || SunDialChoose.compare("YEs") || SunDialChoose.compare("yEs") || SunDialChoose.compare("yeS") || SunDialChoose.compare("YeS") || SunDialChoose.compare("yES")):
 
                         std::cout << "Choosen Date:")
                         ////// CHOOSEN DATE //////
