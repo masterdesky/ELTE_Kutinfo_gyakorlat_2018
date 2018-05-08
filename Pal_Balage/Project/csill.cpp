@@ -2274,7 +2274,7 @@ std::vector<double> SunAnalemma(std::string Planet, double Latitude, double Long
     Altitude = EquIToHorvec[0];
     double Azimuth = EquIToHorvec[1];
 
-    std::vector<double> SunAnalemmavec = {LocalHourAngle, Altitude};
+    std::vector<double> SunAnalemmavec = {Altitude, LocalHourAngle};
     return(SunAnalemmavec);
 }
 
@@ -3463,6 +3463,7 @@ int main()
                     // Print Results
                     std::cout << "\n> Calculated Parameters in Equatorial II Coord. Sys.:\n";
 
+                    // Local Mean Sidereal Time
                     int LocalSiderealTimeHours = int(LocalSiderealTime);
                     int LocalSiderealTimeMinutes = int((LocalSiderealTime - LocalSiderealTimeHours) * 60);
                     int LocalSiderealTimeSeconds = int((((LocalSiderealTime - LocalSiderealTimeHours) * 60) - LocalSiderealTimeMinutes) * 60);
@@ -3472,6 +3473,7 @@ int main()
                     std::string sidermsgstr = sidermsg.str();
                     std::cout << sidermsgstr << '\n';
                     
+                    // Declination
                     if(Declination != NULL)
                     {
                         int DeclinationHours = int(Declination);
@@ -3636,6 +3638,7 @@ int main()
                     // Print Results
                     std::cout << "\n> Calculated parameters in Equatorial I Coord. Sys.:\n";
 
+                    // Right Ascension
                     int RightAscensionHours = int(RightAscension);
                     int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
                     int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
@@ -3645,6 +3648,7 @@ int main()
                     std::string RAmsgstr = RAmsg.str();
                     std::cout << RAmsgstr << '\n';
 
+                    // Declination
                     if(Declination != NULL)
                     {
                         int DeclinationHours = int(Declination);
@@ -3663,6 +3667,7 @@ int main()
                     }
                     std::cout << '\n';
 
+                    // Local Hour Angle
                     int LocalHourAngleHours = int(LocalHourAngle);
                     int LocalHourAngleMinutes = int((LocalHourAngle - LocalHourAngleHours) * 60);
                     int LocalHourAngleSeconds = int((((LocalHourAngle - LocalHourAngleHours) * 60) - LocalHourAngleMinutes) * 60);
@@ -3955,13 +3960,23 @@ int main()
                     // Print Results
                     std::cout << "\n> Calculated Parameters in Horizontal Coord. Sys.:\n";
 
+                    // Altitude
+                    int AltitudeHours = int(Altitude);
+                    int AltitudeMinutes = int((Altitude - AltitudeHours) * 60);
+                    int AltitudeSeconds = int((((Altitude - AltitudeHours) * 60) - AltitudeMinutes) * 60);
+
                     std::stringstream altitmsg;
-                    altitmsg << "- Altitude (m): "<< Altitude << "°";
+                    altitmsg << "- Altitude (m): "<< AltitudeHours << "° " << AltitudeMinutes << "\' " << AltitudeSeconds << "\"";
                     std::string altitmsgstr = altitmsg.str();
                     std::cout << altitmsgstr << '\n';
 
+                    // Azimuth
+                    int AzimuthHours = int(Azimuth);
+                    int AzimuthMinutes = int((Azimuth - AzimuthHours) * 60);
+                    int AzimuthSeconds = int((((Azimuth - AzimuthHours) * 60) - AzimuthMinutes) * 60);
+
                     std::stringstream azimmsg;
-                    azimmsg << "- Azimuth (A): "<< Azimuth << "°";
+                    azimmsg << "- Azimuth (A): "<< AzimuthHours << "° " << AzimuthMinutes << "\' " << AzimuthSeconds << "\"";
                     std::string azimmsgstr = azimmsg.str();
                     std::cout << azimmsgstr << '\n';
 
@@ -4821,7 +4836,7 @@ int main()
                     }
 
 
-                   std::vector<double> TwilightCalcvec = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay);
+                    std::vector<double> TwilightCalcvec = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay);
 
                     double LocalHoursNoon = TwilightCalcvec[0];
                     double LocalMinutesNoon = TwilightCalcvec[1];
@@ -5062,541 +5077,764 @@ int main()
         //  /\__/ / |_| | | | | (_| | | (_| | |
         //  \____/ \__,_|_| |_|\__,_|_|\__,_|_|
         // Plot Sundial for Choosen Locations
-        else if(mode == '6')
+        else if(mode.compare("6") == 0)
         {
-            while(1):
-                std::cout << ">> Plot Sun's Path on a Sundial at Choosen Location on Earth")
-                std::cout << ">> Please choose a mode you'd like to use!")
-                std::cout << "(1) Parameters from User Input")
-                std::cout << "(2) Parameters of Predefined Locations")
-                std::cout << "(Q) Quit to Main Menu")
+            while(1)
+            {
+                std::cout << ">> Plot Sun's Path on a Sundial at Choosen Location on Earth\n";
+                std::cout << ">> Please choose a mode you'd like to use!\n";
+                std::cout << "(1) Parameters from User Input\n";
+                std::cout << "(2) Parameters of Predefined Locations\n";
+                std::cout << "(Q) Quit to Main Menu\n\n";
                 
-                SundialMode = input("> Choose a mode and press enter...: ")
-
-                std::cout << '\n')
+                std::string SundialMode;
+                std::cout << "> Choose a mode and press enter...: ";
+                std::cin >> SundialMode;
+                std::cout << '\n';
 
                 // Constants for calculation
-                Planet = "Earth"
-                if(SundialMode.compare("1") == 0):
-                    std::cout << ">> Plot a Sundial on a User-defined Location\n")
-                    std::cout << ">> Give Parameters!")
+                std::string Planet = "Earth";
+
+                // Declare Variables
+                double Latitude;
+                double Longitude;
+
+                std::string SunDialChoose;
+                double SunDialYear;
+
+                double LocalDateYear;
+                double LocalDateMonth;
+                double LocalDateDay;
+
+                if(SundialMode.compare("1") == 0)
+                {
+                    std::cout << ">> Plot a Sundial on a User-defined Location\n";
+                    std::cout << ">> Give Parameters!\n";
 
                     // Input Positional Parameters
-                    std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
-                    LatitudeMinutes = float(input("> Latitude (φ) Minutes: ") or "0")
-                    LatitudeSeconds = float(input("> Latitude (φ) Seconds: ") or "0")
-                    Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
+                    std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    double LatitudeHours;
+                    double LatitudeMinutes;
+                    double LatitudeSeconds;
+                    
+                    std::cout << "\n> Latitude (φ) Hours: ";
+                    std::cin >> LatitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Latitude (φ) Minutes: ";
+                    std::cin >> LatitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Latitude (φ) Seconds: ";
+                    std::cin >> LatitudeSeconds;
+                    std::cout << '\n';
+                    Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
 
-                    std::cout << ">> HINT: You can write Longitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LongitudeHours = float(input("> Longitude (λ) Hours: ") or "0")
-                    LongitudeMinutes = float(input("> Longitude (λ) Minutes: ") or "0")
-                    LongitudeSeconds = float(input("> Longitude (λ) Seconds: ") or "0")
-                    Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
+                    std::cout << ">> HINT: You can write Longitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    double LongitudeHours;
+                    double LongitudeMinutes;
+                    double LongitudeSeconds;
+                    
+                    std::cout << "\n> Longitude #1 (φ1) Hours: ";
+                    std::cin >> LongitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Minutes: ";
+                    std::cin >> LongitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Seconds: ";
+                    std::cin >> LongitudeSeconds;
+                    std::cout << '\n';
+                    Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600;
+                }
 
-
-                else if(SundialMode.compare("2") == 0):
-                    std::cout << ">> Plot a Sundial on a Predefined Location's Coordinates")
-                    std::cout << ">> Write the Name of a Choosen Location to the Input!")
+                else if(SundialMode.compare("2") == 0)
+                {
+                    std::cout << ">> Plot a Sundial on a Predefined Location's Coordinates";
+                    std::cout << ">> Write the Name of a Choosen Location to the Input!";
 
                     // Input Choosen Location's Name
-                    while(1):
-                        Location = input("> Location's name (type \'H\' for Help): ")
-                        
-                        if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
-                            std::cout << "\n>> Predefined Locations you can choose from:")
-                            for keys in LocationDict.items():
-                                std::cout << keys)
-                            std::cout << '\n')
-                        
-                        else:
-                            try:
-                                Latitude = LocationDictFunc(Location)[0]
-                                Longitude = LocationDictFunc(Location)[1]
+                    while(1)
+                    {
+                        std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
-                            except KeyError:
-                                std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!")
-                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
-                                
-                            else:
-                                break
+                        std::string Location;
+                        std::cout << "\n> Location's name (type \'H\' for Help): ";
+                        std::cin >> Location;
+                        std::cout << '\n';
 
-                else if(SundialMode.compare("Q") == 0 || SundialMode.compare("q") == 0):
-                    break
+                        if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
+                        {
+                            std::cout << ">> Predefined Locations you can choose from:\n";
 
-                else:
-                    std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                            for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                            {
+                                std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << '\n';
+                            }
+
+                            std::cout << '\n';
+                        }
+
+                        else
+                        {
+                            try
+                            {
+                                Latitude = LocationDict[Location][0];
+                                Longitude = LocationDict[Location][1];
+                            
+                                if(LocationDict.find(Location) != LocationDict.end())
+                                {
+                                    throw Location;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            catch(std::string Location)
+                            {
+                                std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!\n";
+                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n";
+                            }
+                        }
+                    }
+                }
+
+                else if(SundialMode.compare("Q") == 0 || SundialMode.compare("q") == 0)
+                {
+                    break;
+                }
+
+                else
+                {
+                    std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                }
 
 
-                if(SundialMode.compare("1") == 0 || SundialMode.compare("2") == 0):
-                    std::cout << ">> For which Year would You like to Draw the Sundial?")
-                    while(1):
-                        SunDialYear = float(input("> Choosen Year: "))
-                        if(SunDialYear != 0):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n")
+                if(SundialMode.compare("1") == 0 || SundialMode.compare("2") == 0)
+                {
+                    std::cout << ">> For which Year would You like to Draw the Sundial?\n";
+                    while(1)
+                    {
+                        std::cout << "> Choosen Year: ";
+                        std::cin >> SunDialYear;
+                        std::cout << '\n';
 
-                    
-                    while(1):
-                        std::cout << ">> Would you like to plot the Sun's path for a Choosen Date in This Year too?")
-                        SunDialChoose = input(">> Write Y for Yes or N for No: ")
-                        if(SunDialChoose.compare("Y") == 0 || SunDialChoose.compare("y") == 0 || SunDialChoose.compare("Yes") == 0 || SunDialChoose.compare("yes") == 0 || SunDialChoose.compare("YEs") == 0 || SunDialChoose.compare("yEs") == 0 || SunDialChoose.compare("yeS") == 0 || SunDialChoose.compare("YeS") == 0 || SunDialChoose.compare("yES") == 0):
+                        if(SunDialYear != 0)
+                        {
+                            std::cout << '\n';
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n";
+                        }
+                    }
+
+                    while(1)
+                    {
+                        std::cout << ">> Would you like to plot the Sun's path for a Choosen Date in This Year too?\n";
+
+                        std::cout << ">> Write Y for Yes or N for No: ";
+                        std::cin >> SunDialChoose;
+                        std::cout << '\n';
+
+                        if(SunDialChoose.compare("Y") == 0 || SunDialChoose.compare("y") == 0 || SunDialChoose.compare("Yes") == 0 || SunDialChoose.compare("yes") == 0 || SunDialChoose.compare("YEs") == 0 || SunDialChoose.compare("yEs") == 0 || SunDialChoose.compare("yeS") == 0 || SunDialChoose.compare("YeS") == 0 || SunDialChoose.compare("yES") == 0)
+                        {
                             // Input Time Parameters
-                            while(1):
-                                LocalDateMonth = int(input("> Month: "))
-                                if(LocalDateMonth > 0 and LocalDateMonth < 13):
-                                    break
-                                else:
-                                    std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n")
+                            while(1)
+                            {
+                                std::cout << "> Month: ";
+                                std::cin >> LocalDateMonth;
+                                std::cout << '\n';
 
-                            // Leap Year	Handling
-                            while(1):
-                                LocalDateDay = int(input("> Day: "))
-                                if(LocalDateYear%4 == 0 && (LocalDateYear%100 != 0 or LocalDateYear%400 == 0)):
-                                    if(MonthLengthListLeapYear[LocalDateMonth - 1] >= LocalDateDay and LocalDateDay > 0):
-                                        break
-                                    else:
-                                        daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                        std::cout << daysmsg.format(MonthLengthListLeapYear[LocalDateMonth - 1]))
-                                else:
-                                    if(MonthLengthList[LocalDateMonth - 1] >= LocalDateDay and LocalDateDay > 0):
-                                        break
-                                    else:
-                                        daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                        std::cout << daysmsg.format(MonthLengthList[LocalDateMonth - 1]))
+                                if(LocalDateMonth > 0 and LocalDateMonth < 13)
+                                {
+                                    std::cout << '\n';
+                                    break;
+                                }
 
-                            break
+                                else
+                                {
+                                    std::cout << ">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n";
+                                }
+                            }
 
-                        else if(SunDialChoose.compare("N") == 0 || SunDialChoose.compare("n") == 0 || SunDialChoose.compare("No") == 0 || SunDialChoose.compare("no") == 0 || SunDialChoose.compare("nO") == 0):
-                            break
+                            // Leap Year Handling
+                            while(1)
+                            {
+                                std::cout << "> Day: ";
+                                std::cin >> LocalDateDay;
+                                std::cout << '\n';
 
-                        else:
-                            std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                                if(int(LocalDateYear)%4 == 0 && (int(LocalDateYear)%100 != 0 || int(LocalDateYear)%400 == 0))
+                                {
+                                    if(MonthLengthListLeapYear[int(LocalDateMonth) - 1] >= LocalDateDay || LocalDateDay > 0)
+                                    {
+                                        std::cout << '\n';
+                                        break;
+                                    }
 
-                    MeasureNumber = 1000
-                    FineTuned = 1000
+                                    else
+                                    {
+                                        std::stringstream daysmsg;
+                                        daysmsg << ">>>> ERROR: Days should be inside [1," << MonthLengthListLeapYear[int(LocalDateMonth) - 1] << "] interval, and should be Integer!";
+                                        std::string daysmsgstr = daysmsg.str();
+                                        std::cout << daysmsgstr << '\n';
+                                    }
+                                }
 
-                    if(SunDialChoose.compare("Y") == 0 || SunDialChoose.compare("y") == 0 || SunDialChoose.compare("Yes") == 0 || SunDialChoose.compare("yes") == 0 || SunDialChoose.compare("YEs") == 0 || SunDialChoose.compare("yEs") == 0 || SunDialChoose.compare("yeS") == 0 || SunDialChoose.compare("YeS") == 0 || SunDialChoose.compare("yES") == 0):
+                                else
+                                {
+                                    if(MonthLengthList[int(LocalDateMonth) - 1] >= LocalDateDay && LocalDateDay > 0)
+                                    {
+                                        std::cout << '\n';
+                                        break;
+                                    }
 
-                        std::cout << "Choosen Date:")
+                                    else
+                                    {
+                                        std::stringstream daysmsg;
+                                        daysmsg << ">>>> ERROR: Days should be inside [1," << MonthLengthList[int(LocalDateMonth) - 1] << "] interval, and should be Integer!";
+                                        std::string daysmsgstr = daysmsg.str();
+                                        std::cout << daysmsgstr << '\n';
+                                    }
+                                }
+                            }
+
+                            break;
+                        }
+
+                        else if(SunDialChoose.compare("N") == 0 || SunDialChoose.compare("n") == 0 || SunDialChoose.compare("No") == 0 || SunDialChoose.compare("no") == 0 || SunDialChoose.compare("nO") == 0)
+                        {
+                            std::cout << '\n';
+                            break;
+                        }
+
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Invalid option! Try Again!";
+                        }
+                    }
+
+                    int MeasureNumber = 1000;
+                    int FineTuned = 1000;
+
+                    if(SunDialChoose.compare("Y") == 0 || SunDialChoose.compare("y") == 0 || SunDialChoose.compare("Yes") == 0 || SunDialChoose.compare("yes") == 0 || SunDialChoose.compare("YEs") == 0 || SunDialChoose.compare("yEs") == 0 || SunDialChoose.compare("yeS") == 0 || SunDialChoose.compare("YeS") == 0 || SunDialChoose.compare("yES") == 0)
+                    {
+                        std::cout << "Choosen Date:\n";
                         ////// CHOOSEN DATE //////
-                        LocalHourAngleRiseChoosen, LocalHourAngleSetChoosen, DeclinationSunChoosen = SundialPrecalculations(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay)
+                        std::vector<double> SundialPrecalculationsoutputVecChoosen = SundialPrecalculations(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay);
+                        double LocalHourAngleRiseChoosen = SundialPrecalculationsoutputVecChoosen[0];
+                        double LocalHourAngleSetChoosen = SundialPrecalculationsoutputVecChoosen[1];
+                        double DeclinationSunChoosen = SundialPrecalculationsoutputVecChoosen[2];
 
                         // Create lists for plot parameters
-                        LocalHourAngleChoosen = []
-                        AltitudesChoosen = []
-                        AzimuthsChoosen = []
-                        ShadowsChoosen = []
+                        std::vector<double> LocalHourAngleChoosen = {};
+                        std::vector<double> AltitudesChoosen = {};
+                        std::vector<double> AzimuthsChoosen = {};
+                        std::vector<double> ShadowsChoosen = {};
 
-                        if(LocalHourAngleRiseChoosen > LocalHourAngleSetChoosen):
-
-                            ChoosenStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseChoosen * FineTuned)) / (MeasureNumber / 2))
-                            ChoosenStep2 = int(int(LocalHourAngleSetChoosen * FineTuned) / (MeasureNumber / 2))
+                        if(LocalHourAngleRiseChoosen > LocalHourAngleSetChoosen)
+                        {
+                            int ChoosenStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseChoosen * FineTuned)) / (MeasureNumber / 2));
+                            int ChoosenStep2 = int(int(LocalHourAngleSetChoosen * FineTuned) / (MeasureNumber / 2));
 
                             // Calculate plot parameters
-                            for LocalHourAngleActual in range(int(LocalHourAngleRiseChoosen * FineTuned), int(23.999999999 * FineTuned), ChoosenStep1):
-
+                            for(int LocalHourAngleActual = int(LocalHourAngleRiseChoosen * FineTuned); int(23.999999999 * FineTuned); ChoosenStep1)
+                            {
                                 // Norm back to normal
-                                LocalHourAngleActual /= FineTuned
+                                double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                                 // Calculate parameters by ~10 seconds interval
-                                AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunChoosen)
-                                //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunChoosen)
+                                std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunChoosen);
+                                double AltitudeActual = SundialParametersCalcoutputVec[0];
+                                double AzimuthActual = SundialParametersCalcoutputVec[1];
+                                double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                                //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunChoosen)
                                 //std::cout << LocalHourAngleActual, AltitudeActual)
 
                                 // Append parameters to lists
-                                LocalHourAngleActual += 12
-                                LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                                LocalHourAngleChoosen.append(LocalHourAngleActual)
-                                AltitudesChoosen.append(AltitudeActual)
-                                AzimuthsChoosen.append(AzimuthActual)
-                                ShadowsChoosen.append(ShadowsLengthActual)
+                                LocalHourAngleActual += 12;
+                                LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                                LocalHourAngleChoosen.push_back(LocalHourAngleActual);
+                                AltitudesChoosen.push_back(AltitudeActual);
+                                AzimuthsChoosen.push_back(AzimuthActual);
+                                ShadowsChoosen.push_back(ShadowsLengthActual);
+                            }
 
                             // Calculate plot parameters
-                            for LocalHourAngleActual in range(0, int(LocalHourAngleSetChoosen * FineTuned), ChoosenStep2):
-
+                            for(int LocalHourAngleActual = 0; int(LocalHourAngleSetChoosen * FineTuned); ChoosenStep2)
+                            {
                                 // Norm back to normal
-                                LocalHourAngleActual /= FineTuned
+                                double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                                 // Calculate parameters by ~10 seconds interval
-                                AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunChoosen)
-                                //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunChoosen)
+                                std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunChoosen);
+                                double AltitudeActual = SundialParametersCalcoutputVec[0];
+                                double AzimuthActual = SundialParametersCalcoutputVec[1];
+                                double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                                //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunChoosen)
                                 //std::cout << LocalHourAngleActual, AltitudeActual)
 
                                 // Append parameters to lists
-                                LocalHourAngleActual += 12
-                                LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                                LocalHourAngleChoosen.append(LocalHourAngleActual)
-                                AltitudesChoosen.append(AltitudeActual)
-                                AzimuthsChoosen.append(AzimuthActual)
-                                ShadowsChoosen.append(ShadowsLengthActual)
+                                LocalHourAngleActual += 12;
+                                LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                                LocalHourAngleChoosen.push_back(LocalHourAngleActual);
+                                AltitudesChoosen.push_back(AltitudeActual);
+                                AzimuthsChoosen.push_back(AzimuthActual);
+                                ShadowsChoosen.push_back(ShadowsLengthActual);
+                            }
+                        }
 
-
-                        else:
-
-                            ChoosenStep = int((int(LocalHourAngleSetChoosen * FineTuned) - int(LocalHourAngleRiseChoosen * FineTuned)) / MeasureNumber)
+                        else
+                        {
+                            int ChoosenStep = int((int(LocalHourAngleSetChoosen * FineTuned) - int(LocalHourAngleRiseChoosen * FineTuned)) / MeasureNumber);
 
                             // Calculate plot parameters
-                            for LocalHourAngleActual in range(int(LocalHourAngleRiseChoosen * FineTuned), int(LocalHourAngleSetChoosen * FineTuned), ChoosenStep):
-
+                            for(int LocalHourAngleActual = int(LocalHourAngleRiseChoosen * FineTuned); int(LocalHourAngleSetChoosen * FineTuned); ChoosenStep)
+                            {
                                 // Norm back to normal
-                                LocalHourAngleActual /= FineTuned
+                                double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                                 // Calculate parameters by ~10 seconds interval
-                                AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunChoosen)
-                                //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunChoosen)
+                                std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunChoosen);
+                                double AltitudeActual = SundialParametersCalcoutputVec[0];
+                                double AzimuthActual = SundialParametersCalcoutputVec[1];
+                                double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                                //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunChoosen)
                                 //std::cout << LocalHourAngleActual, AltitudeActual)
 
                                 // Append parameters to lists
-                                LocalHourAngleActual += 12
-                                LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                                LocalHourAngleChoosen.append(LocalHourAngleActual)
-                                AltitudesChoosen.append(AltitudeActual)
-                                AzimuthsChoosen.append(AzimuthActual)
-                                ShadowsChoosen.append(ShadowsLengthActual)
+                                LocalHourAngleActual += 12;
+                                LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                                LocalHourAngleChoosen.push_back(LocalHourAngleActual);
+                                AltitudesChoosen.push_back(AltitudeActual);
+                                AzimuthsChoosen.push_back(AzimuthActual);
+                                ShadowsChoosen.push_back(ShadowsLengthActual);
+                            }
+                        }
+                    }
 
 
-
-                    std::cout << "Summer Solstice:")
+                    std::cout << "Summer Solstice:";
                     ////// SUMMER SOLSTICE //////
-                    LocalDateMonthSummer = 6
-                    if(SunDialYear%4 == 0):
-                        LocalDateDaySummer = 20
+                    int LocalDateMonthSummer = 6;
+                    int LocalDateDaySummer;
+                    if(int(SunDialYear)%4 == 0)
+                    {
+                        LocalDateDaySummer = 20;
+                    }
 
-                    else:
-                        LocalDateDaySummer = 21
+                    else
+                    {
+                        LocalDateDaySummer = 21;
+                    }
 
-                    LocalHourAngleRiseSummer, LocalHourAngleSetSummer, DeclinationSunSummer = SundialPrecalculations(Planet, Latitude, Longitude, SunDialYear, LocalDateMonthSummer, LocalDateDaySummer)
+                    std::vector<double> SundialPrecalculationsoutputVecSummer = SundialPrecalculations(Planet, Latitude, Longitude, SunDialYear, LocalDateMonthSummer, LocalDateDaySummer);
+                    double LocalHourAngleRiseSummer = SundialPrecalculationsoutputVecSummer[0];
+                    double LocalHourAngleSetSummer = SundialPrecalculationsoutputVecSummer[1];
+                    double DeclinationSunSummer = SundialPrecalculationsoutputVecSummer[2];
 
                     // Create lists for plot parameters
-                    LocalHourAngleSummer = []
-                    AltitudesSummer = []
-                    AzimuthsSummer = []
-                    ShadowsSummer = []
+                    std::vector<double> LocalHourAngleSummer = {};
+                    std::vector<double> AltitudesSummer = {};
+                    std::vector<double> AzimuthsSummer = {};
+                    std::vector<double> ShadowsSummer = {};
 
-                    DeclinationSunSummer = 23.5
+                    double DeclinationSunSummer = 23.5;
 
-                    if(LocalHourAngleRiseSummer > LocalHourAngleSetSummer):
-
-                        SummerStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseSummer * FineTuned)) / (MeasureNumber / 2))
-                        SummerStep2 = int(int(LocalHourAngleSetSummer * FineTuned) / (MeasureNumber / 2))
+                    if(LocalHourAngleRiseSummer > LocalHourAngleSetSummer)
+                    {
+                        int SummerStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseSummer * FineTuned)) / (MeasureNumber / 2));
+                        int SummerStep2 = int(int(LocalHourAngleSetSummer * FineTuned) / (MeasureNumber / 2));
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(int(LocalHourAngleRiseSummer * FineTuned), int(23.999999999 * FineTuned), SummerStep1):
-
+                        for(int LocalHourAngleActual = int(LocalHourAngleRiseSummer * FineTuned); int(23.999999999 * FineTuned); SummerStep1)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSummer)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSummer)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSummer);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSummer)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleSummer.append(LocalHourAngleActual)
-                            AltitudesSummer.append(AltitudeActual)
-                            AzimuthsSummer.append(AzimuthActual)
-                            ShadowsSummer.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleSummer.push_back(LocalHourAngleActual);
+                            AltitudesSummer.push_back(AltitudeActual);
+                            AzimuthsSummer.push_back(AzimuthActual);
+                            ShadowsSummer.push_back(ShadowsLengthActual);
+                        }
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(0, int(LocalHourAngleSetSummer * FineTuned), SummerStep2):
-
+                        for(int LocalHourAngleActual = 0; int(LocalHourAngleSetSummer * FineTuned); SummerStep2)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSummer)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSummer)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSummer);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSummer)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleSummer.append(LocalHourAngleActual)
-                            AltitudesSummer.append(AltitudeActual)
-                            AzimuthsSummer.append(AzimuthActual)
-                            ShadowsSummer.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleSummer.push_back(LocalHourAngleActual);
+                            AltitudesSummer.push_back(AltitudeActual);
+                            AzimuthsSummer.push_back(AzimuthActual);
+                            ShadowsSummer.push_back(ShadowsLengthActual);
+                        }
+                    }
 
-
-                    else:
-
-                        SummerStep = int((int(LocalHourAngleSetSummer * FineTuned) - int(LocalHourAngleRiseSummer * FineTuned)) / MeasureNumber)
+                    else
+                    {
+                        int SummerStep = int((int(LocalHourAngleSetSummer * FineTuned) - int(LocalHourAngleRiseSummer * FineTuned)) / MeasureNumber);
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(int(LocalHourAngleRiseSummer * FineTuned), int(LocalHourAngleSetSummer * FineTuned), SummerStep):
-
+                        for(int LocalHourAngleActual = int(LocalHourAngleRiseSummer * FineTuned); int(LocalHourAngleSetSummer * FineTuned); SummerStep)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSummer)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSummer)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSummer);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSummer)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleSummer.append(LocalHourAngleActual)
-                            AltitudesSummer.append(AltitudeActual)
-                            AzimuthsSummer.append(AzimuthActual)
-                            ShadowsSummer.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleSummer.push_back(LocalHourAngleActual);
+                            AltitudesSummer.push_back(AltitudeActual);
+                            AzimuthsSummer.push_back(AzimuthActual);
+                            ShadowsSummer.push_back(ShadowsLengthActual);
+                        }
+                    }
 
 
-                    std::cout << "Winter Solstice:")
+                    std::cout << "Winter Solstice:";
                     ////// WINTER SOLSTICE //////
-                    LocalDateMonthWinter = 12
-                    if((SunDialYear + 1)%4 == 0):
-                        LocalDateDayWinter = 22
+                    int LocalDateMonthWinter = 12;
+                    int LocalDateDayWinter;
+                    if(int(SunDialYear + 1)%4 == 0)
+                    {
+                        LocalDateDayWinter = 22;
+                    }
 
-                    else:
-                        LocalDateDayWinter = 21
+                    else
+                    {
+                        LocalDateDayWinter = 21;
+                    }
 
-                    LocalHourAngleRiseWinter, LocalHourAngleSetWinter, DeclinationSunWinter = SundialPrecalculations(Planet, Latitude, Longitude, SunDialYear, LocalDateMonthWinter, LocalDateDayWinter)
+                    std::vector<double> SundialPrecalculationsoutputVecWinter = SundialPrecalculations(Planet, Latitude, Longitude, SunDialYear, LocalDateMonthWinter, LocalDateDayWinter);
+                    double LocalHourAngleRiseWinter = SundialPrecalculationsoutputVecWinter[0];
+                    double LocalHourAngleSetWinter = SundialPrecalculationsoutputVecWinter[1];
+                    double DeclinationSunWinter = SundialPrecalculationsoutputVecWinter[2];
 
                     // Create lists for plot parameters
-                    LocalHourAngleWinter = []
-                    AltitudesWinter = []
-                    AzimuthsWinter = []
-                    ShadowsWinter = []
+                    std::vector<double> LocalHourAngleWinter = {};
+                    std::vector<double> AltitudesWinter = {};
+                    std::vector<double> AzimuthsWinter = {};
+                    std::vector<double> ShadowsWinter = {};
 
-                    if(LocalHourAngleRiseWinter > LocalHourAngleSetWinter):
-
-                        WinterStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseWinter * FineTuned)) / (MeasureNumber / 2))
-                        WinterStep2 = int(int(LocalHourAngleSetWinter * FineTuned) / (MeasureNumber / 2))
+                    if(LocalHourAngleRiseWinter > LocalHourAngleSetWinter)
+                    {
+                        int WinterStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseWinter * FineTuned)) / (MeasureNumber / 2));
+                        int WinterStep2 = int(int(LocalHourAngleSetWinter * FineTuned) / (MeasureNumber / 2));
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(int(LocalHourAngleRiseWinter * FineTuned), int(23.999999999 * FineTuned), WinterStep1):
-
+                        for(int LocalHourAngleActual = int(LocalHourAngleRiseWinter * FineTuned); int(23.999999999 * FineTuned); WinterStep1)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunWinter)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunWinter)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunWinter);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunWinter)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleWinter.append(LocalHourAngleActual)
-                            AltitudesWinter.append(AltitudeActual)
-                            //AzimuthsWinter.append(AzimuthActual)
-                            ShadowsWinter.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleWinter.push_back(LocalHourAngleActual);
+                            AltitudesWinter.push_back(AltitudeActual);
+                            AzimuthsWinter.push_back(AzimuthActual);
+                            ShadowsWinter.push_back(ShadowsLengthActual);
+                        }
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(0, int(LocalHourAngleSetWinter * FineTuned), WinterStep2):
-
+                        for(int LocalHourAngleActual = 0; int(LocalHourAngleSetWinter * FineTuned); WinterStep2)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunWinter)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunWinter)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunWinter);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunWinter)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleWinter.append(LocalHourAngleActual)
-                            AltitudesWinter.append(AltitudeActual)
-                            AzimuthsWinter.append(AzimuthActual)
-                            ShadowsWinter.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleWinter.push_back(LocalHourAngleActual);
+                            AltitudesWinter.push_back(AltitudeActual);
+                            AzimuthsWinter.push_back(AzimuthActual);
+                            ShadowsWinter.push_back(ShadowsLengthActual);
+                        }
+                    }
 
-
-                    else:
-
-                        WinterStep = int((int(LocalHourAngleSetWinter * FineTuned) - int(LocalHourAngleRiseWinter * FineTuned)) / MeasureNumber)
+                    else
+                    {
+                        int WinterStep = int((int(LocalHourAngleSetWinter * FineTuned) - int(LocalHourAngleRiseWinter * FineTuned)) / MeasureNumber);
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(int(LocalHourAngleRiseWinter * FineTuned), int(LocalHourAngleSetWinter * FineTuned), SummerStep):
-
+                        for(int LocalHourAngleActual = int(LocalHourAngleRiseWinter * FineTuned); int(LocalHourAngleSetWinter * FineTuned); WinterStep)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunWinter)
-                            //AltitudeActual, AzimuthAShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunWinter)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunWinter);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, AzimuthAShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunWinter)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleWinter.append(LocalHourAngleActual)
-                            AltitudesWinter.append(AltitudeActual)
-                            AzimuthsWinter.append(AzimuthActual)
-                            ShadowsWinter.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleWinter.push_back(LocalHourAngleActual);
+                            AltitudesWinter.push_back(AltitudeActual);
+                            AzimuthsWinter.push_back(AzimuthActual);
+                            ShadowsWinter.push_back(ShadowsLengthActual);
+                        }
+                    }
 
 
-                    std::cout << "March Equinox:")
+                    std::cout << "March Equinox:";
                     ////// MARCH EQUINOX //////
-                    LocalDateMonthMarch = 3
-                    LocalDateDayMarch = 20
+                    int LocalDateMonthMarch = 3;
+                    int LocalDateDayMarch = 20;
 
-                    LocalHourAngleRiseMarch, LocalHourAngleSetMarch, DeclinationSunMarch = SundialPrecalculations(Planet, Latitude, Longitude, SunDialYear, LocalDateMonthMarch, LocalDateDayMarch)
+                    std::vector<double> SundialPrecalculationsoutputVecMarch = SundialPrecalculations(Planet, Latitude, Longitude, SunDialYear, LocalDateMonthMarch, LocalDateDayMarch);
+                    double LocalHourAngleRiseMarch = SundialPrecalculationsoutputVecMarch[0];
+                    double LocalHourAngleSetMarch = SundialPrecalculationsoutputVecMarch[1];
+                    double DeclinationSunMarch = SundialPrecalculationsoutputVecMarch[2];
 
                     // Create lists for plot parameters
-                    LocalHourAngleMarch = []
-                    AltitudesMarch = []
-                    AzimuthsMarch = []
-                    ShadowsMarch = []
+                    std::vector<double> LocalHourAngleMarch = {};
+                    std::vector<double> AltitudesMarch = {};
+                    std::vector<double> AzimuthsMarch = {};
+                    std::vector<double> ShadowsMarch = {};
 
-                    if(LocalHourAngleRiseMarch > LocalHourAngleSetMarch):
-
-                        MarchStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseMarch * FineTuned)) / (MeasureNumber / 2))
-                        MarchStep2 = int(int(LocalHourAngleSetMarch * FineTuned) / (MeasureNumber / 2))
+                    if(LocalHourAngleRiseMarch > LocalHourAngleSetMarch)
+                    {
+                        int MarchStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseMarch * FineTuned)) / (MeasureNumber / 2));
+                        int MarchStep2 = int(int(LocalHourAngleSetMarch * FineTuned) / (MeasureNumber / 2));
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(int(LocalHourAngleRiseMarch * FineTuned), int(23.999999999 * FineTuned), MarchStep1):
-
+                        for(int LocalHourAngleActual = int(LocalHourAngleRiseMarch * FineTuned); int(23.999999999 * FineTuned); MarchStep1)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunMarch)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunMarch)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunMarch);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunMarch)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleMarch.append(LocalHourAngleActual)
-                            AltitudesMarch.append(AltitudeActual)
-                            AzimuthsMarch.append(AzimuthActual)
-                            ShadowsMarch.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleMarch.push_back(LocalHourAngleActual);
+                            AltitudesMarch.push_back(AltitudeActual);
+                            AzimuthsMarch.push_back(AzimuthActual);
+                            ShadowsMarch.push_back(ShadowsLengthActual);
+                        }
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(0, int(LocalHourAngleSetMarch * FineTuned), MarchStep2):
-
+                        for(int LocalHourAngleActual = 0; int(LocalHourAngleSetMarch * FineTuned); MarchStep2)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunMarch)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunMarch)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunMarch);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunMarch)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleMarch.append(LocalHourAngleActual)
-                            AltitudesMarch.append(AltitudeActual)
-                            AzimuthsMarch.append(AzimuthActual)
-                            ShadowsMarch.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleMarch.push_back(LocalHourAngleActual);
+                            AltitudesMarch.push_back(AltitudeActual);
+                            AzimuthsMarch.push_back(AzimuthActual);
+                            ShadowsMarch.push_back(ShadowsLengthActual);
+                        }
+                    }
 
 
-                    else:
-
-                        MarchStep = int((int(LocalHourAngleSetMarch * FineTuned) - int(LocalHourAngleRiseMarch * FineTuned)) / MeasureNumber)
+                    else
+                    {
+                        int MarchStep = int((int(LocalHourAngleSetMarch * FineTuned) - int(LocalHourAngleRiseMarch * FineTuned)) / MeasureNumber);
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(int(LocalHourAngleRiseMarch * FineTuned), int(LocalHourAngleSetMarch * FineTuned), SummerStep):
-
+                        for(int LocalHourAngleActual = int(LocalHourAngleRiseMarch * FineTuned); int(LocalHourAngleSetMarch * FineTuned); MarchStep)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunMarch)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunMarch)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunMarch);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunMarch)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleMarch.append(LocalHourAngleActual)
-                            AltitudesMarch.append(AltitudeActual)
-                            AzimuthsMarch.append(AzimuthActual)
-                            ShadowsMarch.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleMarch.push_back(LocalHourAngleActual);
+                            AltitudesMarch.push_back(AltitudeActual);
+                            AzimuthsMarch.push_back(AzimuthActual);
+                            ShadowsMarch.push_back(ShadowsLengthActual);
+                        }
+                    }
 
 
-                    std::cout << "September Equinox:")
+                    std::cout << "September Equinox:";
                     ////// SEPTEMBER EQIUNOX //////
-                    LocalDateMonthSeptember = 9
-                    if(SunDialYear%4 == 0 || (SunDialYear - 1)%4 == 0):
-                        LocalDateDaySeptember = 22
+                    int LocalDateMonthSeptember = 9;
+                    int LocalDateDaySeptember;
+                    if(int(SunDialYear)%4 == 0 || int(SunDialYear - 1)%4 == 0)
+                    {
+                        LocalDateDaySeptember = 22;
+                    }
 
-                    else:
-                        LocalDateDaySeptember = 23
+                    else
+                    {
+                        LocalDateDaySeptember = 23;
+                    }
 
-                    LocalHourAngleRiseSeptember, LocalHourAngleSetSeptember, DeclinationSunSeptember = SundialPrecalculations(Planet, Latitude, Longitude, SunDialYear, LocalDateMonthSeptember, LocalDateDaySeptember)
+                    std::vector<double> SundialPrecalculationsoutputVec = SundialPrecalculations(Planet, Latitude, Longitude, SunDialYear, LocalDateMonthSeptember, LocalDateDaySeptember);
+                    double LocalHourAngleRiseSeptember = SundialPrecalculationsoutputVec[0];
+                    double LocalHourAngleSetSeptember = SundialPrecalculationsoutputVec[1];
+                    double DeclinationSunSeptember = SundialPrecalculationsoutputVec[2];
 
                     // Create lists for plot parameters
-                    LocalHourAngleSeptember = []
-                    AltitudesSeptember = []
-                    AzimuthsSeptember = []
-                    ShadowsSeptember = []
+                    std::vector<double> LocalHourAngleSeptember = {};
+                    std::vector<double> AltitudesSeptember = {};
+                    std::vector<double> AzimuthsSeptember = {};
+                    std::vector<double> ShadowsSeptember = {};
 
-                    if(LocalHourAngleRiseSeptember > LocalHourAngleSetSeptember):
-
-                        SeptemberStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseSeptember * FineTuned)) / (MeasureNumber / 2))
-                        SeptemberStep2 = int(int(LocalHourAngleSetSeptember * FineTuned) / (MeasureNumber / 2))
+                    if(LocalHourAngleRiseSeptember > LocalHourAngleSetSeptember)
+                    {
+                        int SeptemberStep1 = int((int(23.999999999 * FineTuned) - int(LocalHourAngleRiseSeptember * FineTuned)) / (MeasureNumber / 2));
+                        int SeptemberStep2 = int(int(LocalHourAngleSetSeptember * FineTuned) / (MeasureNumber / 2));
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(int(LocalHourAngleRiseSeptember * FineTuned), int(23.999999999 * FineTuned), SeptemberStep1):
-
+                        for(double LocalHourAngleActual = int(LocalHourAngleRiseSeptember * FineTuned); LocalHourAngleActual < int(23.999999999 * FineTuned); SeptemberStep1)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSeptember)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSeptember)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSeptember);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSeptember)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleSeptember.append(LocalHourAngleActual)
-                            AltitudesSeptember.append(AltitudeActual)
-                            AzimuthsSeptember.append(AzimuthActual)
-                            ShadowsSeptember.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleSeptember.push_back(LocalHourAngleActual);
+                            AltitudesSeptember.push_back(AltitudeActual);
+                            AzimuthsSeptember.push_back(AzimuthActual);
+                            ShadowsSeptember.push_back(ShadowsLengthActual);
+                        }
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(0, int(LocalHourAngleSetSeptember * FineTuned), SeptemberStep2):
-
+                        for(double LocalHourAngleActual = 0; LocalHourAngleActual < int(LocalHourAngleSetSeptember * FineTuned); SeptemberStep2)
+                        {
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSeptember)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSeptember)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSeptember);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSeptember)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleSeptember.append(LocalHourAngleActual)
-                            AltitudesSeptember.append(AltitudeActual)
-                            AzimuthsSeptember.append(AzimuthActual)
-                            ShadowsSeptember.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleSeptember.push_back(LocalHourAngleActual);
+                            AltitudesSeptember.push_back(AltitudeActual);
+                            AzimuthsSeptember.push_back(AzimuthActual);
+                            ShadowsSeptember.push_back(ShadowsLengthActual);
+                        }
+                    }
 
-
-                    else:
-
-                        SeptemberStep = int((int(LocalHourAngleSetSeptember * FineTuned) - int(LocalHourAngleRiseSeptember * FineTuned)) / MeasureNumber)
+                    else
+                    {
+                        int SeptemberStep = int((int(LocalHourAngleSetSeptember * FineTuned) - int(LocalHourAngleRiseSeptember * FineTuned)) / MeasureNumber);
 
                         // Calculate plot parameters
-                        for LocalHourAngleActual in range(int(LocalHourAngleRiseSeptember * FineTuned), int(LocalHourAngleSetSeptember * FineTuned), SeptemberStep):
+                        for(int LocalHourAngleActual = int(LocalHourAngleRiseSeptember * FineTuned); LocalHourAngleActual < int(LocalHourAngleSetSeptember * FineTuned); SeptemberStep)
+                        {
 
                             // Norm back to normal
-                            LocalHourAngleActual /= FineTuned
+                            double LocalHourAngleActualDouble = LocalHourAngleActual / FineTuned;
 
                             // Calculate parameters by ~10 seconds interval
-                            AltitudeActual, AzimuthActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSeptember)
-                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActual, DeclinationSunSeptember)
+                            std::vector<double> SundialParametersCalcoutputVec = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSeptember);
+                            double AltitudeActual = SundialParametersCalcoutputVec[0];
+                            double AzimuthActual = SundialParametersCalcoutputVec[1];
+                            double ShadowsLengthActual = SundialParametersCalcoutputVec[2];
+                            //AltitudeActual, ShadowsLengthActual = SundialParametersCalc(Latitude, LocalHourAngleActualDouble, DeclinationSunSeptember)
                             //std::cout << LocalHourAngleActual, AltitudeActual)
 
                             // Append parameters to lists
-                            LocalHourAngleActual += 12
-                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24)
-                            LocalHourAngleSeptember.append(LocalHourAngleActual)
-                            AltitudesSeptember.append(AltitudeActual)
-                            AzimuthsSeptember.append(AzimuthActual)
-                            ShadowsSeptember.append(ShadowsLengthActual)
+                            LocalHourAngleActual += 12;
+                            LocalHourAngleActual = NormalizeZeroBounded(LocalHourAngleActual, 24);
+                            LocalHourAngleSeptember.push_back(LocalHourAngleActual);
+                            AltitudesSeptember.push_back(AltitudeActual);
+                            AzimuthsSeptember.push_back(AzimuthActual);
+                            ShadowsSeptember.push_back(ShadowsLengthActual);
+                        }
+                    }
 
                     // Sun's path on the Sky
-                    plt.title("Sun's path on the Sky")
+                    /*plt.title("Sun's path on the Sky")
                     plt.plot(LocalHourAngleSummer, AltitudesSummer, '.', label="Summer Solstice")
                     plt.plot(LocalHourAngleWinter, AltitudesWinter, '.', label="Winter Solstice")
                     plt.plot(LocalHourAngleMarch, AltitudesMarch, '.', label="March Equinox")
@@ -5622,7 +5860,7 @@ int main()
                     plt.plot(AzimuthsSeptember, ShadowsSeptember, '.', label="Sept. Equinox")
                     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=2, mode="expand", borderaxespad=0.)
                     plt.show()
-                    */
+                    
 
                     // Shadow's length on the ground
                     plt.title("Sun's path on Sundial")
@@ -5637,7 +5875,9 @@ int main()
                     plt.ylim((0,10))
                     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=2, mode="expand", borderaxespad=0.)
                     plt.grid()
-                    plt.show()
+                    plt.show()*/
+                }
+            }
         }
 
 
@@ -5648,95 +5888,179 @@ int main()
         //  | | | | | | | (_| | |  __/ | | | | | | | | | | (_| |
         //  \_| |_/_| |_|\__,_|_|\___|_| |_| |_|_| |_| |_|\__,_|
         // Draw Sun Analemma at Choosen Location on Earth
-        else if(mode == '7')
+        else if(mode.compare("7") == 0)
         {
-            while(1):
-                std::cout << ">> Plot the Sun Analemma at Choosen Location on Earth")
-                std::cout << ">> Please choose a mode you'd like to use!")
-                std::cout << "(1) Parameters from User Input")
-                std::cout << "(2) Parameters of Predefined Locations")
-                std::cout << "(Q) Quit to Main Menu")
+            while(1)
+            {
+                std::cout << ">> Plot the Sun Analemma at Choosen Location on Earth\n";
+                std::cout << ">> Please choose a mode you'd like to use!\n";
+                std::cout << "(1) Parameters from User Input\n";
+                std::cout << "(2) Parameters of Predefined Locations\n";
+                std::cout << "(Q) Quit to Main Menu\n\n";
                 
-                AnalemmaMode = input("> Choose a mode and press enter...: ")
-
-                std::cout << '\n')
+                std::string AnalemmaMode;
+                std::cout << "> Choose a mode and press enter...: ";
+                std::cin >> AnalemmaMode;
+                std::cout << '\n';
 
                 // Constants for calculation
-                Planet = OrbitDict["Earth"
-]
-                if(AnalemmaMode.compare("1") == 0):
-                    std::cout << ">> Plot Analemma on a User-defined Location\n")
-                    std::cout << ">> Give Parameters!")
+                std::string Planet = "Earth";
+
+                // Declare Variables
+                std::string Location;
+                double Latitude;
+                double Longitude;
+
+                double AnalemmaYear;
+
+                double AltitudeActual;
+                double LocalHourAngleActual;
+
+                if(AnalemmaMode.compare("1") == 0)
+                {
+                    std::cout << ">> Plot Analemma on a User-defined Location\n";
+                    std::cout << ">> Give Parameters!\n";
 
                     // Input Positional Parameters
-                    std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LatitudeHours = float(input("> Latitude (φ) Hours: ") or "0")
-                    LatitudeMinutes = float(input("> Latitude (φ) Minutes: ") or "0")
-                    LatitudeSeconds = float(input("> Latitude (φ) Seconds: ") or "0")
-                    Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600
+                    std::cout << ">> HINT: You can write Latitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    double LatitudeHours;
+                    double LatitudeMinutes;
+                    double LatitudeSeconds;
+                    
+                    std::cout << "\n> Latitude (φ) Hours: ";
+                    std::cin >> LatitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Latitude (φ) Minutes: ";
+                    std::cin >> LatitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Latitude (φ) Seconds: ";
+                    std::cin >> LatitudeSeconds;
+                    std::cout << '\n';
+                    Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
 
-                    std::cout << ">> HINT: You can write Longitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.")
-                    LongitudeHours = float(input("> Longitude (λ) Hours: ") or "0")
-                    LongitudeMinutes = float(input("> Longitude (λ) Minutes: ") or "0")
-                    LongitudeSeconds = float(input("> Longitude (λ) Seconds: ") or "0")
-                    Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600
+                    std::cout << ">> HINT: You can write Longitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
+                    double LongitudeHours;
+                    double LongitudeMinutes;
+                    double LongitudeSeconds;
+                    
+                    std::cout << "\n> Longitude #1 (φ1) Hours: ";
+                    std::cin >> LongitudeHours;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Minutes: ";
+                    std::cin >> LongitudeMinutes;
+                    std::cout << '\n';
+                    std::cout << "> Longitude #1 (φ1) Seconds: ";
+                    std::cin >> LongitudeSeconds;
+                    std::cout << '\n';
+                    Longitude = LongitudeHours + LongitudeMinutes/60 + LongitudeSeconds/3600;
+                }
 
-
-                else if(AnalemmaMode.compare("2") == 0):
-                    std::cout << ">> Plot Analemma on a Predefined Location's Coordinates")
-                    std::cout << ">> Write the Name of a Choosen Location to the Input!")
+                else if(AnalemmaMode.compare("2") == 0)
+                {
+                    std::cout << ">> Plot Analemma on a Predefined Location's Coordinates";
+                    std::cout << ">> Write the Name of a Choosen Location to the Input!";
 
                     // Input Choosen Location's Name
-                    while(1):
-                        Location = input("> Location's name (type \'H\' for Help): ")
+                    while(1)
+                    {
+                        std::cout << ">> Calculate Datetimes of Twilights from the Coordinates of a Predefined Location\n";
+                        std::cout << ">> Write the Name of a Choosen Location to the Input!\n";
+
+                        std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
+
+                        std::cout << "\n> Location's name (type \'H\' for Help): ";
+                        std::cin >> Location;
+                        std::cout << '\n';
+
+                        if(Location.compare("Help") == 0 || Location.compare("help") == 0 || Location.compare("H") == 0 || Location.compare("h") == 0)
+                        {
+                            std::cout << ">> Predefined Locations you can choose from:\n";
+
+                            for(auto Locations = LocationDict.cbegin(); Locations != LocationDict.cend(); ++Locations)
+                            {
+                                std::cout << Locations->first << ": " << Locations->second[0] << "N ; " << Locations->second[1] << "E" << '\n';
+                            }
+
+                            std::cout << '\n';
+                        }
+
+                        else
+                        {
+                            try
+                            {
+                                Latitude = LocationDict[Location][0];
+                                Longitude = LocationDict[Location][1];
+                            
+                                if(LocationDict.find(Location) != LocationDict.end())
+                                {
+                                    throw Location;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            catch(std::string Location2)
+                            {
+                                std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!\n";
+                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!\n";
+                            }
+                        }
+                    }
+                }
+
+                else if(AnalemmaMode.compare("Q") == 0 || AnalemmaMode.compare("q") == 0)
+                {
+                    break;
+                }
+
+                else
+                {
+                    std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
+                }
+
+
+                if(AnalemmaMode.compare("1") == 0 || AnalemmaMode.compare("2") == 0)
+                {
+                    while(1)
+                    {
+                        std::cout << ">> For which Year would You like to Draw the Analemma?\n";
                         
-                        if(Location == "Help" or Location == "help" or Location == "H" or Location == "h"):
-                            std::cout << "\n>> Predefined Locations you can choose from:")
-                            for keys in LocationDict.items():
-                                std::cout << keys)
-                            std::cout << '\n')
-                        
-                        else:
-                            try:
-                                Latitude = LocationDictFunc(Location)[0]
-                                Longitude = LocationDictFunc(Location)[1]
+                        std::cout << "> Choosen Year: ";
+                        std::cin >> AnalemmaYear;
+                        std::cout << '\n';
 
-                            except KeyError:
-                                std::cout << ">>>> ERROR: The Location, named \"" + Location + "\" is not in the Database!")
-                                std::cout << ">>>> Type \"Help\" to list Available Cities in Database!")
-                                
-                            else:
-                                break
+                        if(AnalemmaYear != 0)
+                        {
+                            break;
+                        }
 
-                else if(AnalemmaMode.compare("Q") == 0 || AnalemmaMode.compare("q") == 0):
-                    break
+                        else
+                        {
+                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n";
+                        }
+                    }
 
-                else:
-                    std::cout << ">>>> ERROR: Invalid option! Try Again!")
+                    std::vector<double> LocalHourAngleAnalemma = {};
+                    std::vector<double> AltitudesAnalemma = {};
 
+                    for(int LocalDateMonth = 1; LocalDateMonth < 13; LocalDateMonth++)
+                    {
+                        for(int LocalDateDay = 1; LocalDateDay < MonthLengthList[LocalDateMonth - 1] + 1; LocalDateDay++)
+                        {
+                            std::vector<double> SundialParametersCalcoutputVec = SunAnalemma(Planet, Latitude, Longitude, AnalemmaYear, LocalDateMonth, LocalDateDay);
 
-                if(AnalemmaMode.compare("1") == 0 || AnalemmaMode.compare("2") == 0):
-                    while(1):
-                        std::cout << ">> For which Year would You like to Draw the Analemma?")
-                        AnalemmaYear = float(input("> Choosen Year: "))
-                        if(AnalemmaYear != 0):
-                            break
-                        else:
-                            std::cout << ">>>> ERROR: Year 0 is not defined! Please write another date!\n")
+                            AltitudeActual = SundialParametersCalcoutputVec[0];
+                            LocalHourAngleActual = SundialParametersCalcoutputVec[1];
 
-                    LocalHourAngleAnalemma = []
-                    AltitudesAnalemma = []
+                            LocalHourAngleAnalemma.push_back(LocalHourAngleActual + 12);
+                            AltitudesAnalemma.push_back(AltitudeActual);
+                        }
+                    }
 
-                    for LocalDateMonth in range(1, 13):
-                        for LocalDateDay in range(1, MonthLengthList[LocalDateMonth - 1] + 1, 1):
-
-                            LocalHourAngleActual, AltitudeActual = SunAnalemma(Planet, Latitude, Longitude, AnalemmaYear, LocalDateMonth, LocalDateDay)
-
-                            LocalHourAngleAnalemma.append(LocalHourAngleActual + 12)
-                            AltitudesAnalemma.append(AltitudeActual)
-
+                    // PLOT
                     // Shadow's length on the ground
-                    if(AnalemmaMode.compare("1") == 0):
+                    /*if(AnalemmaMode.compare("1") == 0):
                         plt.title("Sun Analemma at Cordinates " + str(Latitude) + "; " + str(Longitude))
 
                     else if(AnalemmaMode.compare("2") == 0):
@@ -5748,7 +6072,9 @@ int main()
                     plt.ylabel("Altitude of Sun (°)")
                     plt.xlim((12.0,12.1))
                     plt.grid()
-                    plt.show()
+                    plt.show()*/
+                }
+            }
         }
 
 
@@ -5759,8 +6085,11 @@ int main()
         //  | | | | (_) | | | | | |  __/\ V  V / (_) | |  |   < 
         //  \_| |_/\___/|_| |_| |_|\___| \_/\_/ \___/|_|  |_|\_\
         // HOMEWORK MODE
-        else if(mode == 'Home' or mode == 'home' or mode == 'H' or mode == 'h' or sys.argv[0] == "H" or sys.argv[0] == "h")
+        else if(mode.compare("Home") == 0 || mode.compare("home") == 0 || mode.compare("H") == 0 || mode.compare("h") == 0)
         {
+            // Constant map for Locations and Stellar Objects
+            std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
+            std::map<std::string, std::vector<double>> StellarDict = StellarDictFunc();
 
             std::cout << "//////  Csillesz II end-semester homework results, solved by the program  //////\n";
             std::cout << "_________________________________________________________________________\n\n";
@@ -5768,7 +6097,7 @@ int main()
             std::cout << "1.1/1.\n\n";
 
             std::string Location = "Szombathely";
-            double Longitude = LocationDictFunc(Location)[1];
+            double Longitude = LocationDict[Location][1];
             double LocalDateYear = 2017;
             double LocalDateMonth = 12;
             double LocalDateDay = 27;
@@ -5787,7 +6116,7 @@ int main()
             double GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
             double GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
 
-            std::cout << ">>> Calculate LMST at " << Location << ", at " << LocalHours << ":" << LocalMinutes << ":" << LocalSeconds << " LT, " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay;
+            std::cout << ">>> Calculate LMST at " << Location << ", at " << LocalHours << ":" << LocalMinutes << ":" << LocalSeconds << " LT, " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay << '\n';
             std::cout << ">>> Used formulas:\n";
             std::cout << ">>> 1. S_0 (Greenwich Mean Sidereal Time) at 00:00 UT was calculated\n";
             std::cout << ">>> 2. S (Local Mean Sidereal Time) = S_0 + Longitude/15 + dS * UnitedTime\n\n";
@@ -5800,252 +6129,341 @@ int main()
 
             std::cout << "1.1/2.\n\n";
 
-            Location = "Szeged"
-            Latitude = LocationDictFunc(Location)[0]
-            RightAscensionVenus = 18 + 41/60 + 54/3600
-            DeclinationVenus = -(24 + 4/60 + 9/3600)
-            Altitude, Azimuth1, Azimuth2, H_dil = EquIToHor(Latitude, RightAscensionVenus, DeclinationVenus, 0, NULL, NULL)
+            std::string Location = "Szeged";
+            double Latitude = LocationDict[Location][0];
+            double RightAscensionVenus = 18 + 41/60 + 54/3600;
+            double DeclinationVenus = -(24 + 4/60 + 9/3600);
+            std::vector<double> EquIToHoroutputVec = EquIToHor(Latitude, RightAscensionVenus, DeclinationVenus, 0, NULL, NULL);
+            double Altitude = EquIToHoroutputVec[0];
+            double Azimuth1 = EquIToHoroutputVec[1];
+            double Azimuth2 = EquIToHoroutputVec[2];
+            double H_dil = EquIToHoroutputVec[3];
 
-            std::cout << ">>> Calculate Rising and Setting Local Time of Venus,\n>>> As seen from " + Location + ".")
-            std::cout << ">>> Used formulas:")
-            std::cout << ">>> 1. First let's calculate LHA:\n>>> cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)")
-            std::cout << ">>> 2. arccos(x) has two correct output on this interval.\n>>> One if them will be the Rising, the other is\n>>> The Setting Local Hour Angle: LHA2 = -LHA1")
-            std::cout << ">>> 3. We calculate Azimuth for both Local Hour Angle.\n>>> For each one, we use 2 equations to determine the correct output:")
-            std::cout << ">>> a) sin(A) = - sin(H) * cos(δ) / cos(m)\n>>> b) cos(A) = (sin(δ) - sin(φ) * sin(m)) / (cos(φ) * cos(m))")
-            std::cout << ">>> These 2 equation outputs 2-2 values for an Azimuth. 1-1 from both these\n>>> Outputs will be equal, and that's the correct value for one of the Azimuths.\n")        
+            std::cout << ">>> Calculate Rising and Setting Local Time of Venus,\n>>> As seen from " << Location << ".\n";
+            std::cout << ">>> Used formulas:\n";
+            std::cout << ">>> 1. First let's calculate LHA:\n>>> cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)\n";
+            std::cout << ">>> 2. arccos(x) has two correct output on this interval.\n>>> One if them will be the Rising, the other is\n>>> The Setting Local Hour Angle: LHA2 = -LHA1\n";
+            std::cout << ">>> 3. We calculate Azimuth for both Local Hour Angle.\n>>> For each one, we use 2 equations to determine the correct output:\n";
+            std::cout << ">>> a) sin(A) = - sin(H) * cos(δ) / cos(m)\n>>> b) cos(A) = (sin(δ) - sin(φ) * sin(m)) / (cos(φ) * cos(m))\n";
+            std::cout << ">>> These 2 equation outputs 2-2 values for an Azimuth. 1-1 from both these\n>>> Outputs will be equal, and that's the correct value for one of the Azimuths.\n";
 
             // Print Results
-            std::cout << ">>> INFO: Available Data are only suited for Calculating Rising or\n>>> Setting Altitudes!")
-            std::cout << "\n>>> Calculated Parameter of Rising/Setting Object in Horizontal Coord. Sys.:")
+            std::cout << ">>> INFO: Available Data are only suited for Calculating Rising or\n>>> Setting Altitudes!\n";
+            std::cout << "\n>>> Calculated Parameter of Rising/Setting Object in Horizontal Coord. Sys.:\n";
 
-            azimmsg = "Rising and Setting Azimuths (A) are:\n>>> {0:.4f}° and {1:.4f}°"
-            timemsg = "Elapsed time between them: is {0:.2f}h\n"
-            std::cout << azimmsg.format(Azimuth1, Azimuth2))
-            std::cout << timemsg.format(H_dil/15))
-            std::cout << "_________________________________________________________________________")
+            std::stringstream azimmsg;
+            azimmsg << "Rising and Setting Azimuths (A) are:\n>>> " << Azimuth1 << "° and " << Azimuth2 << "°";
+            std::string azimmsgstr = azimmsg.str();
+            std::cout << azimmsgstr << '\n';
+            
+            std::stringstream timemsg;
+            timemsg << "Elapsed time between them: is " << H_dil/15 << "h";
+            std::string timemsgstr = timemsg.str();
+            std::cout << timemsgstr << '\n';
+            std::cout << "_________________________________________________________________________\n\n";
 
-            std::cout << "1.1/3.\n")
+            std::cout << "1.1/3.\n";
 
-            Planet = "Earth"
-            Location = "Piszkesteto"
-            Latitude = LocationDictFunc(Location)[0]
-            Longitude = LocationDictFunc(Location)[1]
-            LocalDateYear = 2018
-            LocalDateMonth = 12
-            LocalDateDay1 = 21
-            LocalDateDay2 = 22
+            std::string Planet = "Earth";
+            std::string Location = "Piszkesteto";
+            Latitude = LocationDict[Location][0];
+            Longitude = LocationDict[Location][1];
+            double LocalDateYear = 2018;
+            double LocalDateMonth = 12;
+            double LocalDateDay1 = 21;
+            double LocalDateDay2 = 22;
 
-            (LocalHoursNoon1, LocalMinutesNoon1, LocalSecondsNoon1, LocalDateYearNoon1, LocalDateMonthNoon1, LocalDateDayNoon1,
-                LocalHoursMidnight1, LocalMinutesMidnight1, LocalSecondsMidnight1, LocalDateYearMidnight1, LocalDateMonthMidnight1, LocalDateDayMidnight1,
-                LocalHoursRiseDaylight1, LocalMinutesRiseDaylight1, LocalSecondsRiseDaylight1, LocalDateYearRiseDaylight1, LocalDateMonthRiseDaylight1, LocalDateDayRiseDaylight1,
-                LocalHoursSetDaylight1, LocalMinutesSetDaylight1, LocalSecondsSetDaylight1, LocalDateYearSetDaylight1, LocalDateMonthSetDaylight1, LocalDateDaySetDaylight1,
-                LocalHoursRiseCivil1, LocalMinutesRiseCivil1, LocalSecondsRiseCivil1, LocalDateYearRiseCivil1, LocalDateMonthRiseCivil1, LocalDateDayRiseCivil1,
-                LocalHoursSetCivil1, LocalMinutesSetCivil1, LocalSecondsSetCivil1, LocalDateYearSetCivil1, LocalDateMonthSetCivil1, LocalDateDaySetCivil1,
-                LocalHoursRiseNaval1, LocalMinutesRiseNaval1, LocalSecondsRiseNaval1, LocalDateYearRiseNaval1, LocalDateMonthRiseNaval1, LocalDateDayRiseNaval1,
-                LocalHoursSetNaval1, LocalMinutesSetNaval1, LocalSecondsSetNaval1, LocalDateYearSetNaval1, LocalDateMonthSetNaval1, LocalDateDaySetNaval1,
-                LocalHoursRiseAstro1, LocalMinutesRiseAstro1, LocalSecondsRiseAstro1, LocalDateYearSetAstro1, LocalDateMonthSetAstro1, LocalDateDaySetAstro1,
-                LocalHoursSetAstro1, LocalMinutesSetAstro1, LocalSecondsSetAstro1, LocalDateYearRiseAstro1, LocalDateMonthRiseAstro1, LocalDateDayRiseAstro1) = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay1)
+            std::vector<double> TwilightCalcvec1 = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay);
 
-            (LocalHoursNoon2, LocalMinutesNoon2, LocalSecondsNoon2, LocalDateYearNoon2, LocalDateMonthNoon2, LocalDateDayNoon2,
-                LocalHoursMidnight2, LocalMinutesMidnight2, LocalSecondsMidnight2, LocalDateYearMidnight2, LocalDateMonthMidnight2, LocalDateDayMidnight2,
-                LocalHoursRiseDaylight2, LocalMinutesRiseDaylight2, LocalSecondsRiseDaylight2, LocalDateYearRiseDaylight2, LocalDateMonthRiseDaylight2, LocalDateDayRiseDaylight2,
-                LocalHoursSetDaylight2, LocalMinutesSetDaylight2, LocalSecondsSetDaylight2, LocalDateYearSetDaylight2, LocalDateMonthSetDaylight2, LocalDateDaySetDaylight2,
-                LocalHoursRiseCivil2, LocalMinutesRiseCivil2, LocalSecondsRiseCivil2, LocalDateYearRiseCivil2, LocalDateMonthRiseCivil2, LocalDateDayRiseCivil2,
-                LocalHoursSetCivil2, LocalMinutesSetCivil2, LocalSecondsSetCivil2, LocalDateYearSetCivil2, LocalDateMonthSetCivil2, LocalDateDaySetCivil2,
-                LocalHoursRiseNaval2, LocalMinutesRiseNaval2, LocalSecondsRiseNaval2, LocalDateYearRiseNaval2, LocalDateMonthRiseNaval2, LocalDateDayRiseNaval2,
-                LocalHoursSetNaval2, LocalMinutesSetNaval2, LocalSecondsSetNaval2, LocalDateYearSetNaval2, LocalDateMonthSetNaval2, LocalDateDaySetNaval2,
-                LocalHoursRiseAstro2, LocalMinutesRiseAstro2, LocalSecondsRiseAstro2, LocalDateYearSetAstro2, LocalDateMonthSetAstro2, LocalDateDaySetAstro2,
-                LocalHoursSetAstro2, LocalMinutesSetAstro2, LocalSecondsSetAstro2, LocalDateYearRiseAstro2, LocalDateMonthRiseAstro2, LocalDateDayRiseAstro2) = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay2)
+            double LocalHoursRiseAstro1 = TwilightCalcvec1[48];
+            double LocalMinutesRiseAstro1 = TwilightCalcvec1[49];
+            double LocalSecondsRiseAstro1 = TwilightCalcvec1[50];
+            double LocalDateYearSetAstro1 = TwilightCalcvec1[51];
+            double LocalDateMonthSetAstro1 = TwilightCalcvec1[52];
+            double LocalDateDaySetAstro1 = TwilightCalcvec1[53];
+            double LocalHoursSetAstro1 = TwilightCalcvec1[54];
+            double LocalMinutesSetAstro1 = TwilightCalcvec1[55];
+            double LocalSecondsSetAstro1 = TwilightCalcvec1[56];
+            double LocalDateYearRiseAstro1 = TwilightCalcvec1[57];
+            double LocalDateMonthRiseAstro1 = TwilightCalcvec1[58];
+            double LocalDateDayRiseAstro1 = TwilightCalcvec1[59];
 
-            LocalDateDaySetAstroTime1 = LocalHoursSetAstro1 + LocalMinutesSetAstro1/60 + LocalSecondsSetAstro1/3600
-            LocalDateDayRiseAstroTime2 = LocalHoursRiseAstro2 + LocalMinutesRiseAstro2/60 + LocalSecondsRiseAstro2/3600
+            std::vector<double> TwilightCalcvec2 = TwilightCalc(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay2);
 
-            std::cout << ">>> Calculate lenght of Astronomical Twilight at " + Location + " on\n>>> " + str(LocalDateYear) + "." + str(LocalDateMonth) + "." + str(LocalDateDay2) + " evening.")
-            std::cout << ">>> Used formulas:")
-            std::cout << ">>> 1. Sun's position for given day was calculated (RA and δ)")
-            std::cout << ">>> 2. Julian Date of the Begind/End of Astrological Twilights\n>>> Was been calculated.")
-            std::cout << ">>> 3. Julian Date was converted to United Time (UT), then Local Time (LT)\n>>> Was calculated for " + Location + "\n")
+            double LocalHoursRiseAstro2 = TwilightCalcvec2[48];
+            double LocalMinutesRiseAstro2 = TwilightCalcvec2[49];
+            double LocalSecondsRiseAstro2 = TwilightCalcvec2[50];
+            double LocalDateYearSetAstro2 = TwilightCalcvec2[51];
+            double LocalDateMonthSetAstro2 = TwilightCalcvec2[52];
+            double LocalDateDaySetAstro2 = TwilightCalcvec2[53];
+            double LocalHoursSetAstro2 = TwilightCalcvec2[54];
+            double LocalMinutesSetAstro2 = TwilightCalcvec2[55];
+            double LocalSecondsSetAstro2 = TwilightCalcvec2[56];
+            double LocalDateYearRiseAstro2 = TwilightCalcvec2[57];
+            double LocalDateMonthRiseAstro2 = TwilightCalcvec2[58];
+            double LocalDateDayRiseAstro2 = TwilightCalcvec2[59];
+
+
+            double LocalDateDaySetAstroTime1 = LocalHoursSetAstro1 + LocalMinutesSetAstro1/60 + LocalSecondsSetAstro1/3600;
+            double LocalDateDayRiseAstroTime2 = LocalHoursRiseAstro2 + LocalMinutesRiseAstro2/60 + LocalSecondsRiseAstro2/3600;
+
+            std::cout << ">>> Calculate lenght of Astronomical Twilight at " << Location << " on\n>>> " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay2 << " evening.\n";
+            std::cout << ">>> Used formulas:\n";
+            std::cout << ">>> 1. Sun's position for given day was calculated (RA and δ)\n";
+            std::cout << ">>> 2. Julian Date of the Begind/End of Astrological Twilights\n>>> Was been calculated.\n";
+            std::cout << ">>> 3. Julian Date was converted to United Time (UT), then Local Time (LT)\n>>> Was calculated for " << Location << "\n\n";
+
+            std::stringstream astrosetmsg;
+            astrosetmsg << ">>> End of Astronomical Twilight on " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay1 << " is at " << LocalHoursSetAstro1 << ":" << LocalMinutesSetAstro1 << ":" << LocalSecondsSetAstro1;
+            std::string astrosetmsgstr = astrosetmsg.str();
+            std::cout << astrosetmsgstr << '\n';
+
+            std::stringstream astrorisemsg;
+            astrorisemsg << ">>> Begin of Astronomical Twilight on " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay2 << " is at " << LocalHoursRiseAstro2 << ":" << LocalMinutesRiseAstro2 << ":" << LocalSecondsRiseAstro2;
+            std::string astrorisemsgstr = astrorisemsg.str();
+            std::cout << astrorisemsgstr << '\n';
 
             // Length of the astronomical night
-            AstroNightLength = 24 - (LocalDateDaySetAstroTime1 - LocalDateDayRiseAstroTime2)
-            AstroNightHours = int(AstroNightLength)
-            AstroNightMinutes = int((AstroNightLength - AstroNightHours) * 60)
-            AstroNightSeconds = int((((AstroNightLength - AstroNightHours) * 60) - AstroNightMinutes) * 60)
+            double AstroNightLength = 24 - (LocalDateDaySetAstroTime1 - LocalDateDayRiseAstroTime2);
+            int AstroNightHours = int(AstroNightLength);
+            int AstroNightMinutes = int((AstroNightLength - AstroNightHours) * 60);
+            int AstroNightSeconds = int((((AstroNightLength - AstroNightHours) * 60) - AstroNightMinutes) * 60);
+            std::stringstream astrotimemsg;
+            astrotimemsg << ">>> The astronomical night's lenght at " << Location << " is " << AstroNightHours << ":" << AstroNightMinutes << ":" << AstroNightSeconds << " long\n>>> In the night, between " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay1 << ", and " << LocalDateDay2 << ".";
+            std::string astrotimemsgstr = astrotimemsg.str();
+            std::cout << astrotimemsgstr << '\n';
 
-            astrosetmsg = ">>> End of Astronomical Twilight on {0}.{1}.{2} is at {3}:{4}:{5}"
-            astrorisemsg = ">>> Begin of Astronomical Twilight on {0}.{1}.{2} is at {3}:{4}:{5}"
-            astrotimemsg = ">>> The astronomical night's lenght at " + Location + " is {0}:{1}:{2} long\n>>> In the night, between {3}.{4}.{5}, and {6}.\n"
-            std::cout << astrosetmsg.format(LocalDateYear, LocalDateMonth, LocalDateDay1, LocalHoursSetAstro1, LocalMinutesSetAstro1, LocalSecondsSetAstro1))
-            std::cout << astrorisemsg.format(LocalDateYear, LocalDateMonth, LocalDateDay2, LocalHoursRiseAstro2, LocalMinutesRiseAstro2, LocalSecondsRiseAstro2))
-            std::cout << astrotimemsg.format(AstroNightHours, AstroNightMinutes, AstroNightSeconds, LocalDateYear, LocalDateMonth, LocalDateDay1, LocalDateDay2))
-            std::cout << "_________________________________________________________________________")
+            std::cout << "_________________________________________________________________________\n\n";
 
-            std::cout << "1.2/1.\n")
+            std::cout << "1.2/1.\n";
 
-            aValue = 54.3666666
-            bValue = 72.2
-            cValue = 0
-            alphaValue = 0
-            betaValue = 0
-            gammaValue = 94.01666666
+            double aValue = 54.3666666;
+            double bValue = 72.2;
+            double cValue = 0;
+            double alphaValue = 0;
+            double betaValue = 0;
+            double gammaValue = 94.01666666;
 
-            aValue, bValue, cValue, alphaValue, betaValue, gammaValue = AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue)
+            std::vector<double> AstroTrianglesoutputVec = AstroTriangles(aValue, bValue, cValue, alphaValue, betaValue, gammaValue);
+            aValue = AstroTrianglesoutputVec[0];
+            bValue = AstroTrianglesoutputVec[1];
+            cValue = AstroTrianglesoutputVec[2];
+            alphaValue = AstroTrianglesoutputVec[3];
+            betaValue = AstroTrianglesoutputVec[4];
+            gammaValue = AstroTrianglesoutputVec[5];
 
-            std::cout << ">>> Used formulas:")
-            std::cout << ">>> The program uses formulas, which may be derived using vector algebra")
-            std::cout << ">>> Given parameters: side \'A\', side \'B\' and angle \'γ\'")
-            std::cout << ">>> C = arctan( sqrt(\n    (sin(A) * cos(B) - cos(A) * sin(B) * cos(γ))^2 + (sin(B) * sin(γ))^2 ) /\n    (cos(A) * cos(B) + sin(A) * sin(B) * cos(γ)) )")
-            std::cout << ">>> α = arctan(\n    (sin(A) * sin(γ)) / (sin(B) * cos(A) - cos(B) * sin(A) * cos(γ))\n    )")
-            std::cout << ">>> β = arctan(\n    (sin(B) * sin(γ)) / (sin(A) * cos(B) - cos(A) * sin(B) * cos(γ))\n    )")
+            std::cout << ">>> Used formulas:\n";
+            std::cout << ">>> The program uses formulas, which may be derived using vector algebra\n";
+            std::cout << ">>> Given parameters: side \'A\', side \'B\' and angle \'γ\'\n";
+            std::cout << ">>> C = arctan( sqrt(\n    (sin(A) * cos(B) - cos(A) * sin(B) * cos(γ))^2 + (sin(B) * sin(γ))^2 ) /\n    (cos(A) * cos(B) + sin(A) * sin(B) * cos(γ)) )\n";
+            std::cout << ">>> α = arctan(\n    (sin(A) * sin(γ)) / (sin(B) * cos(A) - cos(B) * sin(A) * cos(γ))\n    )\n";
+            std::cout << ">>> β = arctan(\n    (sin(B) * sin(γ)) / (sin(A) * cos(B) - cos(A) * sin(B) * cos(γ))\n    )\n\n";
 
-            std::cout << ">>> Calculated Parameters of the Triangle:")
-            std::cout << ">>> Side \'A\': ", aValue)
-            std::cout << ">>> Side \'B\': ", bValue)
-            std::cout << ">>> Side \'C\': ", cValue)
-            std::cout << ">>> Angle \'α\': ", alphaValue)
-            std::cout << ">>> Angle \'β\': ", betaValue)
-            std::cout << ">>> Angle \'γ\': ", gammaValue)
-            std::cout << "\n")
+            std::cout << ">>> Calculated Parameters of the Triangle:\n";
+            std::cout << ">>> Side \'A\': " << aValue << '\n';
+            std::cout << ">>> Side \'B\': " << bValue << '\n';
+            std::cout << ">>> Side \'C\': " << cValue << '\n';
+            std::cout << ">>> Angle \'α\': " << alphaValue << '\n';
+            std::cout << ">>> Angle \'β\': " << betaValue << '\n';
+            std::cout << ">>> Angle \'γ\': " << gammaValue << '\n';
+            std::cout << "\n";
 
-            std::cout << "_________________________________________________________________________")
+            std::cout << "_________________________________________________________________________\n\n";
 
-            std::cout << "1.2/2.\n")
+            std::cout << "1.2/2.\n";
 
-            Location = "Baja"
-            Star = "Altair"
-            Latitude = LocationDictFunc(Location)[0]
-            Longitude = LocationDictFunc(Location)[1]
-            RightAscension = StellarDict[Star][0]
-            Declination = StellarDict[Star][1]
-            Altitude = NULL
-            Azimuth = NULL
-            LocalHourAngle = NULL
-            LocalHours = 20
-            LocalMinutes = 45
-            LocalSeconds = 0
-            LocalDateYear = 2013
-            LocalDateMonth = 6
-            LocalDateDay = 21
+            std::string Location = "Baja";
+            std::string Star = "Altair";
+            double Latitude = LocationDict[Location][0];
+            double Longitude = LocationDict[Location][1];
+            double RightAscension = StellarDict[Star][0];
+            double Declination = StellarDict[Star][1];
+            double Altitude = NULL;
+            double Azimuth = NULL;
+            double LocalHourAngle = NULL;
+            double LocalHours = 20;
+            double LocalMinutes = 45;
+            double LocalSeconds = 0;
+            double LocalDateYear = 2013;
+            double LocalDateMonth = 6;
+            double LocalDateDay = 21;
 
             // Calculate Local Mean Sidereal Time
-            LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds, UnitedHours, UnitedMinutes, UnitedSeconds, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay)
+            std::vector<double> LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay);
+            double LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
+            double LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
+            double LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
+            double UnitedHours = LocalSiderealTimeCalcoutputVec[3];
+            double UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
+            double UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
+            double GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
+            double GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
+            double GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
 
             // Convert to decimal
-            LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600
+            double LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600;
             
             // Normalize result
-            LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24)
+            LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
 
-            Altitude, Azimuth = EquIIToHor(Latitude, RightAscension, Declination, Altitude, Azimuth, LocalSiderealTime, LocalHourAngle)
+            std::vector<double> EquIIToHoroutputVec = EquIIToHor(Latitude, RightAscension, Declination, Altitude, Azimuth, LocalSiderealTime, LocalHourAngle);
+            Altitude = EquIIToHoroutputVec[0];
+            Azimuth = EquIIToHoroutputVec[1];
 
             // For printing this step too
-            LocalHourAngle = LocalSiderealTime - RightAscension
+            double LocalHourAngle = LocalSiderealTime - RightAscension;
             // Normalize Result
-            LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24)
+            LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
 
-            LocalHourAngleHours = int(LocalHourAngle)
-            LocalHourAngleMinutes = int((LocalHourAngle - LocalHourAngleHours) * 60)
-            LocalHourAngleSeconds = int((((LocalHourAngle - LocalHourAngleHours) * 60) - LocalHourAngleMinutes) * 60)
-
-            AzimuthHours = int(Azimuth)
-            AzimuthMinutes = int((Azimuth - AzimuthHours) * 60)
-            AzimuthSeconds = int((((Azimuth - AzimuthHours) * 60) - AzimuthMinutes) * 60)
-
-            AltitudeHours = int(Altitude)
-            AltitudeMinutes = int((Altitude - AltitudeHours) * 60)
-            AltitudeSeconds = int((((Altitude - AltitudeHours) * 60) - AltitudeMinutes) * 60)
-
-            std::cout << ">>> Used formulas:")
-            std::cout << ">>> 1. S_0 (Greenwich Mean Sidereal Time) at 00:00 UT was calculated")
-            std::cout << ">>> 2. S (Local Mean Sidereal Time) = S_0 + Longitude/15 + dS * UnitedTime")
-            std::cout << ">>> 3. S - α = t; H = 15*t")
-            std::cout << ">>> 4. sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H);\n>>> Altitude (m) should been between [-π/2,+π/2]")
-            std::cout << ">>> 5. sin(A) = - sin(H) * cos(δ) / cos(m), Azimuth at given H hour angle\n>>> Also cos(A) = (sin(δ) - sin(φ) sin(m)) / cos(φ) cos(m)")
-            std::cout << ">>> These 2 equation outputs 2-2 values for Azimuth. 1-1 from both these\n>>> Outputs will be equal, and that's the correct value for Azimuth.\n")
+            std::cout << ">>> Used formulas:\n";
+            std::cout << ">>> 1. S_0 (Greenwich Mean Sidereal Time) at 00:00 UT was calculated\n";
+            std::cout << ">>> 2. S (Local Mean Sidereal Time) = S_0 + Longitude/15 + dS * UnitedTime\n";
+            std::cout << ">>> 3. S - α = t; H = 15*t\n";
+            std::cout << ">>> 4. sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H);\n>>> Altitude (m) should been between [-π/2,+π/2]\n";
+            std::cout << ">>> 5. sin(A) = - sin(H) * cos(δ) / cos(m), Azimuth at given H hour angle\n>>> Also cos(A) = (sin(δ) - sin(φ) sin(m)) / cos(φ) cos(m)\n";
+            std::cout << ">>> These 2 equation outputs 2-2 values for Azimuth. 1-1 from both these\n>>> Outputs will be equal, and that's the correct value for Azimuth.\n\n";
 
             // Print Results
-            timemsg = ">>> Altitude and Azimuth of " + Star + " from " + Location + " on {0}.{1}.{2}"
-            grwmsg = ">>> GMST: {0}:{1}:{2}"
-            std::cout << timemsg.format(LocalDateYear, LocalDateMonth, LocalDateDay))
-            std::cout << grwmsg.format(GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds))
+            std::stringstream timemsg;
+            timemsg << ">>> Altitude and Azimuth of " << Star << " from " << Location << " on " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay;
+            std::string timemsgstr = timemsg.str();
+            std::cout << timemsgstr << '\n';
+            
+            // Greenwich Mean Sidereal Time
+            std::stringstream grwmsg;
+            grwmsg << "- GMST (S_0): "  << GreenwichSiderealHours << "°" << GreenwichSiderealMinutes << "\'" << GreenwichSiderealSeconds << "\"";
+            std::string grwmsgstr = grwmsg.str();
+            std::cout << grwmsgstr << '\n';
 
-            std::cout << ">>> Calculated Parameters:")
-            locsidmsg = ">>> Local Mean Siderel Time (S): {0}:{1}:{2}"
-            lhamsg = ">>> Local Hour Angle (t): {0}h {1}m {2}s"
-            azimmsg = ">>> Azimuth (A):  {0}° {1}' {2}\""
-            altitmsg = ">>> Altitude (m): {0}° {1}' {2}\"\n"
-            std::cout << locsidmsg.format(LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds))
-            std::cout << lhamsg.format(LocalHourAngleHours, LocalHourAngleMinutes, LocalHourAngleSeconds))
-            std::cout << azimmsg.format(AzimuthHours, AzimuthMinutes, AzimuthSeconds))
-            std::cout << altitmsg.format(AltitudeHours, AltitudeMinutes, AltitudeSeconds))
+            std::cout << ">>> Calculated Parameters:\n";
 
-            std::cout << "_________________________________________________________________________")
+            // Local Mean Sidereal Time
+            std::stringstream sidermsg;
+            sidermsg << "- Local Mean Sidereal Time (S): "  << LocalSiderealHours << "°" << LocalSiderealMinutes << "\'" << LocalSiderealSeconds << "\"";
+            std::string sidermsgstr = sidermsg.str();
+            std::cout << sidermsgstr << '\n';
 
-            std::cout << "1.2/3.\n")
+            // Local Hour Angle
+            int LocalHourAngleHours = int(LocalHourAngle);
+            int LocalHourAngleMinutes = int((LocalHourAngle - LocalHourAngleHours) * 60);
+            int LocalHourAngleSeconds = int((((LocalHourAngle - LocalHourAngleHours) * 60) - LocalHourAngleMinutes) * 60);
 
-            Location = "Rio"
-            Latitude = LocationDictFunc(Location)[0]
-            Longitude = LocationDictFunc(Location)[1]
+            std::stringstream hourangmsg;
+            hourangmsg << "- Local Hour Angle (t): " << LocalHourAngleHours<< "h" << LocalHourAngleMinutes << "m" << LocalHourAngleSeconds << "s";
+            std::string hourangmsgstr = hourangmsg.str();                    
+            std::cout << hourangmsgstr << '\n\n';
 
-            Altitude = 55.656388
-            Azimuth = 208.113611
+            // Altitude
+            int AltitudeHours = int(Altitude);
+            int AltitudeMinutes = int((Altitude - AltitudeHours) * 60);
+            int AltitudeSeconds = int((((Altitude - AltitudeHours) * 60) - AltitudeMinutes) * 60);
 
-            LocalHours = 20
-            LocalMinutes = 34
-            LocalSeconds = 53
-            LocalDateYear = 2018
-            LocalDateMonth = 4
-            LocalDateDay = 17
+            std::stringstream altitmsg;
+            altitmsg << "- Altitude (m): "<< AltitudeHours << "° " << AltitudeMinutes << "\' " << AltitudeSeconds << "\"";
+            std::string altitmsgstr = altitmsg.str();
+            std::cout << altitmsgstr << '\n';
 
-            LocalSiderealHours, LocalSiderealMinutes, LocalSiderealSeconds, UnitedHours, UnitedMinutes, UnitedSeconds, GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay)
+            // Azimuth
+            int AzimuthHours = int(Azimuth);
+            int AzimuthMinutes = int((Azimuth - AzimuthHours) * 60);
+            int AzimuthSeconds = int((((Azimuth - AzimuthHours) * 60) - AzimuthMinutes) * 60);
+
+            std::stringstream azimmsg;
+            azimmsg << "- Azimuth (A): "<< AzimuthHours << "° " << AzimuthMinutes << "\' " << AzimuthSeconds << "\"";
+            std::string azimmsgstr = azimmsg.str();
+            std::cout << azimmsgstr << '\n';
+
+            std::cout << "_________________________________________________________________________\n\n";
+
+            std::cout << "1.2/3.\n";
+
+            std::string Location = "Rio";
+            double Latitude = LocationDict[Location][0];
+            double Longitude = LocationDict[Location][1];
+
+            double Altitude = 55.656388;
+            double Azimuth = 208.113611;
+
+            double LocalHours = 20;
+            double LocalMinutes = 34;
+            double LocalSeconds = 53;
+            double LocalDateYear = 2018;
+            double LocalDateMonth = 4;
+            double LocalDateDay = 17;
+
+            std::vector<double> LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay);
+            double LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
+            double LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
+            double LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
+            double UnitedHours = LocalSiderealTimeCalcoutputVec[3];
+            double UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
+            double UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
+            double GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
+            double GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
+            double GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
             
             // Convert to decimal
-            LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600
+            double LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600;
             
             // Normalize result
-            LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24)
+            LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
 
-            Declination, RightAscension, LocalSiderealTime = HorToEquII(Latitude, Altitude, Azimuth, LocalSiderealTime)
+            std::vector<double> HorToEquIIoutputVec = HorToEquII(Latitude, Altitude, Azimuth, LocalSiderealTime);
+            double RightAscension = HorToEquIIoutputVec[0];
+            double Declination = HorToEquIIoutputVec[1];
+            double LocalSiderealTime = HorToEquIIoutputVec[2];
 
-            // Normalize Parameters
-            DeclinationHours = int(Declination)
-            DeclinationMinutes = int((Declination - DeclinationHours) * 60)
-            DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60)
-
-            RightAscensionHours = int(RightAscension)
-            RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60)
-            RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60)
-
-            LocalSiderealTimeHours = int(LocalSiderealTime)
-            LocalSiderealTimeMinutes = int((LocalSiderealTime - LocalSiderealTimeHours) * 60)
-            LocalSiderealTimeSeconds = int((((LocalSiderealTime - LocalSiderealTimeHours) * 60) - LocalSiderealTimeMinutes) * 60)
-
-            std::cout << "Calculate a star's equatorial II coordinates (S and δ) from Horizontal coords.")
-            std::cout << "Used Formulas:")
-            std::cout << ">>> 1. S_0 (Greenwich Mean Sidereal Time) at 00:00 UT was calculated")
-            std::cout << ">>> 2. S (Local Mean Sidereal Time) = S_0 + Longitude/15 + dS * UnitedTime")
-            std::cout << ">>> 3. Declination was calculated:\n>>> sin(δ) = sin(m) * sin(φ) + cos(m) * cos(φ) * cos(A)")
-            std::cout << ">>> 4. Local Hour Angle was calculated with two equations:\n>>> a) sin(H) = - sin(A) * cos(m) / cos(δ)\n>>> b) cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)")
-            std::cout << ">>> These 2 equations outputs 2-2 values for Local Hour Angle. 1-1 from both\n>>> These outputs will be equal, and that's the correct value for LHA.")
-            std::cout << ">>> 5. Right Ascension was also calculated: RA = S - t; t = 15 * H\n")
+            std::cout << "Calculate a star's equatorial II coordinates (S and δ) from Horizontal coords.\n";
+            std::cout << "Used Formulas:\n";
+            std::cout << ">>> 1. S_0 (Greenwich Mean Sidereal Time) at 00:00 UT was calculated\n";
+            std::cout << ">>> 2. S (Local Mean Sidereal Time) = S_0 + Longitude/15 + dS * UnitedTime\n";
+            std::cout << ">>> 3. Declination was calculated:\n>>> sin(δ) = sin(m) * sin(φ) + cos(m) * cos(φ) * cos(A)\n";
+            std::cout << ">>> 4. Local Hour Angle was calculated with two equations:\n>>> a) sin(H) = - sin(A) * cos(m) / cos(δ)\n>>> b) cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)\n";
+            std::cout << ">>> These 2 equations outputs 2-2 values for Local Hour Angle. 1-1 from both\n>>> These outputs will be equal, and that's the correct value for LHA.\n";
+            std::cout << ">>> 5. Right Ascension was also calculated: RA = S - t; t = 15 * H\n\n";
 
             std::cout << ">>> Initial Coordinates:\n";
             std::cout << ">>> Azimuth: " << Azimuth;
             std::cout << ">>> Altitude: " << Altitude;
 
-            equIImsg = "\n>>> Calculated Parameters of the Star in Equatorial II Coord. Sys. from {0}:"
-            std::cout << equIImsg.format(Location))
+            std::stringstream equIImsg;
+            equIImsg << "\n>>> Calculated Parameters of the Star in Equatorial II Coord. Sys. from " << Location << ":";
+            std::string equIImsgstr = equIImsg.str();
+            std::cout << equIImsgstr << '\n';
 
-            grwmsg = "GMST: {0}:{1}:{2}" 
-            declinmsg = "Declination (δ): {0}° {1}\' {2}\""
-            RAmsg = "Right Ascension (α): {0}h {1}m {2}s"
-            sidermsg = "Local Mean Sidereal Time (S): {0}:{1}:{2}\n"
-            std::cout << grwmsg.format(GreenwichSiderealHours, GreenwichSiderealMinutes, GreenwichSiderealSeconds))
-            std::cout << declinmsg.format(DeclinationHours, DeclinationMinutes, DeclinationSeconds))
-            std::cout << RAmsg.format(RightAscensionHours, RightAscensionMinutes, RightAscensionSeconds))
-            std::cout << sidermsg.format(LocalSiderealTimeHours, LocalSiderealTimeMinutes, LocalSiderealTimeSeconds))
+            // Greenwich Mean Sidereal Time
+            std::stringstream grwmsg;
+            grwmsg << "- GMST (S_0): "  << GreenwichSiderealHours << "°" << GreenwichSiderealMinutes << "\'" << GreenwichSiderealSeconds << "\"";
+            std::string grwmsgstr = grwmsg.str();
+            std::cout << grwmsgstr << '\n';
+            
+            // Declination
+            int DeclinationHours = int(Declination);
+            int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
+            int DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60);
 
-            std::cout << "_________________________________________________________________________\n\n")
+            std::stringstream declinmsg;
+            declinmsg << "- Declination (δ): " << DeclinationHours << "°" << DeclinationMinutes << "\'" << DeclinationSeconds << "\"";
+            std::string declinmsgstr = declinmsg.str();
+            std::cout << declinmsgstr << '\n';
+            
+            // Right Ascension
+            int RightAscensionHours = int(RightAscension);
+            int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
+            int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
+
+            std::stringstream RAmsg;
+            RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
+            std::string RAmsgstr = RAmsg.str();
+            std::cout << RAmsgstr << '\n';
+            
+            // Local Mean Sidereal Time
+            std::stringstream sidermsg;
+            sidermsg << "- Local Mean Sidereal Time (S): "  << LocalSiderealHours << "°" << LocalSiderealMinutes << "\'" << LocalSiderealSeconds << "\"";
+            std::string sidermsgstr = sidermsg.str();
+            std::cout << sidermsgstr << '\n';
+
+            std::cout << "_________________________________________________________________________\n\n";
 
             std::cout << "1.3\n\n";
 
@@ -6064,7 +6482,7 @@ int main()
         else if(mode.compare("Q") == 0 || mode.compare("q") == 0)
         {
             std::cout << "////////    Developed by Balazs Pal, ELTE    ////////";
-            exit()
+            exit(0);
         }
 
         else
