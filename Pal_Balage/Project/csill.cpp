@@ -60,8 +60,6 @@
 #include <cmath>
 #include <map>
 #include <vector>
-//#include "csill.h"
-
 
 // Current Version of the Csillész II Problem Solver
 std::string ActualVersion = "v1.32";
@@ -171,6 +169,13 @@ std::map<std::string, std::vector<double>> StellarDictFunc()
     StellarDict["VYCanisMajoris"] = {7.38287, -25.767565};
 
     return(StellarDict);
+}
+
+std::vector<std::string> PlanetDictFunc(std::string Planet)
+{
+    std::vector<std::string> PlanetDict = {"Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptunus", "Pluto"};
+
+    return(PlanetDict);
 }
 
 
@@ -358,7 +363,8 @@ std::vector<double> NormalizeTimeParameters(double Time, double Year, double Mon
     double Minutes;
     double Seconds;
     double CountingIndex;
-    double Time = TimeMultiply[0];
+
+    Time = TimeMultiply[0];
     double Multiply = TimeMultiply[1];
 
     // CORRECTIONS IF MINUTES >= 60 or SECONDS >= 60
@@ -381,7 +387,7 @@ std::vector<double> NormalizeTimeParameters(double Time, double Year, double Mon
     {
         if(Day > MonthLengthListLeapYear[int(Month) - 1])
         {
-            Month =+ 1;
+            Month += 1;
         }
     }
 
@@ -396,7 +402,7 @@ std::vector<double> NormalizeTimeParameters(double Time, double Year, double Mon
     if(Month > 12)
     {
         Month = 1;
-        Year =+ 1;
+        Year += 1;
     }
 
     Seconds = int((((Time - Hours) * 60) - Minutes) * 60);
@@ -422,7 +428,7 @@ std::vector<double> NormalizeTimeParameters(double Time, double Year, double Mon
     {
         if(Day > MonthLengthListLeapYear[int(Month) - 1])
         {
-            Month =+ 1;
+            Month += 1;
         }
     }
 
@@ -435,7 +441,7 @@ std::vector<double> NormalizeTimeParameters(double Time, double Year, double Mon
     if(Month > 12)
     {
         Month = 1;
-        Year =+ 1;
+        Year += 1;
     }
 
     // CORRECTIONS IF abs(Time) >= 24
@@ -771,7 +777,6 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
     // Right Ascension: [0h,24h[
     // Declination: [-π/2,+π/2]
     Latitude = NormalizeSymmetricallyBoundedPI(Latitude);
-
     if(RightAscension != NULL)
     {
         RightAscension = NormalizeZeroBounded(RightAscension, 24);
@@ -781,7 +786,6 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
     {
         Declination = NormalizeSymmetricallyBoundedPI_2(Declination);
     }
-
 
     if(LocalSiderealTime != NULL)
     {
@@ -884,7 +888,6 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
 
     else if(Altitude != NULL)
     {
-
         // Declare variables
         double LHAcos;
         double LocalHourAngleDegrees1;
@@ -1292,17 +1295,25 @@ double CalculateJulianDate(double LocalDateYear, double LocalDateMonth, double L
 // Calculate Sun's Position
 std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, double JulianDays)
 {
+    // Declare Variables
+    std::string PlanetJ;
+    std::string PlanetM;
+    std::string PlanetC;
+    std::string PlanetA;
+    std::string PlanetD;
+    std::string PlanetOrbit;
+
     // 1. Mean Solar Noon
     // JAnomaly is an approximation of Mean Solar Time at WLongitude expressed as a Julian day with the day fraction
     // WLongitude is the longitude west (west is positive, east is negative) of the observer on the Earth
     double WLongitude = - Longitude;
-    std::string PlanetJ = Planet.append("J");
+    PlanetJ = Planet.append("J");
     double JAnomaly = (JulianDays - OrbitDictFunc(PlanetJ)[0]) / OrbitDictFunc(PlanetJ)[3] - WLongitude/360;
 
     // 2. Solar Mean Anomaly
     // MeanAnomaly (M) is the Solar Mean Anomaly used in a few of next equations
     // MeanAnomaly = (M_0 + M_1 * (JulianDays-J2000)) and Norm to 360
-    std::string PlanetM = Planet.append("M");
+    PlanetM = Planet.append("M");
     double MeanAnomaly = (OrbitDictFunc(PlanetM)[0] + OrbitDictFunc(PlanetM)[1] * JulianDays);
     // Normalize Result
     MeanAnomaly = NormalizeZeroBounded(MeanAnomaly, 360);
@@ -1310,7 +1321,7 @@ std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, do
     // 3. Equation of the Center
     // EquationOfCenter (C) is the Equation of the center value needed to calculate Lambda (see next equation)
     // EquationOfCenter = C_1 * sin(M) + C_2 * sin(2M) + C_3 * sin(3M) + C_4 * sin(4M) + C_5 * sin(5M) + C_6 * sin(6M)
-    std::string PlanetC = Planet.append("C");
+    PlanetC = Planet.append("C");
     double EquationOfCenter = (OrbitDictFunc(PlanetC)[0] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDictFunc(PlanetC)[1] * sin((Pi / 180) * (2 * MeanAnomaly)) + 
                        OrbitDictFunc(PlanetC)[2] * sin((Pi / 180) * (3 * MeanAnomaly)) + OrbitDictFunc(PlanetC)[3] * sin((Pi / 180) * (4 * MeanAnomaly)) + 
                        OrbitDictFunc(PlanetC)[4] * sin((Pi / 180) * (5 * MeanAnomaly)) + OrbitDictFunc(PlanetC)[5] * sin((Pi / 180) * (6 * MeanAnomaly)));
@@ -1319,7 +1330,7 @@ std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, do
     // MeanEclLongitudeSun (L_sun) in the Mean Ecliptic Longitude
     // EclLongitudeSun (λ) is the Ecliptic Longitude
     // OrbitDictFunc(PlanetOrbit)[0] is a value for the argument of perihelion
-    std::string PlanetOrbit = Planet.append("Orbit");
+    PlanetOrbit = Planet.append("Orbit");
     double MeanEclLongitudeSun = MeanAnomaly + OrbitDictFunc(PlanetOrbit)[0] + 180;
     double EclLongitudeSun = EquationOfCenter + MeanEclLongitudeSun;
     // Normalize Results
@@ -1330,7 +1341,7 @@ std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, do
     // PlanetA_2, PlanetA_4 and PlanetA_6 (measured in degrees) are coefficients in the series expansion of the Sun's Right Ascension
     // They varie for different planets in the Solar System
     // RightAscensionSun = EclLongitudeSun + S ≈ EclLongitudeSun + PlanetA_2 * sin(2 * EclLongitudeSun) + PlanetA_4 * sin(4 * EclLongitudeSun) + PlanetA_6 * sin(6 * EclLongitudeSun)
-    std::string PlanetA = Planet.append("A");
+    PlanetA = Planet.append("A");
     double RightAscensionSun = (EclLongitudeSun + OrbitDictFunc(PlanetA)[0] * sin((Pi / 180) * (2 * EclLongitudeSun)) + OrbitDictFunc(PlanetA)[1] * 
                         sin((Pi / 180) * (4 * EclLongitudeSun)) + OrbitDictFunc(PlanetA)[2] * sin((Pi / 180) * (6 * EclLongitudeSun)));
 
@@ -1348,7 +1359,7 @@ std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, do
     // PlanetD_1, PlanetD_3 and PlanetD_5 (measured in degrees) are coefficients in the series expansion of the Sun's Declination.
     // They varie for different planets in the Solar System.
     // DeclinationSun = PlanetD_1 * sin(EclLongitudeSun) + PlanetD_3 * (sin(EclLongitudeSun))^3 + PlanetD_5 * (sin(EclLongitudeSun))^5
-    std::string PlanetD = Planet.append("D");
+    PlanetD = Planet.append("D");
     double DeclinationSun = (OrbitDictFunc(PlanetD)[0] * sin((Pi / 180) * (EclLongitudeSun)) + OrbitDictFunc(PlanetD)[1] * 
                      pow((sin((Pi / 180) * (EclLongitudeSun))), 3) + OrbitDictFunc(PlanetD)[2] * pow((sin((Pi / 180) * (EclLongitudeSun))), 5));
 
@@ -1359,7 +1370,7 @@ std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, do
     // 2451545.5 is midnight or the beginning of the equivalent Julian year reference
     // Jtransit = J_x + 0.0053 * sin(MeanANomaly) - 0.0068 * sin(2 * L_sun)
     // "0.0053 * sin(MeanAnomaly) - 0.0069 * sin(2 * EclLongitudeSun)"  is a simplified version of the equation of time
-    std::string PlanetJ = Planet.append("J");
+    PlanetJ = Planet.append("J");
     double J_x = (JulianDays + 2451545) + OrbitDictFunc(PlanetJ)[3] * (JulianDays - JAnomaly);
     double Jtransit = J_x + OrbitDictFunc(PlanetJ)[1] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDictFunc(PlanetJ)[2] * sin((Pi / 180) * (2 * MeanEclLongitudeSun));
 
@@ -1753,22 +1764,22 @@ std::vector<double> TwilightCalc(std::string Planet, double Latitude, double Lon
 
     // LT of Noon and Midnight
     std::vector<double> NormalizeTimeParametersNoon = NormalizeTimeParameters(LocalTimeNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon);
-    double LocalTimeNoon = NormalizeTimeParametersNoon[0];
+    LocalTimeNoon = NormalizeTimeParametersNoon[0];
     double LocalHoursNoon = NormalizeTimeParametersNoon[1];
     double LocalMinutesNoon = NormalizeTimeParametersNoon[2];
     double LocalSecondsNoon = NormalizeTimeParametersNoon[3];
-    double LocalDateYearNoon = NormalizeTimeParametersNoon[4];
-    double LocalDateMonthNoon = NormalizeTimeParametersNoon[5];
-    double LocalDateDayNoon = NormalizeTimeParametersNoon[6];
+    LocalDateYearNoon = NormalizeTimeParametersNoon[4];
+    LocalDateMonthNoon = NormalizeTimeParametersNoon[5];
+    LocalDateDayNoon = NormalizeTimeParametersNoon[6];
 
     std::vector<double> NormalizeTimeParametersMidnight = NormalizeTimeParameters(LocalTimeMidnight, LocalDateYearMidnight, LocalDateMonthMidnight, LocalDateDayMidnight);
-    double LocalTimeMidnight = NormalizeTimeParametersMidnight[0];
+    LocalTimeMidnight = NormalizeTimeParametersMidnight[0];
     double LocalHoursMidnight = NormalizeTimeParametersMidnight[1];
     double LocalMinutesMidnight = NormalizeTimeParametersMidnight[2];
     double LocalSecondsMidnight = NormalizeTimeParametersMidnight[3];
-    double LocalDateYearMidnight = NormalizeTimeParametersMidnight[4];
-    double LocalDateMonthMidnight = NormalizeTimeParametersMidnight[5];
-    double LocalDateDayMidnight = NormalizeTimeParametersMidnight[6];
+    LocalDateYearMidnight = NormalizeTimeParametersMidnight[4];
+    LocalDateMonthMidnight = NormalizeTimeParametersMidnight[5];
+    LocalDateDayMidnight = NormalizeTimeParametersMidnight[6];
 
     
     std::vector<double> TwilightCalcvec = {LocalHoursNoon, LocalMinutesNoon, LocalSecondsNoon, LocalDateYearNoon, LocalDateMonthNoon, LocalDateDayNoon,
@@ -2144,7 +2155,7 @@ std::vector<double> SundialParametersCalc(double Latitude, double LocalHourAngle
     Azimuth = NormalizeZeroBounded(Azimuth, 360)
     */
 
-    double Azimuth = 0;
+    Azimuth = 0;
 
     std::vector<double> SundialParametersCalcvec = {Altitude, Azimuth, ShadowLength};
     return(SundialParametersCalcvec);
@@ -2327,7 +2338,7 @@ int main()
         std::string mode;
         std::cout << "\n> Choose a mode and press enter...: ";
         std::cin >> mode;
-        std::cout << '\n\n\n';
+        std::cout << "\n\n\n";
 
         //    _____                    _    _____              _____                 
         //   / ____|                  | |  / ____|            / ____|                
@@ -2355,7 +2366,7 @@ int main()
                 std::string CoordMode;
                 std::cout << "\n> Choose a number and press enter...: ";
                 std::cin >> CoordMode;
-                std::cout << '\n\n';
+                std::cout << "\n\n";
 
                 //  __  
                 // /  | 
@@ -2375,7 +2386,7 @@ int main()
                     std::string HorToEquILocationChoose;
                     std::cout << "\n>> (1) User Defined, (2) Predefined: ";
                     std::cin >> HorToEquILocationChoose;
-                    std::cout << '\n\n';
+                    std::cout << "\n\n";
 
                     double Latitude;
                     double LocalSiderealTime;
@@ -2434,7 +2445,8 @@ int main()
                                     {
                                         Latitude = LocationDict[Location][0];
                                     
-                                        if(LocationDict.find(Location) != LocationDict.end())
+                                        auto LocationSearch = LocationDict.find(Location);
+                                        if(LocationSearch == LocationDict.end())
                                         {
                                             throw Location;
                                         }
@@ -2511,7 +2523,7 @@ int main()
                             std::cout << '\n';
                             std::cout << "> Local Mean Sidereal Time (S) Seconds: ";
                             std::cin >> LocalSiderealTimeSeconds;
-                            std::cout << '\n\n';
+                            std::cout << "\n\n";
                             LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600;
 
                             break;
@@ -2620,7 +2632,7 @@ int main()
                             std::cout << '\n';
                             std::cout << "> Latitude (φ) Seconds: ";
                             std::cin >> LatitudeSeconds;
-                            std::cout << '\n\n';
+                            std::cout << "\n\n";
                             Latitude = LatitudeHours + LatitudeMinutes/60 + LatitudeSeconds/3600;
                             break;
                         }
@@ -2655,7 +2667,8 @@ int main()
                                     {
                                         Latitude = LocationDict[Location][0];
                                     
-                                        if(LocationDict.find(Location) != LocationDict.end())
+                                        auto LocationSearch = LocationDict.find(Location);
+                                        if(LocationSearch == LocationDict.end())
                                         {
                                             throw Location;
                                         }
@@ -2730,7 +2743,7 @@ int main()
                     std::vector<double> HorToEquIIoutputVec = HorToEquII(Latitude, Altitude, Azimuth, LocalSiderealTime);
                     double RightAscension = HorToEquIIoutputVec[0];
                     double Declination = HorToEquIIoutputVec[1];
-                    double LocalSiderealTime = HorToEquIIoutputVec[2];
+                    LocalSiderealTime = HorToEquIIoutputVec[2];
 
 
                     // Print Results
@@ -2757,10 +2770,6 @@ int main()
                     std::cout << RAmsgstr << '\n';
 
                     // Local Mean Sidereal Time
-                    int LocalSiderealTimeHours = int(LocalSiderealTime);
-                    int LocalSiderealTimeMinutes = int((LocalSiderealTime - LocalSiderealTimeHours) * 60);
-                    int LocalSiderealTimeSeconds = int((((LocalSiderealTime - LocalSiderealTimeHours) * 60) - LocalSiderealTimeMinutes) * 60);
-
                     std::stringstream sidermsg;
                     sidermsg << "- Local Mean Sidereal Time (S): " << LocalSiderealTimeHours << "h" << LocalSiderealTimeMinutes << "m" << LocalSiderealTimeSeconds << "s";
                     std::string sidermsgstr = sidermsg.str();
@@ -2798,7 +2807,7 @@ int main()
                         std::string EquIToHorLocationChoose;
                         std::cout << ">> (1) User Defined, (2) Predefined: ";
                         std::cin >> EquIToHorLocationChoose;
-                        std::cout << '\n\n';
+                        std::cout << "\n\n";
 
                         if(EquIToHorLocationChoose.compare("1") == 0)
                         {
@@ -2852,7 +2861,8 @@ int main()
                                     {
                                         Latitude = LocationDict[Location][0];
                                     
-                                        if(LocationDict.find(Location) != LocationDict.end())
+                                        auto LocationSearch = LocationDict.find(Location);
+                                        if(LocationSearch == LocationDict.end())
                                         {
                                             throw Location;
                                         }
@@ -2886,7 +2896,7 @@ int main()
                         std::string EquIToHorStellarChoose;
                         std::cout << ">> (1) User Defined, (2) Predefined: ";
                         std::cin >> EquIToHorStellarChoose;
-                        std::cout << '\n\n';
+                        std::cout << "\n\n";
                         
                         if(EquIToHorStellarChoose.compare("1") == 0)
                         {
@@ -3132,7 +3142,7 @@ int main()
                                     std::cout << '\n';
                                     Altitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600;
 
-                                    Azimuth == NULL;
+                                    Azimuth = NULL;
 
                                     break;
                                 }
@@ -3193,7 +3203,7 @@ int main()
                                 std::cout << '\n';
                                 Altitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600;
 
-                                Azimuth == NULL;
+                                Azimuth = NULL;
 
                                 break;
                             }
@@ -3675,7 +3685,7 @@ int main()
                     std::stringstream hourangmsg;
                     hourangmsg << "- Local Hour Angle (t): " << LocalHourAngleHours<< "h" << LocalHourAngleMinutes << "m" << LocalHourAngleSeconds << "s";
                     std::string hourangmsgstr = hourangmsg.str();                    
-                    std::cout << hourangmsgstr << '\n\n';
+                    std::cout << hourangmsgstr << "\n\n";
                 }
 
                 //   ____   
@@ -3759,7 +3769,8 @@ int main()
                                     {
                                         Latitude = LocationDict[Location][0];
                                     
-                                        if(LocationDict.find(Location) != LocationDict.end())
+                                        auto LocationSearch = LocationDict.find(Location);
+                                        if(LocationSearch == LocationDict.end())
                                         {
                                             throw Location;
                                         }
@@ -4100,7 +4111,7 @@ int main()
                     {
                         std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
-                        std::cout << "\n> Location's name (type \'H\' for Help): ";
+                        std::cout << "\n> Location's name #1 (type \'H\' for Help): ";
                         std::cin >> Location1;
                         std::cout << '\n';
 
@@ -4123,7 +4134,8 @@ int main()
                                 Latitude1 = LocationDict[Location1][0];
                                 Longitude1 = LocationDict[Location1][1];
                             
-                                if(LocationDict.find(Location1) != LocationDict.end())
+                                auto LocationSearch1 = LocationDict.find(Location1);
+                                if(LocationSearch1 == LocationDict.end())
                                 {
                                     throw Location1;
                                 }
@@ -4143,7 +4155,7 @@ int main()
                     {
                         std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
 
-                        std::cout << "\n> Location's name (type \'H\' for Help): ";
+                        std::cout << "\n> Location's name #2 (type \'H\' for Help): ";
                         std::cin >> Location2;
                         std::cout << '\n';
 
@@ -4166,7 +4178,8 @@ int main()
                                 Latitude2 = LocationDict[Location2][0];
                                 Longitude2 = LocationDict[Location2][1];
                             
-                                if(LocationDict.find(Location2) != LocationDict.end())
+                                auto LocationSearch2 = LocationDict.find(Location2);
+                                if(LocationSearch2 == LocationDict.end())
                                 {
                                     throw Location2;
                                 }
@@ -4211,9 +4224,9 @@ int main()
                     else if(DistMode.compare("2") == 0)
                     {
                         std::stringstream distmsg;
-                        distmsg << "\n>>> The Geographical Distance Between\n>>> " << Location1 << "and" << Location2 << "is\n>>>" << Distance << "km";
+                        distmsg << "\n>>> The Geographical Distance Between\n>>> " << Location1 << " and " << Location2 << " is\n>>> " << Distance << "km";
                         std::string distmsgstr = distmsg.str();
-                        std::cout << distmsgstr << '\n';
+                        std::cout << distmsgstr << "\n\n";
 
                     }
                 }
@@ -4465,7 +4478,8 @@ int main()
                             {
                                 Latitude = LocationDict[Location][0];
                             
-                                if(LocationDict.find(Location) != LocationDict.end())
+                                auto LocationSearch = LocationDict.find(Location);
+                                if(LocationSearch == LocationDict.end())
                                 {
                                     throw Location;
                                 }
@@ -4733,7 +4747,8 @@ int main()
                                 Latitude = LocationDict[Location][0];
                                 Longitude = LocationDict[Location][1];
                             
-                                if(LocationDict.find(Location) != LocationDict.end())
+                                auto LocationSearch = LocationDict.find(Location);
+                                if(LocationSearch == LocationDict.end())
                                 {
                                     throw Location;
                                 }
@@ -5179,7 +5194,8 @@ int main()
                                 Latitude = LocationDict[Location][0];
                                 Longitude = LocationDict[Location][1];
                             
-                                if(LocationDict.find(Location) != LocationDict.end())
+                                auto LocationSearch = LocationDict.find(Location);
+                                if(LocationSearch == LocationDict.end())
                                 {
                                     throw Location;
                                 }
@@ -5439,8 +5455,6 @@ int main()
                     std::vector<double> AltitudesSummer = {};
                     std::vector<double> AzimuthsSummer = {};
                     std::vector<double> ShadowsSummer = {};
-
-                    double DeclinationSunSummer = 23.5;
 
                     if(LocalHourAngleRiseSummer > LocalHourAngleSetSummer)
                     {
@@ -5846,7 +5860,6 @@ int main()
                     plt.grid()
                     plt.show()
 
-                    /*
                     plt.plot(AzimuthsSummer, AltitudesSummer, '.', label="Summer Solstice")
                     plt.plot(AzimuthsWinter, AltitudesWinter, '.', label="Winter Solstice")
                     plt.plot(AzimuthsMarch, AltitudesMarch, '.', label="March Equinox")
@@ -5991,7 +6004,8 @@ int main()
                                 Latitude = LocationDict[Location][0];
                                 Longitude = LocationDict[Location][1];
                             
-                                if(LocationDict.find(Location) != LocationDict.end())
+                                auto LocationSearch = LocationDict.find(Location);
+                                if(LocationSearch == LocationDict.end())
                                 {
                                     throw Location;
                                 }
@@ -6090,31 +6104,82 @@ int main()
             // Constant map for Locations and Stellar Objects
             std::map<std::string, std::vector<double>> LocationDict = LocationDictFunc();
             std::map<std::string, std::vector<double>> StellarDict = StellarDictFunc();
+            std::vector<double> LocalSiderealTimeCalcoutputVec;
+
+            // Constant variables for homework
+            std::string Planet;
+            std::string Star;
+            std::string Location;
+            double Latitude;
+            double Longitude;
+            double LocalDateYear;
+            double LocalDateMonth;
+            double LocalDateDay;
+            double LocalHours;
+            double LocalMinutes;
+            double LocalSeconds;
+
+            double LocalSiderealTime;
+            double LocalSiderealHours;
+            double LocalSiderealMinutes;
+            double LocalSiderealSeconds;
+            double UnitedHours;
+            double UnitedMinutes;
+            double UnitedSeconds;
+            double GreenwichSiderealHours;
+            double GreenwichSiderealMinutes;
+            double GreenwichSiderealSeconds;
+
+            double RightAscension;
+            double Declination;
+            double Altitude;
+            double Azimuth;
+            double LocalHourAngle;
+
+            std::stringstream timemsg;
+            std::stringstream grwmsg;
+
+            std::stringstream sidermsg;
+            std::stringstream hourangmsg;
+            std::stringstream altitmsg;
+            std::stringstream azimmsg;
+            std::stringstream declinmsg;
+            std::stringstream RAmsg;
+
+            std::stringstream astrosetmsg;
+            std::stringstream astrorisemsg;
+            std::stringstream astrotimemsg;
+
+            std::string timemsgstr;
+            std::string grwmsgstr;
+            std::string sidermsgstr;
+            std::string azimmsgstr;
+
 
             std::cout << "//////  Csillesz II end-semester homework results, solved by the program  //////\n";
             std::cout << "_________________________________________________________________________\n\n";
 
             std::cout << "1.1/1.\n\n";
 
-            std::string Location = "Szombathely";
-            double Longitude = LocationDict[Location][1];
-            double LocalDateYear = 2017;
-            double LocalDateMonth = 12;
-            double LocalDateDay = 27;
-            double LocalHours = 14;
-            double LocalMinutes = 0;
-            double LocalSeconds = 0;
+            Location = "Szombathely";
+            Longitude = LocationDict[Location][1];
+            LocalDateYear = 2017;
+            LocalDateMonth = 12;
+            LocalDateDay = 27;
+            LocalHours = 14;
+            LocalMinutes = 0;
+            LocalSeconds = 0;
 
-            std::vector<double> LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay);
-            double LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
-            double LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
-            double LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
-            double UnitedHours = LocalSiderealTimeCalcoutputVec[3];
-            double UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
-            double UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
-            double GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
-            double GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
-            double GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
+            LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay);
+            LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
+            LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
+            LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
+            UnitedHours = LocalSiderealTimeCalcoutputVec[3];
+            UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
+            UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
+            GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
+            GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
+            GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
 
             std::cout << ">>> Calculate LMST at " << Location << ", at " << LocalHours << ":" << LocalMinutes << ":" << LocalSeconds << " LT, " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay << '\n';
             std::cout << ">>> Used formulas:\n";
@@ -6129,12 +6194,12 @@ int main()
 
             std::cout << "1.1/2.\n\n";
 
-            std::string Location = "Szeged";
-            double Latitude = LocationDict[Location][0];
+            Location = "Szeged";
+            Latitude = LocationDict[Location][0];
             double RightAscensionVenus = 18 + 41/60 + 54/3600;
             double DeclinationVenus = -(24 + 4/60 + 9/3600);
             std::vector<double> EquIToHoroutputVec = EquIToHor(Latitude, RightAscensionVenus, DeclinationVenus, 0, NULL, NULL);
-            double Altitude = EquIToHoroutputVec[0];
+            Altitude = EquIToHoroutputVec[0];
             double Azimuth1 = EquIToHoroutputVec[1];
             double Azimuth2 = EquIToHoroutputVec[2];
             double H_dil = EquIToHoroutputVec[3];
@@ -6151,25 +6216,23 @@ int main()
             std::cout << ">>> INFO: Available Data are only suited for Calculating Rising or\n>>> Setting Altitudes!\n";
             std::cout << "\n>>> Calculated Parameter of Rising/Setting Object in Horizontal Coord. Sys.:\n";
 
-            std::stringstream azimmsg;
             azimmsg << "Rising and Setting Azimuths (A) are:\n>>> " << Azimuth1 << "° and " << Azimuth2 << "°";
-            std::string azimmsgstr = azimmsg.str();
+            azimmsgstr = azimmsg.str();
             std::cout << azimmsgstr << '\n';
             
-            std::stringstream timemsg;
             timemsg << "Elapsed time between them: is " << H_dil/15 << "h";
-            std::string timemsgstr = timemsg.str();
+            timemsgstr = timemsg.str();
             std::cout << timemsgstr << '\n';
             std::cout << "_________________________________________________________________________\n\n";
 
             std::cout << "1.1/3.\n";
 
-            std::string Planet = "Earth";
-            std::string Location = "Piszkesteto";
+            Planet = "Earth";
+            Location = "Piszkesteto";
             Latitude = LocationDict[Location][0];
             Longitude = LocationDict[Location][1];
-            double LocalDateYear = 2018;
-            double LocalDateMonth = 12;
+            LocalDateYear = 2018;
+            LocalDateMonth = 12;
             double LocalDateDay1 = 21;
             double LocalDateDay2 = 22;
 
@@ -6213,12 +6276,10 @@ int main()
             std::cout << ">>> 2. Julian Date of the Begind/End of Astrological Twilights\n>>> Was been calculated.\n";
             std::cout << ">>> 3. Julian Date was converted to United Time (UT), then Local Time (LT)\n>>> Was calculated for " << Location << "\n\n";
 
-            std::stringstream astrosetmsg;
             astrosetmsg << ">>> End of Astronomical Twilight on " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay1 << " is at " << LocalHoursSetAstro1 << ":" << LocalMinutesSetAstro1 << ":" << LocalSecondsSetAstro1;
             std::string astrosetmsgstr = astrosetmsg.str();
             std::cout << astrosetmsgstr << '\n';
 
-            std::stringstream astrorisemsg;
             astrorisemsg << ">>> Begin of Astronomical Twilight on " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay2 << " is at " << LocalHoursRiseAstro2 << ":" << LocalMinutesRiseAstro2 << ":" << LocalSecondsRiseAstro2;
             std::string astrorisemsgstr = astrorisemsg.str();
             std::cout << astrorisemsgstr << '\n';
@@ -6228,7 +6289,7 @@ int main()
             int AstroNightHours = int(AstroNightLength);
             int AstroNightMinutes = int((AstroNightLength - AstroNightHours) * 60);
             int AstroNightSeconds = int((((AstroNightLength - AstroNightHours) * 60) - AstroNightMinutes) * 60);
-            std::stringstream astrotimemsg;
+
             astrotimemsg << ">>> The astronomical night's lenght at " << Location << " is " << AstroNightHours << ":" << AstroNightMinutes << ":" << AstroNightSeconds << " long\n>>> In the night, between " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay1 << ", and " << LocalDateDay2 << ".";
             std::string astrotimemsgstr = astrotimemsg.str();
             std::cout << astrotimemsgstr << '\n';
@@ -6272,36 +6333,36 @@ int main()
 
             std::cout << "1.2/2.\n";
 
-            std::string Location = "Baja";
-            std::string Star = "Altair";
-            double Latitude = LocationDict[Location][0];
-            double Longitude = LocationDict[Location][1];
-            double RightAscension = StellarDict[Star][0];
-            double Declination = StellarDict[Star][1];
-            double Altitude = NULL;
-            double Azimuth = NULL;
-            double LocalHourAngle = NULL;
-            double LocalHours = 20;
-            double LocalMinutes = 45;
-            double LocalSeconds = 0;
-            double LocalDateYear = 2013;
-            double LocalDateMonth = 6;
-            double LocalDateDay = 21;
+            Location = "Baja";
+            Star = "Altair";
+            Latitude = LocationDict[Location][0];
+            Longitude = LocationDict[Location][1];
+            RightAscension = StellarDict[Star][0];
+            Declination = StellarDict[Star][1];
+            Altitude = NULL;
+            Azimuth = NULL;
+            LocalHourAngle = NULL;
+            LocalDateYear = 2013;
+            LocalDateMonth = 6;
+            LocalDateDay = 21;
+            LocalHours = 20;
+            LocalMinutes = 45;
+            LocalSeconds = 0;
 
             // Calculate Local Mean Sidereal Time
-            std::vector<double> LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay);
-            double LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
-            double LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
-            double LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
-            double UnitedHours = LocalSiderealTimeCalcoutputVec[3];
-            double UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
-            double UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
-            double GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
-            double GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
-            double GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
+            LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay);
+            LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
+            LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
+            LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
+            UnitedHours = LocalSiderealTimeCalcoutputVec[3];
+            UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
+            UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
+            GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
+            GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
+            GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
 
             // Convert to decimal
-            double LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600;
+            LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600;
             
             // Normalize result
             LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
@@ -6311,7 +6372,7 @@ int main()
             Azimuth = EquIIToHoroutputVec[1];
 
             // For printing this step too
-            double LocalHourAngle = LocalSiderealTime - RightAscension;
+            LocalHourAngle = LocalSiderealTime - RightAscension;
             // Normalize Result
             LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
 
@@ -6324,23 +6385,20 @@ int main()
             std::cout << ">>> These 2 equation outputs 2-2 values for Azimuth. 1-1 from both these\n>>> Outputs will be equal, and that's the correct value for Azimuth.\n\n";
 
             // Print Results
-            std::stringstream timemsg;
             timemsg << ">>> Altitude and Azimuth of " << Star << " from " << Location << " on " << LocalDateYear << "." << LocalDateMonth << "." << LocalDateDay;
-            std::string timemsgstr = timemsg.str();
+            timemsgstr = timemsg.str();
             std::cout << timemsgstr << '\n';
             
             // Greenwich Mean Sidereal Time
-            std::stringstream grwmsg;
             grwmsg << "- GMST (S_0): "  << GreenwichSiderealHours << "°" << GreenwichSiderealMinutes << "\'" << GreenwichSiderealSeconds << "\"";
-            std::string grwmsgstr = grwmsg.str();
+            grwmsgstr = grwmsg.str();
             std::cout << grwmsgstr << '\n';
 
             std::cout << ">>> Calculated Parameters:\n";
 
             // Local Mean Sidereal Time
-            std::stringstream sidermsg;
             sidermsg << "- Local Mean Sidereal Time (S): "  << LocalSiderealHours << "°" << LocalSiderealMinutes << "\'" << LocalSiderealSeconds << "\"";
-            std::string sidermsgstr = sidermsg.str();
+            sidermsgstr = sidermsg.str();
             std::cout << sidermsgstr << '\n';
 
             // Local Hour Angle
@@ -6348,17 +6406,15 @@ int main()
             int LocalHourAngleMinutes = int((LocalHourAngle - LocalHourAngleHours) * 60);
             int LocalHourAngleSeconds = int((((LocalHourAngle - LocalHourAngleHours) * 60) - LocalHourAngleMinutes) * 60);
 
-            std::stringstream hourangmsg;
             hourangmsg << "- Local Hour Angle (t): " << LocalHourAngleHours<< "h" << LocalHourAngleMinutes << "m" << LocalHourAngleSeconds << "s";
             std::string hourangmsgstr = hourangmsg.str();                    
-            std::cout << hourangmsgstr << '\n\n';
+            std::cout << hourangmsgstr << "\n\n";
 
             // Altitude
             int AltitudeHours = int(Altitude);
             int AltitudeMinutes = int((Altitude - AltitudeHours) * 60);
             int AltitudeSeconds = int((((Altitude - AltitudeHours) * 60) - AltitudeMinutes) * 60);
 
-            std::stringstream altitmsg;
             altitmsg << "- Altitude (m): "<< AltitudeHours << "° " << AltitudeMinutes << "\' " << AltitudeSeconds << "\"";
             std::string altitmsgstr = altitmsg.str();
             std::cout << altitmsgstr << '\n';
@@ -6368,50 +6424,49 @@ int main()
             int AzimuthMinutes = int((Azimuth - AzimuthHours) * 60);
             int AzimuthSeconds = int((((Azimuth - AzimuthHours) * 60) - AzimuthMinutes) * 60);
 
-            std::stringstream azimmsg;
             azimmsg << "- Azimuth (A): "<< AzimuthHours << "° " << AzimuthMinutes << "\' " << AzimuthSeconds << "\"";
-            std::string azimmsgstr = azimmsg.str();
+            azimmsgstr = azimmsg.str();
             std::cout << azimmsgstr << '\n';
 
             std::cout << "_________________________________________________________________________\n\n";
 
             std::cout << "1.2/3.\n";
 
-            std::string Location = "Rio";
-            double Latitude = LocationDict[Location][0];
-            double Longitude = LocationDict[Location][1];
+            Location = "Rio";
+            Latitude = LocationDict[Location][0];
+            Longitude = LocationDict[Location][1];
 
-            double Altitude = 55.656388;
-            double Azimuth = 208.113611;
+            Altitude = 55.656388;
+            Azimuth = 208.113611;
 
-            double LocalHours = 20;
-            double LocalMinutes = 34;
-            double LocalSeconds = 53;
-            double LocalDateYear = 2018;
-            double LocalDateMonth = 4;
-            double LocalDateDay = 17;
+            LocalDateYear = 2018;
+            LocalDateMonth = 4;
+            LocalDateDay = 17;
+            LocalHours = 20;
+            LocalMinutes = 34;
+            LocalSeconds = 53;
 
-            std::vector<double> LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay);
-            double LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
-            double LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
-            double LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
-            double UnitedHours = LocalSiderealTimeCalcoutputVec[3];
-            double UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
-            double UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
-            double GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
-            double GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
-            double GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
+            LocalSiderealTimeCalcoutputVec = LocalSiderealTimeCalc(Longitude, LocalHours, LocalMinutes, LocalSeconds, LocalDateYear, LocalDateMonth, LocalDateDay);
+            LocalSiderealHours = LocalSiderealTimeCalcoutputVec[0];
+            LocalSiderealMinutes = LocalSiderealTimeCalcoutputVec[1];
+            LocalSiderealSeconds = LocalSiderealTimeCalcoutputVec[2];
+            UnitedHours = LocalSiderealTimeCalcoutputVec[3];
+            UnitedMinutes = LocalSiderealTimeCalcoutputVec[4];
+            UnitedSeconds = LocalSiderealTimeCalcoutputVec[5];
+            GreenwichSiderealHours = LocalSiderealTimeCalcoutputVec[6];
+            GreenwichSiderealMinutes = LocalSiderealTimeCalcoutputVec[7];
+            GreenwichSiderealSeconds = LocalSiderealTimeCalcoutputVec[8];
             
             // Convert to decimal
-            double LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600;
+            LocalSiderealTime = LocalSiderealHours + LocalSiderealMinutes/60 + LocalSiderealSeconds/3600;
             
             // Normalize result
             LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
 
             std::vector<double> HorToEquIIoutputVec = HorToEquII(Latitude, Altitude, Azimuth, LocalSiderealTime);
-            double RightAscension = HorToEquIIoutputVec[0];
-            double Declination = HorToEquIIoutputVec[1];
-            double LocalSiderealTime = HorToEquIIoutputVec[2];
+            RightAscension = HorToEquIIoutputVec[0];
+            Declination = HorToEquIIoutputVec[1];
+            LocalSiderealTime = HorToEquIIoutputVec[2];
 
             std::cout << "Calculate a star's equatorial II coordinates (S and δ) from Horizontal coords.\n";
             std::cout << "Used Formulas:\n";
@@ -6432,9 +6487,8 @@ int main()
             std::cout << equIImsgstr << '\n';
 
             // Greenwich Mean Sidereal Time
-            std::stringstream grwmsg;
             grwmsg << "- GMST (S_0): "  << GreenwichSiderealHours << "°" << GreenwichSiderealMinutes << "\'" << GreenwichSiderealSeconds << "\"";
-            std::string grwmsgstr = grwmsg.str();
+            grwmsgstr = grwmsg.str();
             std::cout << grwmsgstr << '\n';
             
             // Declination
@@ -6442,7 +6496,6 @@ int main()
             int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
             int DeclinationSeconds = int((((Declination - DeclinationHours) * 60) - DeclinationMinutes) * 60);
 
-            std::stringstream declinmsg;
             declinmsg << "- Declination (δ): " << DeclinationHours << "°" << DeclinationMinutes << "\'" << DeclinationSeconds << "\"";
             std::string declinmsgstr = declinmsg.str();
             std::cout << declinmsgstr << '\n';
@@ -6452,15 +6505,13 @@ int main()
             int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
             int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
 
-            std::stringstream RAmsg;
             RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
             std::string RAmsgstr = RAmsg.str();
             std::cout << RAmsgstr << '\n';
             
             // Local Mean Sidereal Time
-            std::stringstream sidermsg;
             sidermsg << "- Local Mean Sidereal Time (S): "  << LocalSiderealHours << "°" << LocalSiderealMinutes << "\'" << LocalSiderealSeconds << "\"";
-            std::string sidermsgstr = sidermsg.str();
+            sidermsgstr = sidermsg.str();
             std::cout << sidermsgstr << '\n';
 
             std::cout << "_________________________________________________________________________\n\n";
@@ -6489,4 +6540,5 @@ int main()
         {
             std::cout << ">>>> ERROR: Invalid option! Try Again!\n";
         }
+    }
 }
