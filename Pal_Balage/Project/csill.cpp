@@ -535,7 +535,7 @@ std::vector <double> LTtoUT(float Longitude, double LocalHours, double LocalMinu
     // Summer: March 26/31 - October 8/14 LT+1
     // Winter: October 8/14 - March 26/31 LT+0
     // ISN'T NEEDED
-    if((DateMonth > 3 and DateMonth < 10) || ((DateMonth == 3 and DateDay >=25) || (DateMonth == 10 && (DateDay >= 8 && DateDay <=14))))
+    if((DateMonth > 3 && DateMonth < 10) || ((DateMonth == 3 && DateDay >=25) || (DateMonth == 10 && (DateDay >= 8 && DateDay <=14))))
     {
         UnitedTime = LocalTime - (std::round(Longitude/15) + 1);
     }
@@ -687,7 +687,7 @@ std::vector<double> HorToEquI(float Latitude, double Altitude, double Azimuth, d
     // cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)
     LHAcos2_1 = (sin((Pi / 180) * (Altitude)) - sin((Pi / 180) * (Declination)) * sin((Pi / 180) * (Latitude))) / (cos((Pi / 180) * (Declination)) * cos((Pi / 180) * (Latitude)));
 
-    if(LHAcos2_1 <= 1 and LHAcos2_1 >= -1)
+    if(LHAcos2_1 <= 1 && LHAcos2_1 >= -1)
     {
         LocalHourAngleDegrees2_1 = (180 / Pi) * (acos(LHAcos2_1));
     }
@@ -849,22 +849,22 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
         Azimuth4 = NormalizeZeroBounded(Azimuth4, 360);
 
         // Compare Azimuth values
-        if(Azimuth1 + 3 > Azimuth3 and Azimuth1 - 3 < Azimuth3)
+        if(Azimuth1 + 3 > Azimuth3 && Azimuth1 - 3 < Azimuth3)
         {
             Azimuth = Azimuth1;
         }
 
-        else if(Azimuth1 + 3 > Azimuth4 and Azimuth1 - 3 < Azimuth4)
+        else if(Azimuth1 + 3 > Azimuth4 && Azimuth1 - 3 < Azimuth4)
         {
             Azimuth = Azimuth1;
         }
 
-        else if(Azimuth2 + 3 > Azimuth3 and Azimuth2 - 3 < Azimuth3)
+        else if(Azimuth2 + 3 > Azimuth3 && Azimuth2 - 3 < Azimuth3)
         {
             Azimuth = Azimuth2;
         }
 
-        else if(Azimuth2 + 3 > Azimuth4 and Azimuth2 - 3 < Azimuth4)
+        else if(Azimuth2 + 3 > Azimuth4 && Azimuth2 - 3 < Azimuth4)
         {
             Azimuth = Azimuth2;
         }
@@ -909,7 +909,7 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
         // First let's calculate LHA:
         // cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)
         LHAcos = (sin((Pi / 180) * (Altitude)) - sin((Pi / 180) * (Declination)) * sin((Pi / 180) * (Latitude))) / (cos((Pi / 180) * (Declination)) * cos((Pi / 180) * (Latitude)));
-        if(LHAcos <= 1 and LHAcos >= -1)
+        if(LHAcos <= 1 && LHAcos >= -1)
         {
             LocalHourAngleDegrees1 = (180 / Pi) * (acos(LHAcos));
         }
@@ -965,22 +965,22 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
         Azimuth1_4 = NormalizeZeroBounded(Azimuth1_4, 360);
 
         // Compare Azimuth values
-        if(Azimuth1_1 + 3 > Azimuth1_3 and Azimuth1_1 - 3 < Azimuth1_3)
+        if(Azimuth1_1 + 3 > Azimuth1_3 && Azimuth1_1 - 3 < Azimuth1_3)
         {
             Azimuth1 = Azimuth1_1;
         }
 
-        else if(Azimuth1_1 + 3 > Azimuth1_4 and Azimuth1_1 - 3 < Azimuth1_4)
+        else if(Azimuth1_1 + 3 > Azimuth1_4 && Azimuth1_1 - 3 < Azimuth1_4)
         {
             Azimuth1 = Azimuth1_1;
         }
 
-        else if(Azimuth1_2 + 3 > Azimuth1_3 and Azimuth1_2 - 3 < Azimuth1_3)
+        else if(Azimuth1_2 + 3 > Azimuth1_3 && Azimuth1_2 - 3 < Azimuth1_3)
         {
             Azimuth1 = Azimuth1_2;
         }
 
-        else if(Azimuth1_2 + 3 > Azimuth1_4 and Azimuth1_2 - 3 < Azimuth1_4)
+        else if(Azimuth1_2 + 3 > Azimuth1_4 && Azimuth1_2 - 3 < Azimuth1_4)
         {
             Azimuth1 = Azimuth1_2;
         }
@@ -1023,22 +1023,22 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
         Azimuth2_4 = NormalizeZeroBounded(Azimuth2_4, 360);
 
         // Compare Azimuth values
-        if(Azimuth2_1 + 3 > Azimuth2_3 and Azimuth2_1 - 3 < Azimuth2_3)
+        if(Azimuth2_1 + 3 > Azimuth2_3 && Azimuth2_1 - 3 < Azimuth2_3)
         {
             Azimuth2 = Azimuth2_1;
         }
 
-        else if(Azimuth2_1 + 3 > Azimuth2_4 and Azimuth2_1 - 3 < Azimuth2_4)
+        else if(Azimuth2_1 + 3 > Azimuth2_4 && Azimuth2_1 - 3 < Azimuth2_4)
         {
             Azimuth2 = Azimuth2_1;
         }
 
-        else if(Azimuth2_2 + 3 > Azimuth2_3 and Azimuth2_2 - 3 < Azimuth2_3)
+        else if(Azimuth2_2 + 3 > Azimuth2_3 && Azimuth2_2 - 3 < Azimuth2_3)
         {
             Azimuth2 = Azimuth2_2;
         }
 
-        else if(Azimuth2_2 + 3 > Azimuth2_4 and Azimuth2_2 - 3 < Azimuth2_4)
+        else if(Azimuth2_2 + 3 > Azimuth2_4 && Azimuth2_2 - 3 < Azimuth2_4)
         {
             Azimuth2 = Azimuth2_2;
         }
@@ -1078,7 +1078,7 @@ double EquIToEquII(double RightAscension, double LocalHourAngle)
 std::vector<double> EquIIToEquI(double RightAscension, double LocalHourAngle, double LocalSiderealTime)
 {
     // Calculate Right Ascension or Local Mean Sidereal Time
-    if(RightAscension != NULL and LocalHourAngle == NULL)
+    if(RightAscension != NULL && LocalHourAngle == NULL)
     {
         LocalHourAngle = LocalSiderealTime - RightAscension;
         // Normalize LHA
@@ -1086,7 +1086,7 @@ std::vector<double> EquIIToEquI(double RightAscension, double LocalHourAngle, do
         LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
     }
 
-    else if(RightAscension == NULL and LocalHourAngle != NULL)
+    else if(RightAscension == NULL && LocalHourAngle != NULL)
     {
         RightAscension = LocalSiderealTime - LocalHourAngle;
         // Normalize Right Ascension
@@ -1115,12 +1115,12 @@ std::vector<double> EquIIToHor(double Latitude, double RightAscension, double De
     Latitude = NormalizeSymmetricallyBoundedPI(Latitude);
     LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
     
-    if(RightAscension == NULL and LocalHourAngle != NULL)
+    if(RightAscension == NULL && LocalHourAngle != NULL)
     {
         LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
     }
 
-    else if(RightAscension != NULL and LocalHourAngle == NULL)
+    else if(RightAscension != NULL && LocalHourAngle == NULL)
     {
         RightAscension = NormalizeZeroBounded(RightAscension, 24);
     }
@@ -1389,7 +1389,7 @@ std::vector<double> SunsLocalHourAngle(std::string Planet, double Latitude, doub
     std::string PlanetOrbit = Planet.append("Orbit");
     double LHAcos = ((sin((Pi / 180) * (AltitudeOfSun + OrbitDictFunc(PlanetOrbit)[2])) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (DeclinationSun))) /
             (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (DeclinationSun))));
-    if(LHAcos <= 1 and LHAcos >= -1)
+    if(LHAcos <= 1 && LHAcos >= -1)
     {
         LocalHourAngleSun_Orig = (180 / Pi) * (acos(LHAcos));
     }
@@ -3044,7 +3044,7 @@ int main()
                         }
                     }
 
-                    if(RightAscension != NULL and Declination != NULL)
+                    if(RightAscension != NULL && Declination != NULL)
                     {
                         while(1)
                         {
@@ -3140,7 +3140,7 @@ int main()
                         }
                     }
 
-                    else if(Declination != NULL and RightAscension == NULL)
+                    else if(Declination != NULL && RightAscension == NULL)
                     {
                         while(1)
                         {
@@ -3224,7 +3224,7 @@ int main()
                     // Used formulas:
                     // t = S - α
                     // sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H)
-                    if(LocalSiderealTime != NULL or LocalHourAngle != NULL)
+                    if(LocalSiderealTime != NULL || LocalHourAngle != NULL)
                     {                        
                         std::vector<double> EquIToHoroutputVec = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle);
                         Altitude = EquIToHoroutputVec[0];
@@ -4350,7 +4350,7 @@ int main()
 
                         else
                         {
-                            if(MonthLengthList[int(DateMonth) - 1] >= DateDay and DateDay > 0)
+                            if(MonthLengthList[int(DateMonth) - 1] >= DateDay && DateDay > 0)
                             {
                                 std::cout << '\n';
                                 break;
@@ -4403,7 +4403,7 @@ int main()
                     {
                         std::cout << "> Local Seconds: ";
                         std::cin >> LocalSeconds;
-                        if(LocalSeconds >= 0 and LocalSeconds < 60)
+                        if(LocalSeconds >= 0 && LocalSeconds < 60)
                         {
                             std::cout << '\n';
                             break;
@@ -4520,7 +4520,7 @@ int main()
                         std::cin >> DateDay;
                         if(int(DateYear)%4 == 0 && (int(DateYear)%100 != 0 || int(DateYear)%400 == 0))
                         {
-                            if(MonthLengthListLeapYear[int(DateMonth) - 1] >= DateDay and DateDay > 0)
+                            if(MonthLengthListLeapYear[int(DateMonth) - 1] >= DateDay && DateDay > 0)
                             {
                                 break;
                             }
@@ -4784,7 +4784,7 @@ int main()
                     {
                         std::cout << "> Month: ";
                         std::cin >> LocalDateMonth;
-                        if(LocalDateMonth > 0 and LocalDateMonth < 13)
+                        if(LocalDateMonth > 0 && LocalDateMonth < 13)
                         {
                             std::cout << '\n';
                             break;
@@ -4801,7 +4801,7 @@ int main()
                     {
                         std::cout << "> Day: ";
                         std::cin >> LocalDateDay;
-                        if(int(LocalDateYear)%4 == 0 && (int(LocalDateYear)%100 != 0 or int(LocalDateYear)%400 == 0))
+                        if(int(LocalDateYear)%4 == 0 && (int(LocalDateYear)%100 != 0 || int(LocalDateYear)%400 == 0))
                         {
                             if(MonthLengthListLeapYear[int(LocalDateMonth) - 1] >= LocalDateDay && LocalDateDay > 0)
                             {
@@ -5246,7 +5246,7 @@ int main()
                                 std::cin >> LocalDateMonth;
                                 std::cout << '\n';
 
-                                if(LocalDateMonth > 0 and LocalDateMonth < 13)
+                                if(LocalDateMonth > 0 && LocalDateMonth < 13)
                                 {
                                     std::cout << '\n';
                                     break;
