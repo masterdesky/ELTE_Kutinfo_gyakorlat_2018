@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.2.28)  20 MAY 2018 17:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.2.28)  21 MAY 2018 17:24
 entering extended mode
 **./thesis.tex
 (thesis.tex
@@ -771,7 +771,7 @@ gy ev vegi beadandojanak tel-jes megrasa
  []
 
 
-Underfull \vbox (badness 2486) has occurred while \output is active []
+Underfull \vbox (badness 1394) has occurred while \output is active []
 
  [3]
 Overfull \hbox (2.02586pt too wide) in paragraph at lines 34--35
@@ -816,7 +816,7 @@ ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><E:/Program Fil
 es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><E:/Program Files/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmsl12.pfb><E:/Program Files/MiKTeX 2.9/fon
 ts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on thesis.pdf (9 pages, 89756 bytes).
+Output written on thesis.pdf (9 pages, 89797 bytes).
 PDF statistics:
  125 PDF objects out of 1000 (max. 8388607)
  19 named destinations out of 1000 (max. 500000)
