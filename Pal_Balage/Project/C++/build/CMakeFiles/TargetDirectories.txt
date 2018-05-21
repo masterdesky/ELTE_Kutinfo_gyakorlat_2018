@@ -1,3 +1,3 @@
-C:/Users/Lordpb/Documents/GitHub/Kutinfo_gyakorlat_KA_LM_PB/Pal_Balage/Project/build/CMakeFiles/csill.dir
-C:/Users/Lordpb/Documents/GitHub/Kutinfo_gyakorlat_KA_LM_PB/Pal_Balage/Project/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/Lordpb/Documents/GitHub/Kutinfo_gyakorlat_KA_LM_PB/Pal_Balage/Project/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/Lordpb/Documents/GitHub/Kutinfo_gyakorlat_KA_LM_PB/Pal_Balage/Project/C++/build/CMakeFiles/csill.dir
+C:/Users/Lordpb/Documents/GitHub/Kutinfo_gyakorlat_KA_LM_PB/Pal_Balage/Project/C++/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Lordpb/Documents/GitHub/Kutinfo_gyakorlat_KA_LM_PB/Pal_Balage/Project/C++/build/CMakeFiles/ZERO_CHECK.dir

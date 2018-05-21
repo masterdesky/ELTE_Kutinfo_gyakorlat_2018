@@ -47,7 +47,7 @@
 //////        A: Azimuth at Horizontal Coords                                                    ////
 //////        m: Altitude at Horizontal Coords                                                   ////
 //////        δ: Declination at Equatorial Coords                                                ////
-//////        α/RA: Right Ascension at Equatorial Coords                                         ////
+//////        \u03b1/RA: Right Ascension at Equatorial Coords                                         ////
 //////        ε: Obliquity of the equator of the planet compared to the orbit of the planet      ////
 //////        Π: Perihelion of the planet, relative to the ecliptic and vernal equinox           ////
 ////////                                                                                       //////
@@ -60,6 +60,7 @@
 #include <cmath>
 #include <map>
 #include <vector>
+#include <limits.h>
 
 // Current Version of the Csillész II Problem Solver
 std::string ActualVersion = "v1.32";
@@ -183,7 +184,7 @@ std::vector<std::string> PlanetDictFunc(std::string Planet)
 // Format:
 // "PlanetNameX": [X_0, X_1, X_2 .., X_E.] or [X_1, X_3, ..., X_E] etc.
 // "PlanetNameOrbit": [Π, ε, Correction for Refraction and Sun's visible shape]
-std::vector<double> OrbitDictFunc(std::string Planet)
+std::map<std::string, std::vector<double>> OrbitDictFunc()
 {
 
     std::map<std::string, std::vector<double>> OrbitDict;
@@ -260,7 +261,7 @@ std::vector<double> OrbitDictFunc(std::string Planet)
     OrbitDict["PlutoH"] = {38.648, 4.971, 1.864};
     OrbitDict["PlutoOrbit"] = {184.5484, 119.6075, -0.01};
 
-    return(OrbitDict[Planet]);
+    return(OrbitDict);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -268,6 +269,16 @@ std::vector<double> OrbitDictFunc(std::string Planet)
 ////////////////               UTILITY FUNCTIONS                ////////////////
 ////////////////                                                ////////////////
 ////////////////////////////////////////////////////////////////////////////////
+
+// Appends strings
+std::string StringAppend(const std::string str, std::string suffix)
+{
+	std::string Appended = str;
+	Appended += suffix; // parameter str is a copy of argument
+
+	return(Appended);
+}
+
 
 // Normalization with Bound [0,NonZeroBound]
 double NormalizeZeroBounded(double Parameter, double NonZeroBound)
@@ -659,7 +670,7 @@ std::vector<double> HorToEquI(float Latitude, double Altitude, double Azimuth, d
     Altitude = NormalizeSymmetricallyBoundedPI_2(Altitude);
     Azimuth = NormalizeZeroBounded(Azimuth, 360);
 
-    if (LocalSiderealTime != NULL)
+    if (LocalSiderealTime != INT_MAX)
     {
         LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
     }
@@ -731,16 +742,16 @@ std::vector<double> HorToEquI(float Latitude, double Altitude, double Azimuth, d
     // Convert to hours from angles (H -> t)
     LocalHourAngle = LocalHourAngleDegrees / 15;
 
-    if(LocalSiderealTime != NULL)
+    if(LocalSiderealTime != INT_MAX)
     {
-        // Calculate Right Ascension (α)
-        // α = S – t
+        // Calculate Right Ascension (\u03b1)
+        // \u03b1 = S – t
         RightAscension = LocalSiderealTime - LocalHourAngle;
     }
 
     else
     {
-        RightAscension = NULL;
+        RightAscension = INT_MAX;
     }
 
     std::vector<double> HorToEquIvec = {RightAscension, Declination, LocalHourAngle};
@@ -777,27 +788,27 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
     // Right Ascension: [0h,24h[
     // Declination: [-π/2,+π/2]
     Latitude = NormalizeSymmetricallyBoundedPI(Latitude);
-    if(RightAscension != NULL)
+    if(RightAscension != INT_MAX)
     {
         RightAscension = NormalizeZeroBounded(RightAscension, 24);
     }
 
-    if(Declination != NULL)
+    if(Declination != INT_MAX)
     {
         Declination = NormalizeSymmetricallyBoundedPI_2(Declination);
     }
 
-    if(LocalSiderealTime != NULL)
+    if(LocalSiderealTime != INT_MAX)
     {
         // Calculate Local Hour Angle in Hours (t)
-        // t = S - α
+        // t = S - \u03b1
         LocalHourAngle = LocalSiderealTime - RightAscension;
         // Normalize LHA
         // LHA: [0h,24h[
         LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
     }
 
-    if(LocalHourAngle != NULL)
+    if(LocalHourAngle != INT_MAX)
     {
         // Declare variables
         double Azimuth;
@@ -886,7 +897,7 @@ std::vector<double> EquIToHor(float Latitude, double RightAscension, double Decl
         return(EquIToHorvec1);
     }
 
-    else if(Altitude != NULL)
+    else if(Altitude != INT_MAX)
     {
         // Declare variables
         double LHAcos;
@@ -1081,7 +1092,7 @@ double EquIToEquII(double RightAscension, double LocalHourAngle)
 std::vector<double> EquIIToEquI(double RightAscension, double LocalHourAngle, double LocalSiderealTime)
 {
     // Calculate Right Ascension or Local Mean Sidereal Time
-    if(RightAscension != NULL && LocalHourAngle == NULL)
+    if(RightAscension != INT_MAX && LocalHourAngle == INT_MAX)
     {
         LocalHourAngle = LocalSiderealTime - RightAscension;
         // Normalize LHA
@@ -1089,7 +1100,7 @@ std::vector<double> EquIIToEquI(double RightAscension, double LocalHourAngle, do
         LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
     }
 
-    else if(RightAscension == NULL && LocalHourAngle != NULL)
+    else if(RightAscension == INT_MAX && LocalHourAngle != INT_MAX)
     {
         RightAscension = LocalSiderealTime - LocalHourAngle;
         // Normalize Right Ascension
@@ -1118,12 +1129,12 @@ std::vector<double> EquIIToHor(double Latitude, double RightAscension, double De
     Latitude = NormalizeSymmetricallyBoundedPI(Latitude);
     LocalSiderealTime = NormalizeZeroBounded(LocalSiderealTime, 24);
     
-    if(RightAscension == NULL && LocalHourAngle != NULL)
+    if(RightAscension == INT_MAX && LocalHourAngle != INT_MAX)
     {
         LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
     }
 
-    else if(RightAscension != NULL && LocalHourAngle == NULL)
+    else if(RightAscension != INT_MAX && LocalHourAngle == INT_MAX)
     {
         RightAscension = NormalizeZeroBounded(RightAscension, 24);
     }
@@ -1296,54 +1307,60 @@ double CalculateJulianDate(double LocalDateYear, double LocalDateMonth, double L
 std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, double JulianDays)
 {
     // Declare Variables
-    std::string PlanetJ;
-    std::string PlanetM;
-    std::string PlanetC;
-    std::string PlanetA;
-    std::string PlanetD;
-    std::string PlanetOrbit;
+	std::string PlanetM = StringAppend(Planet, "M");
+	std::string PlanetJ = StringAppend(Planet, "J");
+    std::string PlanetC = StringAppend(Planet, "C");
+    std::string PlanetA = StringAppend(Planet, "A");
+    std::string PlanetD = StringAppend(Planet, "D");
+    std::string PlanetOrbit = StringAppend(Planet, "Orbit");
+
+    std::map<std::string, std::vector<double>> OrbitDictFuncoutputMap = OrbitDictFunc();
+
+    std::vector<double> PlanetMvec = OrbitDictFuncoutputMap[PlanetM];
+    std::vector<double> PlanetJvec = OrbitDictFuncoutputMap[PlanetJ];
+    std::vector<double> PlanetCvec = OrbitDictFuncoutputMap[PlanetC];
+    std::vector<double> PlanetAvec = OrbitDictFuncoutputMap[PlanetA];
+    std::vector<double> PlanetDvec = OrbitDictFuncoutputMap[PlanetD];
+    std::vector<double> PlanetOrbitvec = OrbitDictFuncoutputMap[PlanetOrbit];
+
 
     // 1. Mean Solar Noon
     // JAnomaly is an approximation of Mean Solar Time at WLongitude expressed as a Julian day with the day fraction
     // WLongitude is the longitude west (west is positive, east is negative) of the observer on the Earth
     double WLongitude = - Longitude;
-    PlanetJ = Planet.append("J");
-    double JAnomaly = (JulianDays - OrbitDictFunc(PlanetJ)[0]) / OrbitDictFunc(PlanetJ)[3] - WLongitude/360;
+    double JAnomaly = (JulianDays - PlanetJvec[0]) / PlanetJvec[3] - WLongitude/360;
+
 
     // 2. Solar Mean Anomaly
     // MeanAnomaly (M) is the Solar Mean Anomaly used in a few of next equations
     // MeanAnomaly = (M_0 + M_1 * (JulianDays-J2000)) and Norm to 360
-    PlanetM = Planet.append("M");
-    double MeanAnomaly = (OrbitDictFunc(PlanetM)[0] + OrbitDictFunc(PlanetM)[1] * JulianDays);
+    double MeanAnomaly = (PlanetMvec[0] + PlanetMvec[1] * JulianDays);
     // Normalize Result
     MeanAnomaly = NormalizeZeroBounded(MeanAnomaly, 360);
 
     // 3. Equation of the Center
     // EquationOfCenter (C) is the Equation of the center value needed to calculate Lambda (see next equation)
     // EquationOfCenter = C_1 * sin(M) + C_2 * sin(2M) + C_3 * sin(3M) + C_4 * sin(4M) + C_5 * sin(5M) + C_6 * sin(6M)
-    PlanetC = Planet.append("C");
-    double EquationOfCenter = (OrbitDictFunc(PlanetC)[0] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDictFunc(PlanetC)[1] * sin((Pi / 180) * (2 * MeanAnomaly)) + 
-                       OrbitDictFunc(PlanetC)[2] * sin((Pi / 180) * (3 * MeanAnomaly)) + OrbitDictFunc(PlanetC)[3] * sin((Pi / 180) * (4 * MeanAnomaly)) + 
-                       OrbitDictFunc(PlanetC)[4] * sin((Pi / 180) * (5 * MeanAnomaly)) + OrbitDictFunc(PlanetC)[5] * sin((Pi / 180) * (6 * MeanAnomaly)));
+    double EquationOfCenter = (PlanetCvec[0] * sin((Pi / 180) * (MeanAnomaly)) + PlanetCvec[1] * sin((Pi / 180) * (2 * MeanAnomaly)) + 
+                       PlanetCvec[2] * sin((Pi / 180) * (3 * MeanAnomaly)) + PlanetCvec[3] * sin((Pi / 180) * (4 * MeanAnomaly)) + 
+                       PlanetCvec[4] * sin((Pi / 180) * (5 * MeanAnomaly)) + PlanetCvec[5] * sin((Pi / 180) * (6 * MeanAnomaly)));
 
     // 4. Ecliptic Longitude
     // MeanEclLongitudeSun (L_sun) in the Mean Ecliptic Longitude
     // EclLongitudeSun (λ) is the Ecliptic Longitude
-    // OrbitDictFunc(PlanetOrbit)[0] is a value for the argument of perihelion
-    PlanetOrbit = Planet.append("Orbit");
-    double MeanEclLongitudeSun = MeanAnomaly + OrbitDictFunc(PlanetOrbit)[0] + 180;
+    // PlanetOrbitvec[0] is a value for the argument of perihelion
+    double MeanEclLongitudeSun = MeanAnomaly + PlanetOrbitvec[0] + 180;
     double EclLongitudeSun = EquationOfCenter + MeanEclLongitudeSun;
     // Normalize Results
     MeanEclLongitudeSun = NormalizeZeroBounded(MeanEclLongitudeSun, 360);
     EclLongitudeSun = NormalizeZeroBounded(EclLongitudeSun, 360);
 
-    // 5. Right Ascension of Sun (α)
+    // 5. Right Ascension of Sun (\u03b1)
     // PlanetA_2, PlanetA_4 and PlanetA_6 (measured in degrees) are coefficients in the series expansion of the Sun's Right Ascension
     // They varie for different planets in the Solar System
     // RightAscensionSun = EclLongitudeSun + S ≈ EclLongitudeSun + PlanetA_2 * sin(2 * EclLongitudeSun) + PlanetA_4 * sin(4 * EclLongitudeSun) + PlanetA_6 * sin(6 * EclLongitudeSun)
-    PlanetA = Planet.append("A");
-    double RightAscensionSun = (EclLongitudeSun + OrbitDictFunc(PlanetA)[0] * sin((Pi / 180) * (2 * EclLongitudeSun)) + OrbitDictFunc(PlanetA)[1] * 
-                        sin((Pi / 180) * (4 * EclLongitudeSun)) + OrbitDictFunc(PlanetA)[2] * sin((Pi / 180) * (6 * EclLongitudeSun)));
+    double RightAscensionSun = (EclLongitudeSun + PlanetAvec[0] * sin((Pi / 180) * (2 * EclLongitudeSun)) + PlanetAvec[1] * 
+                        sin((Pi / 180) * (4 * EclLongitudeSun)) + PlanetAvec[2] * sin((Pi / 180) * (6 * EclLongitudeSun)));
 
     RightAscensionSun /= 15;
 
@@ -1359,9 +1376,8 @@ std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, do
     // PlanetD_1, PlanetD_3 and PlanetD_5 (measured in degrees) are coefficients in the series expansion of the Sun's Declination.
     // They varie for different planets in the Solar System.
     // DeclinationSun = PlanetD_1 * sin(EclLongitudeSun) + PlanetD_3 * (sin(EclLongitudeSun))^3 + PlanetD_5 * (sin(EclLongitudeSun))^5
-    PlanetD = Planet.append("D");
-    double DeclinationSun = (OrbitDictFunc(PlanetD)[0] * sin((Pi / 180) * (EclLongitudeSun)) + OrbitDictFunc(PlanetD)[1] * 
-                     pow((sin((Pi / 180) * (EclLongitudeSun))), 3) + OrbitDictFunc(PlanetD)[2] * pow((sin((Pi / 180) * (EclLongitudeSun))), 5));
+    double DeclinationSun = (PlanetDvec[0] * sin((Pi / 180) * (EclLongitudeSun)) + PlanetDvec[1] * 
+                     pow((sin((Pi / 180) * (EclLongitudeSun))), 3) + PlanetDvec[2] * pow((sin((Pi / 180) * (EclLongitudeSun))), 5));
 
 
     // 7. Solar Transit
@@ -1370,9 +1386,8 @@ std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, do
     // 2451545.5 is midnight or the beginning of the equivalent Julian year reference
     // Jtransit = J_x + 0.0053 * sin(MeanANomaly) - 0.0068 * sin(2 * L_sun)
     // "0.0053 * sin(MeanAnomaly) - 0.0069 * sin(2 * EclLongitudeSun)"  is a simplified version of the equation of time
-    PlanetJ = Planet.append("J");
-    double J_x = (JulianDays + 2451545) + OrbitDictFunc(PlanetJ)[3] * (JulianDays - JAnomaly);
-    double Jtransit = J_x + OrbitDictFunc(PlanetJ)[1] * sin((Pi / 180) * (MeanAnomaly)) + OrbitDictFunc(PlanetJ)[2] * sin((Pi / 180) * (2 * MeanEclLongitudeSun));
+    double J_x = (JulianDays + 2451545) + PlanetJvec[3] * (JulianDays - JAnomaly);
+    double Jtransit = J_x + PlanetJvec[1] * sin((Pi / 180) * (MeanAnomaly)) + PlanetJvec[2] * sin((Pi / 180) * (2 * MeanEclLongitudeSun));
 
     std::vector<double> SunsCoordinatesCalc = {RightAscensionSun, DeclinationSun, EclLongitudeSun, Jtransit};
     return(SunsCoordinatesCalc);
@@ -1381,14 +1396,22 @@ std::vector<double> SunsCoordinatesCalc(std::string Planet, double Longitude, do
 
 std::vector<double> SunsLocalHourAngle(std::string Planet, double Latitude, double Longitude, double DeclinationSun, double EclLongitudeSun, double AltitudeOfSun)
 {
+
+    std::string PlanetH = StringAppend(Planet, "H");
+    std::string PlanetOrbit = StringAppend(Planet, "Orbit");
+
+    std::map<std::string, std::vector<double>> OrbitDictFuncoutputMap = OrbitDictFunc();
+
+    std::vector<double> PlanetHvec = OrbitDictFuncoutputMap[PlanetH];
+    std::vector<double> PlanetOrbitvec = OrbitDictFuncoutputMap[PlanetOrbit];
+
     // Declare variables
     double LocalHourAngleSun_Orig;
 
     // 8./a Local Hour Angle of Sun (H)
     // H+ ≈ 90° + H_1 * sin(EclLongitudeSun) * tan(φ) + H_3 * sin(EclLongitudeSun)^3 * tan(φ) * (3 + tan(φ)^2) + H_5 * sin(EclLongitudeSun)^5 * tan(φ) * (15 + 10*tan(φ)^2 + 3 * tan(φ)^4))
-    std::string PlanetH = Planet.append("H");
-    double LocalHourAngleSun_Pos = (90 + OrbitDictFunc(PlanetH)[0] * sin((Pi / 180) * (EclLongitudeSun)) * tan((Pi / 180) * (Latitude)) + OrbitDictFunc(PlanetH)[1] * 
-                            sin((Pi / 180) * pow(((EclLongitudeSun)), 3) * tan((Pi / 180) * (Latitude)) * (3 + pow(tan((Pi / 180) * (Latitude)), 2)) + OrbitDictFunc(PlanetH)[2] * 
+    double LocalHourAngleSun_Pos = (90 + PlanetHvec[0] * sin((Pi / 180) * (EclLongitudeSun)) * tan((Pi / 180) * (Latitude)) + PlanetHvec[1] * 
+                            sin((Pi / 180) * pow(((EclLongitudeSun)), 3) * tan((Pi / 180) * (Latitude)) * (3 + pow(tan((Pi / 180) * (Latitude)), 2)) + PlanetHvec[2] * 
                             pow(sin((Pi / 180) * (EclLongitudeSun)), 5) * tan((Pi / 180) * (Latitude)) * (15 + 10 * pow(tan((Pi / 180) * (Latitude)), 2) + 3 * pow(tan((Pi / 180) * (Latitude)), 4))));
 
     // 8./b1 Local Hour Angle of Sun (H)
@@ -1397,8 +1420,7 @@ std::vector<double> SunsLocalHourAngle(std::string Planet, double Latitude, doub
     // Latitude (φ) is the North Latitude of the Observer (north is positive, south is negative)
     // m_0 = Planet_RefCorr is a compensation of Altitude (m) in degrees, for the Sun's distorted shape, and the atmospherical refraction
     // The equation return two value, LHA1 and LHA2. We need that one, which is approximately equals to LHA_Pos
-    std::string PlanetOrbit = Planet.append("Orbit");
-    double LHAcos = ((sin((Pi / 180) * (AltitudeOfSun + OrbitDictFunc(PlanetOrbit)[2])) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (DeclinationSun))) /
+    double LHAcos = ((sin((Pi / 180) * (AltitudeOfSun + PlanetOrbitvec[2])) - sin((Pi / 180) * (Latitude)) * sin((Pi / 180) * (DeclinationSun))) /
             (cos((Pi / 180) * (Latitude)) * cos((Pi / 180) * (DeclinationSun))));
     if(LHAcos <= 1 && LHAcos >= -1)
     {
@@ -1615,7 +1637,6 @@ std::vector<double> TwilightCalc(std::string Planet, double Latitude, double Lon
     double LocalDateYearSetDaylight = SunSetAndRiseDateTimeDaylight[11];
     double LocalDateMonthSetDaylight = SunSetAndRiseDateTimeDaylight[12];
     double LocalDateDaySetDaylight = SunSetAndRiseDateTimeDaylight[13];
-
 
     // Civil Twilight
     std::vector<double> SunSetAndRiseDateTimeCivil = SunSetAndRiseDateTime(Planet, Latitude, Longitude, AltitudeCivil, LocalDateYear, LocalDateMonth, LocalDateDay);
@@ -1942,12 +1963,12 @@ std::vector<double> AstroTriangles(double aValue, double bValue, double cValue, 
 
     else
     {
-        aValue = NULL;
-        bValue = NULL;
-        cValue = NULL;
-        alphaValue = NULL;
-        betaValue = NULL;
-        gammaValue = NULL;
+        aValue = INT_MAX;
+        bValue = INT_MAX;
+        cValue = INT_MAX;
+        alphaValue = INT_MAX;
+        betaValue = INT_MAX;
+        gammaValue = INT_MAX;
     }
 
     std::vector<double> AstroTriangles = {aValue, bValue, cValue, alphaValue, betaValue, gammaValue};
@@ -2279,7 +2300,7 @@ std::vector<double> SunAnalemma(std::string Planet, double Latitude, double Long
     LocalHourAngle = NormalizeZeroBounded(LocalHourAngle, 24);
     
     // Initial input
-    double Altitude = NULL;
+    double Altitude = INT_MAX;
 
     std::vector<double> EquIToHorvec = EquIToHor(Latitude, RightAscensionSun, DeclinationSun, Altitude, LocalSiderealTime, LocalHourAngle);
     Altitude = EquIToHorvec[0];
@@ -2531,7 +2552,7 @@ int main()
 
                         else if(HorToEquIChoose.compare("N") == 0 || HorToEquIChoose.compare("n") == 0 || HorToEquIChoose.compare("No") == 0 || HorToEquIChoose.compare("no") == 0 || HorToEquIChoose.compare("nO") == 0)
                         {
-                            LocalSiderealTime = NULL;
+                            LocalSiderealTime = INT_MAX;
                             break;
                         }
 
@@ -2544,7 +2565,7 @@ int main()
                     // Used Formulas:
                     // sin(δ) = sin(m) * sin(φ) + cos(m) * cos(φ) * cos(A)
                     // sin(H) = - sin(A) * cos(m) / cos(δ)
-                    // α = S – t
+                    // \u03b1 = S – t
                     std::vector<double> HorToEquIoutputVec = HorToEquI(Latitude, Altitude, Azimuth, LocalSiderealTime);
                     double RightAscension = HorToEquIoutputVec[0];
                     double Declination = HorToEquIoutputVec[1];
@@ -2573,7 +2594,7 @@ int main()
                     std::string hourangmsgstr = hourangmsg.str();                    
                     std::cout << hourangmsgstr << '\n';
                     
-                    if(LocalSiderealTime != NULL)
+                    if(LocalSiderealTime != INT_MAX)
                     {
                         // Right Ascension
                         int RightAscensionHours = int(RightAscension);
@@ -2581,7 +2602,7 @@ int main()
                         int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
 
                         std::stringstream RAmsg;
-                        RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
+                        RAmsg << "- Right Ascension (\u03b1): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
                         std::string RAmsgstr = RAmsg.str();
                         std::cout << RAmsgstr << '\n';
                     }
@@ -2765,7 +2786,7 @@ int main()
                     int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
 
                     std::stringstream RAmsg;
-                    RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
+                    RAmsg << "- Right Ascension (\u03b1): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
                     std::string RAmsgstr = RAmsg.str();
                     std::cout << RAmsgstr << '\n';
 
@@ -2911,7 +2932,7 @@ int main()
 
                             if(RAorDecEquIToHorChoose.compare("D") == 0 || RAorDecEquIToHorChoose.compare("d") == 0)
                             {
-                                RightAscension = NULL;
+                                RightAscension = INT_MAX;
 
                                 std::cout << "\n\n>> HINT: You can write RA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
 
@@ -2943,13 +2964,13 @@ int main()
                                 double RightAscensionMinutes;
                                 double RightAscensionSeconds;
 
-                                std::cout << "\n> Right Ascension (α) Hours: ";
+                                std::cout << "\n> Right Ascension (\u03b1) Hours: ";
                                 std::cin >> RightAscensionHours;
                                 std::cout << '\n';
-                                std::cout << "> Right Ascension (α) Minutes: ";
+                                std::cout << "> Right Ascension (\u03b1) Minutes: ";
                                 std::cin >> RightAscensionMinutes;
                                 std::cout << '\n';
-                                std::cout << "> Right Ascension (α) Seconds: ";
+                                std::cout << "> Right Ascension (\u03b1) Seconds: ";
                                 std::cin >> RightAscensionSeconds;
                                 std::cout << '\n';
                                 RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600;
@@ -3019,7 +3040,7 @@ int main()
                                             if(RAorDecEquIToHorChoose.compare("D") == 0 || RAorDecEquIToHorChoose.compare("d") == 0)
                                             {
                                             
-                                                RightAscension = NULL;
+                                                RightAscension = INT_MAX;
                                                 Declination = StellarDict[StellarObject][1];
                                                 break;
                                             }
@@ -3054,7 +3075,7 @@ int main()
                         }
                     }
 
-                    if(RightAscension != NULL && Declination != NULL)
+                    if(RightAscension != INT_MAX && Declination != INT_MAX)
                     {
                         while(1)
                         {
@@ -3084,13 +3105,13 @@ int main()
                                 std::cout << '\n';
                                 LocalSiderealTime = LocalSiderealTimeHours + LocalSiderealTimeMinutes/60 + LocalSiderealTimeSeconds/3600;
 
-                                Altitude = NULL;
+                                Altitude = INT_MAX;
                                 break;
                             }
 
                             else if(EquIToHorChoose1.compare("N") == 0 || EquIToHorChoose1.compare("n") == 0 || EquIToHorChoose1.compare("No") == 0 || EquIToHorChoose1.compare("no") == 0 || EquIToHorChoose1.compare("nO") == 0)
                             {
-                                LocalSiderealTime = NULL;
+                                LocalSiderealTime = INT_MAX;
 
                                 std::cout << "\n>> Is Local Hour Angle given?";
 
@@ -3118,13 +3139,13 @@ int main()
                                     std::cout << '\n';
                                     LocalHourAngle = LocalHourAngleHours + LocalHourAngleMinutes/60 + LocalHourAngleSeconds/3600;
 
-                                    Altitude = NULL;
+                                    Altitude = INT_MAX;
                                     break;
                                 }
 
                                 else if(EquIToHorChoose2.compare("N") == 0 || EquIToHorChoose2.compare("n") == 0 || EquIToHorChoose2.compare("No") == 0 || EquIToHorChoose2.compare("no") == 0 || EquIToHorChoose2.compare("nO") == 0)
                                 {
-                                    LocalHourAngle = NULL;
+                                    LocalHourAngle = INT_MAX;
                                     std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.";
 
                                     double AltitudeHours;
@@ -3142,7 +3163,7 @@ int main()
                                     std::cout << '\n';
                                     Altitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600;
 
-                                    Azimuth = NULL;
+                                    Azimuth = INT_MAX;
 
                                     break;
                                 }
@@ -3150,7 +3171,7 @@ int main()
                         }
                     }
 
-                    else if(Declination != NULL && RightAscension == NULL)
+                    else if(Declination != INT_MAX && RightAscension == INT_MAX)
                     {
                         while(1)
                         {
@@ -3184,7 +3205,7 @@ int main()
 
                             else if(EquIToHorChooseD.compare("N") == 0 || EquIToHorChooseD.compare("n") == 0 || EquIToHorChooseD.compare("No") == 0 || EquIToHorChooseD.compare("no") == 0 || EquIToHorChooseD.compare("nO") == 0)
                             {
-                                LocalHourAngle = NULL;
+                                LocalHourAngle = INT_MAX;
                                 std::cout << "\n>> From the given data, you can calculate Azimuth (A),\n>> If Altitude (m) is given.";
                                 std::cout << ">> HINT: You can write Altitude as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.";
 
@@ -3203,7 +3224,7 @@ int main()
                                 std::cout << '\n';
                                 Altitude = AltitudeHours + AltitudeMinutes/60 + AltitudeSeconds/3600;
 
-                                Azimuth = NULL;
+                                Azimuth = INT_MAX;
 
                                 break;
                             }
@@ -3216,25 +3237,25 @@ int main()
                     }
 
                     // Starting parameters could be:
-                    // 1. Latitude, RightAscension, Declination, LocalSiderealTime   // φ,α,δ,S:  S,α -> t; t -> H; H,δ,φ -> m; H,δ,m -> A    // Output: A,m
-                    // 2. Latitude, RightAscension, Declination, LocalHourAngle      // φ,α,δ,t:  t -> H; H,δ,φ -> m; H,δ,m -> A              // Output: A,m
-                    // 3. Latitude, RightAscension, Declination, Azimuth             // φ,α,δ,A:  Not Enough Parameters!                      // Output: NULL
-                    // 4. Latitude, RightAscension, Declination, Altitude            // φ,α,δ,m:  m,δ,φ -> H; H,δ,m -> A                      // Output: A from m
-                    // 5. Latitude, RightAscension, LocalSiderealTime                // φ,α,S:    Not Enough Parameters!                      // Output: NULL
-                    // 6. Latitude, RightAscension, LocalHourAngle                   // φ,α,t:    Not Enough Parameters!                      // Output: NULL
-                    // 7. Latitude, RightAscension, Azimuth                          // φ,α,A:    Not Enough Parameters!                      // Output: NULL
-                    // 8. Latitude, RightAscension, Altitude                         // φ,α,m:    Not Enough Parameters!                      // Output: NULL
-                    // 9. Latitude, Declination, LocalSiderealTime                   // φ,δ,S:    Not Enough Parameters!                      // Output: NULL
+                    // 1. Latitude, RightAscension, Declination, LocalSiderealTime   // φ,\u03b1,δ,S:  S,\u03b1 -> t; t -> H; H,δ,φ -> m; H,δ,m -> A    // Output: A,m
+                    // 2. Latitude, RightAscension, Declination, LocalHourAngle      // φ,\u03b1,δ,t:  t -> H; H,δ,φ -> m; H,δ,m -> A              // Output: A,m
+                    // 3. Latitude, RightAscension, Declination, Azimuth             // φ,\u03b1,δ,A:  Not Enough Parameters!                      // Output: INT_MAX
+                    // 4. Latitude, RightAscension, Declination, Altitude            // φ,\u03b1,δ,m:  m,δ,φ -> H; H,δ,m -> A                      // Output: A from m
+                    // 5. Latitude, RightAscension, LocalSiderealTime                // φ,\u03b1,S:    Not Enough Parameters!                      // Output: INT_MAX
+                    // 6. Latitude, RightAscension, LocalHourAngle                   // φ,\u03b1,t:    Not Enough Parameters!                      // Output: INT_MAX
+                    // 7. Latitude, RightAscension, Azimuth                          // φ,\u03b1,A:    Not Enough Parameters!                      // Output: INT_MAX
+                    // 8. Latitude, RightAscension, Altitude                         // φ,\u03b1,m:    Not Enough Parameters!                      // Output: INT_MAX
+                    // 9. Latitude, Declination, LocalSiderealTime                   // φ,δ,S:    Not Enough Parameters!                      // Output: INT_MAX
                     // 10. Latitude, Declination, LocalHourAngle                     // φ,δ,t:    t -> H; H,δ,φ -> m; H,δ,m -> A              // Output: A,m
-                    // 11. Latitude, Declination, Azimuth                            // φ,δ,A:    Not Enough Parameters!                      // Output: NULL
+                    // 11. Latitude, Declination, Azimuth                            // φ,δ,A:    Not Enough Parameters!                      // Output: INT_MAX
                     // 12. Latitude, Declination, Altitude                           // φ,δ,m:    m,δ,φ -> H; H,δ,m -> A                      // Output: A from m
                     // !!!! Now only those could be selected, which has any kind of output !!!!
 
 
                     // Used formulas:
-                    // t = S - α
+                    // t = S - \u03b1
                     // sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H)
-                    if(LocalSiderealTime != NULL || LocalHourAngle != NULL)
+                    if(LocalSiderealTime != INT_MAX || LocalHourAngle != INT_MAX)
                     {                        
                         std::vector<double> EquIToHoroutputVec = EquIToHor(Latitude, RightAscension, Declination, Altitude, LocalSiderealTime, LocalHourAngle);
                         Altitude = EquIToHoroutputVec[0];
@@ -3257,7 +3278,7 @@ int main()
                     // Used formulas:
                     // cos(H) = (sin(m) - sin(δ) * sin(φ)) / cos(δ) * cos(φ)
                     // sin(A) = - sin(H) * cos(δ) / cos(m)
-                    else if(Altitude != NULL)
+                    else if(Altitude != INT_MAX)
                     {
                         double Azimuth1;
                         double Azimuth2;
@@ -3315,13 +3336,13 @@ int main()
                             double RightAscensionMinutes;
                             double RightAscensionSeconds;
 
-                            std::cout << "\n> Right Ascension (α) Hours: ";
+                            std::cout << "\n> Right Ascension (\u03b1) Hours: ";
                             std::cin >> RightAscensionHours;
                             std::cout << '\n';
-                            std::cout << "> Right Ascension (α) Minutes: ";
+                            std::cout << "> Right Ascension (\u03b1) Minutes: ";
                             std::cin >> RightAscensionMinutes;
                             std::cout << '\n';
-                            std::cout << "> Right Ascension (α) Seconds: ";
+                            std::cout << "> Right Ascension (\u03b1) Seconds: ";
                             std::cin >> RightAscensionSeconds;
                             std::cout << '\n';
                             RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600;
@@ -3358,7 +3379,7 @@ int main()
                                 
                                 else if(EquIToEquIIChoose.compare("N") == 0 || EquIToEquIIChoose.compare("n") == 0 || EquIToEquIIChoose.compare("No") == 0 || EquIToEquIIChoose.compare("no") == 0 || EquIToEquIIChoose.compare("nO") == 0)
                                 {
-                                    Declination = NULL;
+                                    Declination = INT_MAX;
                                 }
 
                                 else
@@ -3422,7 +3443,7 @@ int main()
 
                                                 else if(EquIToEquIIChoose.compare("N") == 0 || EquIToEquIIChoose.compare("n") == 0 || EquIToEquIIChoose.compare("No") == 0 || EquIToEquIIChoose.compare("no") == 0 || EquIToEquIIChoose.compare("nO") == 0)
                                                 {
-                                                    Declination = NULL;
+                                                    Declination = INT_MAX;
                                                 }
 
                                                 else
@@ -3484,7 +3505,7 @@ int main()
                     std::cout << sidermsgstr << '\n';
                     
                     // Declination
-                    if(Declination != NULL)
+                    if(Declination != INT_MAX)
                     {
                         int DeclinationHours = int(Declination);
                         int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
@@ -3572,7 +3593,7 @@ int main()
 
                         else if(EquIIToEquIChoose.compare("N") == 0 || EquIIToEquIChoose.compare("n") == 0 || EquIIToEquIChoose.compare("No") == 0 || EquIIToEquIChoose.compare("no") == 0 || EquIIToEquIChoose.compare("nO") == 0)
                         {
-                            Declination = NULL;
+                            Declination = INT_MAX;
                         }
 
                         else
@@ -3597,24 +3618,24 @@ int main()
                             double RightAscensionMinutes;
                             double RightAscensionSeconds;
 
-                            std::cout << "\n> Right Ascension (α) Hours: ";
+                            std::cout << "\n> Right Ascension (\u03b1) Hours: ";
                             std::cin >> RightAscensionHours;
                             std::cout << '\n';
-                            std::cout << "> Right Ascension (α) Minutes: ";
+                            std::cout << "> Right Ascension (\u03b1) Minutes: ";
                             std::cin >> RightAscensionMinutes;
                             std::cout << '\n';
-                            std::cout << "> Right Ascension (α) Seconds: ";
+                            std::cout << "> Right Ascension (\u03b1) Seconds: ";
                             std::cin >> RightAscensionSeconds;
                             std::cout << '\n';
                             RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600;
 
-                            LocalHourAngle = NULL;
+                            LocalHourAngle = INT_MAX;
                             break;
                         }
 
                         else if(EquIIToEquIDecChoose.compare("T") == 0 || EquIIToEquIDecChoose.compare("t") == 0)
                         {
-                            RightAscension = NULL;
+                            RightAscension = INT_MAX;
 
                             std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
                             double LocalHourAngleHours;
@@ -3654,12 +3675,12 @@ int main()
                     int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
 
                     std::stringstream RAmsg;
-                    RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
+                    RAmsg << "- Right Ascension (\u03b1): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
                     std::string RAmsgstr = RAmsg.str();
                     std::cout << RAmsgstr << '\n';
 
                     // Declination
-                    if(Declination != NULL)
+                    if(Declination != INT_MAX)
                     {
                         int DeclinationHours = int(Declination);
                         int DeclinationMinutes = int((Declination - DeclinationHours) * 60);
@@ -3823,24 +3844,24 @@ int main()
                                 double RightAscensionMinutes;
                                 double RightAscensionSeconds;
 
-                                std::cout << "\n> Right Ascension (α) Hours: ";
+                                std::cout << "\n> Right Ascension (\u03b1) Hours: ";
                                 std::cin >> RightAscensionHours;
                                 std::cout << '\n';
-                                std::cout << "> Right Ascension (α) Minutes: ";
+                                std::cout << "> Right Ascension (\u03b1) Minutes: ";
                                 std::cin >> RightAscensionMinutes;
                                 std::cout << '\n';
-                                std::cout << "> Right Ascension (α) Seconds: ";
+                                std::cout << "> Right Ascension (\u03b1) Seconds: ";
                                 std::cin >> RightAscensionSeconds;
                                 std::cout << '\n';
                                 RightAscension = RightAscensionHours + RightAscensionMinutes/60 + RightAscensionSeconds/3600;
 
-                                LocalHourAngle = NULL;
+                                LocalHourAngle = INT_MAX;
                                 break;
                             }
 
                             else if(EquIIToEquIDecChoose.compare("T") == 0 || EquIIToEquIDecChoose.compare("t") == 0)
                             {
-                                RightAscension = NULL;
+                                RightAscension = INT_MAX;
 
                                 std::cout << ">> HINT: You can write LHA as a Decimal Fraction. For this you need to\n>> Write Hours as a float-type value, then you can\n>> Press Enter for both Minutes and Seconds.\n";
                                 double LocalHourAngleHours;
@@ -3921,7 +3942,7 @@ int main()
 
                                                 else if(EquIToEquIIChoose.compare("N") == 0 || EquIToEquIIChoose.compare("n") == 0 || EquIToEquIIChoose.compare("No") == 0 || EquIToEquIIChoose.compare("no") == 0 || EquIToEquIIChoose.compare("nO") == 0)
                                                 {
-                                                    Declination = NULL;
+                                                    Declination = INT_MAX;
                                                 }
 
                                                 else
@@ -5029,15 +5050,15 @@ int main()
                     std::cin >> cValue;
                     std::cout << '\n';
 
-                    std::cout << "> Value for angle \'α\': ";
+                    std::cout << "> Value for angle \'\u03b1\': ";
                     std::cin >> alphaValue;
                     std::cout << '\n';
 
-                    std::cout << "> Value for angle \'β\': ";
+                    std::cout << "> Value for angle \'\u03b2\': ";
                     std::cin >> betaValue;
                     std::cout << '\n';
 
-                    std::cout << "> Value for angle \'γ\': ";
+                    std::cout << "> Value for angle \'\u03b3\': ";
                     std::cin >> gammaValue;
                     std::cout << '\n';
                 }
@@ -5076,9 +5097,9 @@ int main()
                     std::cout << "Side \'A\': " << aValue << '\n';
                     std::cout << "Side \'B\': " << bValue << '\n';
                     std::cout << "Side \'C\': " << cValue << '\n';
-                    std::cout << "Angle \'α\': " << alphaValue << '\n';
-                    std::cout << "Angle \'β\': " << betaValue << '\n';
-                    std::cout << "Angle \'γ\': " << gammaValue << '\n';
+                    std::cout << "Angle \'\u03b1\': " << alphaValue << '\n';
+                    std::cout << "Angle \'\u03b2\': " << betaValue << '\n';
+                    std::cout << "Angle \'\u03b3\': " << gammaValue << '\n';
                     std::cout << "\n";
                 }
             }
@@ -6198,7 +6219,7 @@ int main()
             Latitude = LocationDict[Location][0];
             double RightAscensionVenus = 18 + 41/60 + 54/3600;
             double DeclinationVenus = -(24 + 4/60 + 9/3600);
-            std::vector<double> EquIToHoroutputVec = EquIToHor(Latitude, RightAscensionVenus, DeclinationVenus, 0, NULL, NULL);
+            std::vector<double> EquIToHoroutputVec = EquIToHor(Latitude, RightAscensionVenus, DeclinationVenus, 0, INT_MAX, INT_MAX);
             Altitude = EquIToHoroutputVec[0];
             double Azimuth1 = EquIToHoroutputVec[1];
             double Azimuth2 = EquIToHoroutputVec[2];
@@ -6315,18 +6336,18 @@ int main()
 
             std::cout << ">>> Used formulas:\n";
             std::cout << ">>> The program uses formulas, which may be derived using vector algebra\n";
-            std::cout << ">>> Given parameters: side \'A\', side \'B\' and angle \'γ\'\n";
-            std::cout << ">>> C = arctan( sqrt(\n    (sin(A) * cos(B) - cos(A) * sin(B) * cos(γ))^2 + (sin(B) * sin(γ))^2 ) /\n    (cos(A) * cos(B) + sin(A) * sin(B) * cos(γ)) )\n";
-            std::cout << ">>> α = arctan(\n    (sin(A) * sin(γ)) / (sin(B) * cos(A) - cos(B) * sin(A) * cos(γ))\n    )\n";
-            std::cout << ">>> β = arctan(\n    (sin(B) * sin(γ)) / (sin(A) * cos(B) - cos(A) * sin(B) * cos(γ))\n    )\n\n";
+            std::cout << ">>> Given parameters: side \'A\', side \'B\' and angle \'\u03b3\'\n";
+            std::cout << ">>> C = arctan( sqrt(\n    (sin(A) * cos(B) - cos(A) * sin(B) * cos(\u03b3))^2 + (sin(B) * sin(\u03b3))^2 ) /\n    (cos(A) * cos(B) + sin(A) * sin(B) * cos(\u03b3)) )\n";
+            std::cout << ">>> \u03b1 = arctan(\n    (sin(A) * sin(\u03b3)) / (sin(B) * cos(A) - cos(B) * sin(A) * cos(\u03b3))\n    )\n";
+            std::cout << ">>> \u03b2 = arctan(\n    (sin(B) * sin(\u03b3)) / (sin(A) * cos(B) - cos(A) * sin(B) * cos(\u03b3))\n    )\n\n";
 
             std::cout << ">>> Calculated Parameters of the Triangle:\n";
             std::cout << ">>> Side \'A\': " << aValue << '\n';
             std::cout << ">>> Side \'B\': " << bValue << '\n';
             std::cout << ">>> Side \'C\': " << cValue << '\n';
-            std::cout << ">>> Angle \'α\': " << alphaValue << '\n';
-            std::cout << ">>> Angle \'β\': " << betaValue << '\n';
-            std::cout << ">>> Angle \'γ\': " << gammaValue << '\n';
+            std::cout << ">>> Angle \'\u03b1\': " << alphaValue << '\n';
+            std::cout << ">>> Angle \'\u03b2\': " << betaValue << '\n';
+            std::cout << ">>> Angle \'\u03b3\': " << gammaValue << '\n';
             std::cout << "\n";
 
             std::cout << "_________________________________________________________________________\n\n";
@@ -6339,9 +6360,9 @@ int main()
             Longitude = LocationDict[Location][1];
             RightAscension = StellarDict[Star][0];
             Declination = StellarDict[Star][1];
-            Altitude = NULL;
-            Azimuth = NULL;
-            LocalHourAngle = NULL;
+            Altitude = INT_MAX;
+            Azimuth = INT_MAX;
+            LocalHourAngle = INT_MAX;
             LocalDateYear = 2013;
             LocalDateMonth = 6;
             LocalDateDay = 21;
@@ -6379,7 +6400,7 @@ int main()
             std::cout << ">>> Used formulas:\n";
             std::cout << ">>> 1. S_0 (Greenwich Mean Sidereal Time) at 00:00 UT was calculated\n";
             std::cout << ">>> 2. S (Local Mean Sidereal Time) = S_0 + Longitude/15 + dS * UnitedTime\n";
-            std::cout << ">>> 3. S - α = t; H = 15*t\n";
+            std::cout << ">>> 3. S - \u03b1 = t; H = 15*t\n";
             std::cout << ">>> 4. sin(m) = sin(δ) * sin(φ) + cos(δ) * cos(φ) * cos(H);\n>>> Altitude (m) should been between [-π/2,+π/2]\n";
             std::cout << ">>> 5. sin(A) = - sin(H) * cos(δ) / cos(m), Azimuth at given H hour angle\n>>> Also cos(A) = (sin(δ) - sin(φ) sin(m)) / cos(φ) cos(m)\n";
             std::cout << ">>> These 2 equation outputs 2-2 values for Azimuth. 1-1 from both these\n>>> Outputs will be equal, and that's the correct value for Azimuth.\n\n";
@@ -6505,7 +6526,7 @@ int main()
             int RightAscensionMinutes = int((RightAscension - RightAscensionHours) * 60);
             int RightAscensionSeconds = int((((RightAscension - RightAscensionHours) * 60) - RightAscensionMinutes) * 60);
 
-            RAmsg << "- Right Ascension (α): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
+            RAmsg << "- Right Ascension (\u03b1): " << RightAscensionHours << "h" << RightAscensionMinutes << "m" << RightAscensionSeconds << "s";
             std::string RAmsgstr = RAmsg.str();
             std::cout << RAmsgstr << '\n';
             
