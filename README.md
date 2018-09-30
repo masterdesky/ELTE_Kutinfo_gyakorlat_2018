@@ -1,4 +1,4 @@
-# Kutinfo_gyakorlat_KA_LM_PB
+# ELTE_Kutinfo_gyakorlat_2018
 ## Közös repo csoportmunkához kutinfóra
 
 ### Random infók:
