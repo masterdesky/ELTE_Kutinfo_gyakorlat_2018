@@ -63,7 +63,7 @@
 #include <limits.h>
 
 // Current Version of the Csillész II Problem Solver
-std::string ActualVersion = "v1.32";
+std::string ActualVersion = "v1.65";
 
 
 //////////////////////////////////////////////////////////////////////////////////

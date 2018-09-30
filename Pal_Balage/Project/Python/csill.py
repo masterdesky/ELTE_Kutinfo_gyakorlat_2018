@@ -107,6 +107,7 @@ LocationDict = {
     "Gyor": [47.6875, 17.6504],
     "Jerusalem": [31.7683, 35.2137],
     "Kecskemet": [46.8964, 19.6897],
+    "Lumbaqui": [0.0467, -77.3281],
     "London": [51.5074, -0.1278],
     "Mako": [46.2219, 20.4809],
     "Miskolc": [48.1035, 20.7784],
@@ -3021,7 +3022,7 @@ while(True):
             if(SundialMode == '1' or SundialMode == '2'):
                 print(">> For which Year would You like to Draw the Sundial?")
                 while(True):
-                    SunDialYear = float(input("> Choosen Year: "))
+                    SunDialYear = int(input("> Choosen Year: "))
                     if(SunDialYear != 0):
                         break
                     else:
@@ -3034,27 +3035,27 @@ while(True):
                     if(SunDialChoose == 'Y' or SunDialChoose == 'y' or SunDialChoose == 'Yes' or SunDialChoose == 'yes' or SunDialChoose == 'YEs' or SunDialChoose == 'yEs' or SunDialChoose == 'yeS' or SunDialChoose == 'YeS' or SunDialChoose == 'yES'):
                         # Input Time Parameters
                         while(True):
-                            LocalDateMonth = int(input("> Month: "))
-                            if(LocalDateMonth > 0 and LocalDateMonth < 13):
+                            LocalDateMonthChoosen = int(input("> Month: "))
+                            if(LocalDateMonthChoosen > 0 and LocalDateMonthChoosen < 13):
                                 break
                             else:
                                 print(">>>> ERROR: Months should be inside [1,12] interval, and should be Integer!\n")
 
                         # Leap Year	Handling
                         while(True):
-                            LocalDateDay = int(input("> Day: "))
-                            if(LocalDateYear%4 == 0 and (LocalDateYear%100 != 0 or LocalDateYear%400 == 0)):
-                                if(MonthLengthListLeapYear[LocalDateMonth - 1] >= LocalDateDay and LocalDateDay > 0):
+                            LocalDateDayChoosen = int(input("> Day: "))
+                            if(SunDialYear%4 == 0 and (SunDialYear%100 != 0 or SunDialYear%400 == 0)):
+                                if(MonthLengthListLeapYear[LocalDateMonthChoosen - 1] >= LocalDateDayChoosen and LocalDateDayChoosen > 0):
                                     break
                                 else:
                                     daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                    print(daysmsg.format(MonthLengthListLeapYear[LocalDateMonth - 1]))
+                                    print(daysmsg.format(MonthLengthListLeapYear[LocalDateMonthChoosen - 1]))
                             else:
-                                if(MonthLengthList[LocalDateMonth - 1] >= LocalDateDay and LocalDateDay > 0):
+                                if(MonthLengthList[LocalDateMonthChoosen - 1] >= LocalDateDayChoosen and LocalDateDayChoosen > 0):
                                     break
                                 else:
                                     daysmsg = ">>>> ERROR: Days should be inside [1,{0}] interval, and should be Integer!\n"
-                                    print(daysmsg.format(MonthLengthList[LocalDateMonth - 1]))
+                                    print(daysmsg.format(MonthLengthList[LocalDateMonthChoosen - 1]))
 
                         break
 
@@ -3071,7 +3072,7 @@ while(True):
 
                     print("Choosen Date:")
                     ### CHOOSEN DATE ###
-                    LocalHourAngleRiseChoosen, LocalHourAngleSetChoosen, DeclinationSunChoosen = SundialPrecalculations(Planet, Latitude, Longitude, LocalDateYear, LocalDateMonth, LocalDateDay)
+                    LocalHourAngleRiseChoosen, LocalHourAngleSetChoosen, DeclinationSunChoosen = SundialPrecalculations(Planet, Latitude, Longitude, SunDialYear, LocalDateMonthChoosen, LocalDateDayChoosen)
 
                     # Create lists for plot parameters
                     LocalHourAngleChoosen = []
@@ -3491,6 +3492,8 @@ while(True):
                 plt.plot(LocalHourAngleWinter, AltitudesWinter, '.', label="Winter Solstice")
                 plt.plot(LocalHourAngleMarch, AltitudesMarch, '.', label="March Equinox")
                 plt.plot(LocalHourAngleSeptember, AltitudesSeptember, '.', label="Sept. Equinox")
+                if(SunDialChoose == 'Y' or SunDialChoose == 'y' or SunDialChoose == 'Yes' or SunDialChoose == 'yes' or SunDialChoose == 'YEs' or SunDialChoose == 'yEs' or SunDialChoose == 'yeS' or SunDialChoose == 'YeS' or SunDialChoose == 'yES'):
+                    plt.plot(LocalHourAngleChoosen, AltitudesChoosen, '.', label="Choosen date")
 
                 plt.xlabel("Hours (h)")
                 plt.ylabel("Altitude of the Sun (°)")
@@ -3518,6 +3521,8 @@ while(True):
                 plt.plot(LocalHourAngleWinter, ShadowsWinter, '.', label="Winter Solstice")
                 plt.plot(LocalHourAngleMarch, ShadowsMarch, '.', label="March Equinox")
                 plt.plot(LocalHourAngleSeptember, ShadowsSeptember, '.', label="Sept. Equinox")
+                if(SunDialChoose == 'Y' or SunDialChoose == 'y' or SunDialChoose == 'Yes' or SunDialChoose == 'yes' or SunDialChoose == 'YEs' or SunDialChoose == 'yEs' or SunDialChoose == 'yeS' or SunDialChoose == 'YeS' or SunDialChoose == 'yES'):
+                    plt.plot(LocalHourAngleChoosen, ShadowsChoosen, '.', label="Choosen date")
 
                 plt.xlabel("Hours (h)")
                 plt.ylabel("Length of the shadow (m)")
