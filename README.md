@@ -1,7 +1,6 @@
-# ELTE_Kutinfo_gyakorlat_2018
-## Közös repo csoportmunkához kutinfóra
+# Tools of information for research 2017-2018/2 @ ELTE
+## Joint repository for group work
 
-### Random infók:
-- Közös projektet a végén egyesével külön-külön kell ledokumentálni jegyzőkönyvbe. Azokat meg majd ide feltölteni szintén külön-külön.
-- Többi projektet nem kell dokumentálni csak feltölteni.
-- GREENTEXT
+### Info about the course:
+- Warm-up task: Writing a (fictive) CV in LaTeX, and uploading it to a ~/This_Repo/Student_Name/CV/ folder.
+- The joint project must be documented separately. The parts of the project should be uploaded here also separately.
