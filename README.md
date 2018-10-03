@@ -1,5 +1,5 @@
 # Tools of information for research 2017-2018/2 @ ELTE
-## Joint repository for group work
+## Joint repository for group work ('joint' and 'group work' only theoretically)
 
 ### Info about the course:
 - Warm-up task: Writing a (fictive) CV in LaTeX, and uploading it to a ~/This_Repo/Student_Name/CV/ folder.
